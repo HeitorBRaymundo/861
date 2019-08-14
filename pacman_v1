@@ -349,34 +349,18 @@ readKeys:
   beq leftKey
   rts
 upKey:
-  lda #movingDown
-  bit snakeDirection
-  bne illegalMove
-
   lda #movingUp
   sta snakeDirection
   rts
 rightKey:
-  lda #movingLeft
-  bit snakeDirection
-  bne illegalMove
-
   lda #movingRight
   sta snakeDirection
   rts
 downKey:
-  lda #movingUp
-  bit snakeDirection
-  bne illegalMove
-
   lda #movingDown
   sta snakeDirection
   rts
 leftKey:
-  lda #movingRight
-  bit snakeDirection
-  bne illegalMove
-
   lda #movingLeft
   sta snakeDirection
   rts
@@ -394,13 +378,18 @@ gameOver:
   lda sysLastKey
   cmp #ASCII_w
   beq upKey
+  beq endGameOver
   cmp #ASCII_d
   beq rightKey
+  beq endGameOver
   cmp #ASCII_s
   beq downKey
+  beq endGameOver
   cmp #ASCII_a
   beq leftKey
+  beq endGameOver
   bne gameOver
+endGameOver:
   rts
 
 checkAppleCollision:
@@ -439,7 +428,7 @@ continueCollisionLoop:
   jmp snakeCollisionLoop
 
 didCollide:
-  lda #0
+  lda #1
   sta $ff
   rts
   jmp gameOver
