@@ -301,22 +301,14 @@ initSnake:
   lda #movingRight  ;start direction
   sta snakeDirection
 
-  lda #4  ;start length (2 segments)
+  lda #2  ;start length (1 segments) --> viro um pixel so vamo
   sta snakeLength
 
   lda #$11
   sta snakeHeadL
 
-  lda #$10
-  sta snakeBodyStart
-
-  lda #$0f
-  sta $14 ; body segment 1
-
   lda #$04
   sta snakeHeadH
-  sta $13 ; body segment 1
-  sta $15 ; body segment 2
   rts
 
 
@@ -397,6 +389,19 @@ checkCollision:
   jsr checkSnakeCollision
   rts
 
+gameOver:
+  clc
+  lda sysLastKey
+  cmp #ASCII_w
+  beq upKey
+  cmp #ASCII_d
+  beq rightKey
+  cmp #ASCII_s
+  beq downKey
+  cmp #ASCII_a
+  beq leftKey
+  bne gameOver
+  rts
 
 checkAppleCollision:
   lda appleL
@@ -434,8 +439,10 @@ continueCollisionLoop:
   jmp snakeCollisionLoop
 
 didCollide:
+  lda #0
+  sta $ff
   rts
-;  jmp gameOver
+  jmp gameOver
 didntCollide:
   rts
 
@@ -528,6 +535,3 @@ spinloop:
   dex
   bne spinloop
   rts
-
-
-gameOver:
