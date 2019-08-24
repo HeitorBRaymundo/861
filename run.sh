@@ -3,7 +3,7 @@
 git clone https://github.com/camsaul/nesasm.git
 cd nesasm/source
 make
-sudo make install
+make install
 cd ../../
 
 cd $1
