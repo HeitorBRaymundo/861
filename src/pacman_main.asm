@@ -28,7 +28,7 @@ NMI:
     LDA $4016 ;Start
     LDA $4016 ; Cima
     AND #1
-    BNE labelUp
+    BNE PacUp1
     LDA $4016 ; Baixo
     AND #1
     BNE labelDown
@@ -40,6 +40,11 @@ NMI:
     BNE labelRight
     JMP doSomething
 
+     PacUp1:
+         JMP PacUp
+
+     .include "pacman.asm"
+       
      UpdateSeed1:
 
         JSR RandomSeed1
