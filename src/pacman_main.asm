@@ -114,6 +114,13 @@ VBlank:
     .dw Reset		; Launches reset method when the processor starts
     .dw 0			; Do not launch anything when the BRK command occurs
 
+
+Sprites:
+.db $80, $00, %00000000, $88  ; 200, 201, 202, 203
+.db $80, $01, %00000000, $80    ; 204, 205, 206, 207
+.db $88, $02, %00000000, $88    ; 208, 209, 20A, 20B
+.db $88, $03, %00000000, $80    ; 20C, 20D, 20E, 20F
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; write Background sprites ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -146,7 +153,9 @@ Background:
 ;;;;;;;;;;;;;;;;;;;;;
 
     .org $1000		; write of the sprites
+    .include "pacman_left_right_sprite.asm"
     .include "ghost_sprites.asm"
+    .include "pacman_up_down_sprite.asm"
 
 ;;;;;;;;;;;;;
 ; VARIABLES ;
@@ -164,3 +173,5 @@ Background:
     count2: .ds 1
     count3: .ds 1
     count4: .ds 1
+
+    directionPacMan: .ds 1
