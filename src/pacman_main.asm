@@ -31,17 +31,37 @@ NMI:
     BNE PacUp1
     LDA $4016 ; Baixo
     AND #1
-    BNE labelDown
+    BNE PacDown1
     LDA $4016 ; Esquerda
     AND #1
-    BNE labelLeft
+    BNE PacLeft1
     LDA $4016 ; Direita
     AND #1
-    BNE labelRight
-    JMP doSomething
+    BNE PacRight1
+    JMP PacMan_movement
+
+     PacRight1:
+        JMP PacRight
+
+     PacLeft1:
+        JMP PacLeft
 
      PacUp1:
-         JMP PacUp
+        JMP PacUp
+
+     PacDown1:
+        JMP PacDown
+
+     PacMan_movement:
+        LDA directionPacMan
+        CMP #10
+        BEQ PacUp1
+        CMP #20
+        BEQ PacDown1
+        CMP #30
+        BEQ PacLeft1
+        CMP #40
+        BEQ PacRight1
 
      .include "pacman.asm"
        
