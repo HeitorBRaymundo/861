@@ -14,7 +14,57 @@ Forever:
 ; NMI - Code for images ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 NMI:
+; Loading Control Buttons
+; Store # $ 01 and # $ 00 is for position 4016 to begin sending control data
 
+    LDA #$01
+    STA $4016
+    LDA #00
+    STA $4016
+
+    LDA $4016 ;A
+    LDA $4016 ;B
+    LDA $4016 ;Select
+    LDA $4016 ;Start
+    LDA $4016 ; Cima
+    AND #1
+    BNE PacUp1
+    LDA $4016 ; Baixo
+    AND #1
+    BNE PacDown1
+    LDA $4016 ; Esquerda
+    AND #1
+    BNE PacLeft1
+    LDA $4016 ; Direita
+    AND #1
+    BNE PacRight1
+    JMP PacMan_movement
+
+     PacRight1:
+        JMP PacRight
+
+     PacLeft1:
+        JMP PacLeft
+
+     PacUp1:
+        JMP PacUp
+
+     PacDown1:
+        JMP PacDown
+
+     PacMan_movement:
+        LDA directionPacMan
+        CMP #10
+        BEQ PacUp1
+        CMP #20
+        BEQ PacDown1
+        CMP #30
+        BEQ PacLeft1
+        CMP #40
+        BEQ PacRight1
+
+     .include "pacman.asm"
+       
      UpdateSeed1:
 
         JSR RandomSeed1
@@ -114,6 +164,13 @@ VBlank:
     .dw Reset		; Launches reset method when the processor starts
     .dw 0			; Do not launch anything when the BRK command occurs
 
+
+Sprites:
+.db $80, $00, %00000000, $88  ; 200, 201, 202, 203
+.db $80, $01, %00000000, $80    ; 204, 205, 206, 207
+.db $88, $02, %00000000, $88    ; 208, 209, 20A, 20B
+.db $88, $03, %00000000, $80    ; 20C, 20D, 20E, 20F
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; write Background sprites ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -146,7 +203,9 @@ Background:
 ;;;;;;;;;;;;;;;;;;;;;
 
     .org $1000		; write of the sprites
+    .include "pacman_left_right_sprite.asm"
     .include "ghost_sprites.asm"
+    .include "pacman_up_down_sprite.asm"
 
 ;;;;;;;;;;;;;
 ; VARIABLES ;
@@ -164,3 +223,5 @@ Background:
     count2: .ds 1
     count3: .ds 1
     count4: .ds 1
+
+    directionPacMan: .ds 1
