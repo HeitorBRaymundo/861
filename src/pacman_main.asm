@@ -14,6 +14,31 @@ Forever:
 ; NMI - Code for images ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 NMI:
+; Loading Control Buttons
+; Store # $ 01 and # $ 00 is for position 4016 to begin sending control data
+
+    LDA #$01
+    STA $4016
+    LDA #00
+    STA $4016
+
+    LDA $4016 ;A
+    LDA $4016 ;B
+    LDA $4016 ;Select
+    LDA $4016 ;Start
+    LDA $4016 ; Cima
+    AND #1
+    BNE labelUp
+    LDA $4016 ; Baixo
+    AND #1
+    BNE labelDown
+    LDA $4016 ; Esquerda
+    AND #1
+    BNE labelLeft
+    LDA $4016 ; Direita
+    AND #1
+    BNE labelRight
+    JMP doSomething
 
      UpdateSeed1:
 
