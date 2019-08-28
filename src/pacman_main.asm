@@ -63,6 +63,8 @@ PacMan_movement:
   CMP #40
   BEQ PacRight1
 
+ .include "pacman_logic.asm"
+
 EndPacMan:
    JMP Ghost1
 
@@ -163,6 +165,19 @@ VBlank:
   BIT $2002		; Checks 7h bit of $2002 address (PPU loaded)
   BPL VBlank		; Repet while image is not loaded
   RTS				; Return to parent
+
+;;;;;;;;
+; VIEW ;
+;;;;;;;;
+  .bank 1			; bank 1
+  .org $E000		; Write starts at address $E000
+
+Palette:
+  ; [background color, color 1, color 2, color 3], [...], ...
+  .db $FE,$20,$11,$15, $FE,$05,$15,$25, $FE,$08,$18,$28, $FE,$0A,$1A,$2A
+  ; [color of opacity, color 1, color 2, color 3], [...], ...
+  .db $FE,$28,$3E,$20, $FE,$12,$3E,$20, $FE,$27,$3E,$20, $FE,$16,$3E,$20
+
 
 ;;;;;;;;;;;;;;;;;
 ; Interruptions ;
