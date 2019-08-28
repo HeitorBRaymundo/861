@@ -129,9 +129,9 @@ NMI:
         JMP ghost1_movement
 
       .include "yellow_ghost.asm"
-      .include "ghost2.asm"
-      .include "ghost3.asm"
-      .include "ghost4.asm"
+      .include "blue_ghost.asm"
+      .include "orange_ghost.asm"
+      .include "red_ghost.asm"
 
     collide:
         ; game over hehe
