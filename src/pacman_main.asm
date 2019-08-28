@@ -157,6 +157,31 @@ End:
   STA $4016
   RTI				; return to Forever
 
+;;;;;;;;;;;;;;;;;;
+; Initialise PPU ;
+;;;;;;;;;;;;;;;;;;
+PPUInit:
+    LDA #$00	; Charge $ 00 (0) in A
+    STA $2003	; Place A, the most significant ($ 00) in $ 2003
+    LDA #$02	; Charge $ 02 (2) in A
+    STA $4014	; Place A, the most significant ($ 02) at $ 4014.
+    LDA #%10001000; Charge the information of control of the PPU in A
+    STA $2000	; Place A in $ 2000
+    LDA #%00011110; Load mask information from the PPU into A
+    STA $2001		; Place A in $ 2001
+    RTS			; Return to the parent run
+
+;;;;;;;;;;;;;;;;;;;;;;
+; Cancel PPU  Scroll ;
+;;;;;;;;;;;;;;;;;;;;;;
+CancelScroll:
+    LDA $2002	;Read the state of the PPU to reset its latch
+    LDA #$00	; Charge $ 00 (0) in A
+    STA $2000	; Place A in $ 2000 (Scroll X accurate)
+    STA $2006	; Place A in $ 2006 (Scroll Y accurate)
+    STA $2005	; Place A in $ 2005 (Tile Table)
+    STA $2005	; Place A in $ 2005 (Scroll Y Rough)
+    STA $2006	; Place A in $ 2006 (Scroll X Rude)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; code to wait images to load ;
