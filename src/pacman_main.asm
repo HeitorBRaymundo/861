@@ -290,3 +290,6 @@ Background:
   count2: .ds 1
   count3: .ds 1
   count4: .ds 1
+  highCounter: .ds 1
+  lowCounter: .ds 1
+  ghostSpeed: .ds 1
