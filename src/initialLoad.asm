@@ -33,7 +33,7 @@ LoadSprites:
 LoadSpritesLoop:
     LDA Sprites, y  ; Loads the first byte of Sprites (+ Y) in A
     STA $0200, y    ; Put A at $ 02YY
-    INY              ; Increment Y
+    INY
     CPY #80        ; Compare Y with #80 (dec)
     BNE LoadSpritesLoop     ; Loop while Y < 80
     JSR PPUInit     ; Call PPU startup
