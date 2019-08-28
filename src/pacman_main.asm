@@ -17,125 +17,133 @@ NMI:
 ; Loading Control Buttons
 ; Store # $ 01 and # $ 00 is for position 4016 to begin sending control data
 
-    LDA #$01
-    STA $4016
-    LDA #00
-    STA $4016
+LDA #$01
+STA $4016
+LDA #00
+STA $4016
 
-    LDA $4016 ;A
-    LDA $4016 ;B
-    LDA $4016 ;Select
-    LDA $4016 ;Start
-    LDA $4016 ; Cima
-    AND #1
-    BNE PacUp1
-    LDA $4016 ; Baixo
-    AND #1
-    BNE PacDown1
-    LDA $4016 ; Esquerda
-    AND #1
-    BNE PacLeft1
-    LDA $4016 ; Direita
-    AND #1
-    BNE PacRight1
-    JMP PacMan_movement
+LDA $4016 ;A
+LDA $4016 ;B
+LDA $4016 ;Select
+LDA $4016 ;Start
+LDA $4016 ; Cima
+AND #1
+BNE PacUp1
+LDA $4016 ; Baixo
+AND #1
+BNE PacDown1
+LDA $4016 ; Esquerda
+AND #1
+BNE PacLeft1
+LDA $4016 ; Direita
+AND #1
+BNE PacRight1
+JMP PacMan_movement
 
-     PacRight1:
-        JMP PacRight
+ PacRight1:
+    JMP PacRight
 
-     PacLeft1:
-        JMP PacLeft
+ PacLeft1:
+    JMP PacLeft
 
-     PacUp1:
-        JMP PacUp
+ PacUp1:
+    JMP PacUp
 
-     PacDown1:
-        JMP PacDown
+ PacDown1:
+    JMP PacDown
 
-     PacMan_movement:
-        LDA directionPacMan
-        CMP #10
-        BEQ PacUp1
-        CMP #20
-        BEQ PacDown1
-        CMP #30
-        BEQ PacLeft1
-        CMP #40
-        BEQ PacRight1
+ PacMan_movement:
+    LDA directionPacMan
+    CMP #10
+    BEQ PacUp1
+    CMP #20
+    BEQ PacDown1
+    CMP #30
+    BEQ PacLeft1
+    CMP #40
+    BEQ PacRight1
 
-     .include "pacman.asm"
+ .include "pacman.asm"
 
-     UpdateSeed1:
+ UpdateSeed1:
 
-        JSR RandomSeed1
-        LDA #0
-        STA count1
-        JMP Ghost2
+    JSR RandomSeed1
+    LDA #0
+    STA count1
+    JMP Ghost2
 
-     UpdateSeed2:
+ UpdateSeed2:
 
-        JSR RandomSeed2
-        LDA #0
-        STA count2
-        JMP Ghost3
+    JSR RandomSeed2
+    LDA #0
+    STA count2
+    JMP Ghost3
 
-     UpdateSeed3:
+ UpdateSeed3:
 
-        JSR RandomSeed3
-        LDA #0
-        STA count3
-        JMP Ghost4
+    JSR RandomSeed3
+    LDA #0
+    STA count3
+    JMP Ghost4
 
-     UpdateSeed4:
+ UpdateSeed4:
 
-        JSR RandomSeed4
-        LDA #0
-        STA count4
-        JMP ghost1_movement
+    JSR RandomSeed4
+    LDA #0
+    STA count4
+    JMP ghost1_movement
 
-    Ghost1:
-        LDA count1
-        CMP #79
-        BEQ  UpdateSeed1
-        LDA #1
-        ADC count1
-        STA count1
+  Ghost1:
+      LDA count1
+      CMP #79
+      BEQ  UpdateSeed1
+      LDA #1
+      ADC count1
+      STA count1
 
-    Ghost2:
-        LDA count2
-        CMP #127
-        BEQ  UpdateSeed2
-        LDA #1
-        ADC count2
-        STA count2
+  Ghost2:
+      LDA count2
+      CMP #127
+      BEQ  UpdateSeed2
+      LDA #1
+      ADC count2
+      STA count2
 
-    Ghost3:
-        LDA count3
-        CMP #191
-        BEQ  UpdateSeed3
-        LDA #1
-        ADC count3
-        STA count3
+  Ghost3:
+      LDA count3
+      CMP #191
+      BEQ  UpdateSeed3
+      LDA #1
+      ADC count3
+      STA count3
 
-    Ghost4:
-        LDA count4
-        CMP #251
-        BEQ  UpdateSeed4
-        LDA #1
-        ADC count4
-        STA count4
+  Ghost4:
+      LDA count4
+      CMP #251
+      BEQ  UpdateSeed4
+      LDA #1
+      ADC count4
+      STA count4
 
 
-        JMP ghost1_movement
+    JMP ghost1_movement
 
-      .include "yellow_ghost.asm"
-      .include "blue_ghost.asm"
-      .include "orange_ghost.asm"
-      .include "red_ghost.asm"
+  .include "yellow_ghost.asm"
+  .include "blue_ghost.asm"
+  .include "orange_ghost.asm"
+  .include "red_ghost.asm"
 
-    collide:
-        ; game over hehe
-        JMP 0x000
+collide:
+    ; game over hehe
+    JSR beep
+    JMP 0x000
+
+beep: ; emite um beep em C# (#$C9)
+  lda #$C9
+  sta $4002
+  lda #$00
+  sta $4003
+  rts
 
 ;;;;;;;;;;;;;;;;;;;
 ; END: end of NMI ;

@@ -28,6 +28,12 @@ Reset:
     STX $2000       ; X at $ 2000 to disable NMI
     STX $2001       ; X at $ 2000 to disable display
     STX $4010       ; X at $ 2000 to disable DMC
+
+    lda #%00000111  ; enable channels Sq1, Sq2 and Tri
+    sta $4015
+    lda #%11001111  ; Configure channel Sq1 w/ duty 10 and volume F using internal counter
+    sta $4000
+    
     JSR VBlank
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
