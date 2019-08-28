@@ -6,6 +6,6 @@ make
 make install
 cd ../../
 
-cd $1
-nesasm $1.asm
-mednafen $1.nes
+cd src/
+nesasm pacman_main
+mednafen pacman_main.nes
