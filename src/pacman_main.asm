@@ -128,7 +128,7 @@ NMI:
 
         JMP ghost1_movement
 
-      .include "ghost1.asm"
+      .include "yellow_ghost.asm"
       .include "ghost2.asm"
       .include "ghost3.asm"
       .include "ghost4.asm"
