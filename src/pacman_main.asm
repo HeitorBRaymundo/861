@@ -204,15 +204,6 @@ Palette:
   .db $FE,$28,$3E,$20, $FE,$12,$3E,$20, $FE,$27,$3E,$20, $FE,$16,$3E,$20
 
 
-;;;;;;;;;;;;;;;;;
-; Interruptions ;
-;;;;;;;;;;;;;;;;;
-  .org $FFFA		; Write starts at address $FFFA
-  .dw NMI			; Starts the NMI sub-method when the NMI occurs
-  .dw Reset		; Launches reset method when the processor starts
-  .dw 0			; Do not launch anything when the BRK command occurs
-
-
 Sprites:
   .db $80, $00, %00000000, $88    ; 200, 201, 202, 203
   .db $80, $01, %00000000, $80    ; 204, 205, 206, 207
@@ -239,6 +230,15 @@ Sprites:
   .db $38, $06, %00000011, $38
   .db $38, $06, %01000011, $30
 ; [Position Y, Sprite's index , Attributes, Position X]
+
+;;;;;;;;;;;;;;;;;
+; Interruptions ;
+;;;;;;;;;;;;;;;;;
+  .org $FFFA		; Write starts at address $FFFA
+  .dw NMI			; Starts the NMI sub-method when the NMI occurs
+  .dw Reset		; Launches reset method when the processor starts
+  .dw 0			; Do not launch anything when the BRK command occurs
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; write Background sprites ;
