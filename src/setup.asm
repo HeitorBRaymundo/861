@@ -1,25 +1,38 @@
-    .inesprg 1
-    .ineschr 1
-    .inesmap 0
-    .inesmir 1
+;;;;;;;;;;;;;;;;
+; Declarations ;
+;;;;;;;;;;;;;;;;
+    .inesprg 1      ; 16 KB database of PRG code
+    .ineschr 1      ; 1x 8KB CHR database
+    .inesmap 0      ; No bank swaps
+    .inesmir 1      ; Background mirror
 
-    .bank 0
-    .org $8000
-    .code
 
+;;;;;;;;;;;;;;;;;;
+; Init ;
+;;;;;;;;;;;;;;;;;;
+    .bank 0         ; Bank 0
+    .org $8000      ; Writing starts at $ 8000
+    .code           ; Program Start
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Init of the PPU and APU ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Reset:
-    SEI
-    CLD
-    LDX #%01000000
-    STX $4017
-    LDX #$FF
-    TXS
-    INX
-    STX $2000
-    STX $2001
-    STX $4010
+    SEI             ; Disable IRQ
+    CLD             ; Disable decimal mode
+    LDX #%01000000  ; Load% 01000000 (64) into register X
+    STX $4017       ; X at $ 4017 to disable APU metronamo
+    LDX #$FF        ; Load $ FF (255) into register X
+    TXS             ; Initializes the stack with 255
+    INX             ; Increments X
+    STX $2000       ; X at $ 2000 to disable NMI
+    STX $2001       ; X at $ 2000 to disable display
+    STX $4010       ; X at $ 2000 to disable DMC
     JSR VBlank
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Init of the variables ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Clear:
     LDX #40
     STX directionPacMan
@@ -40,5 +53,5 @@ Clear:
     LDX #0
     STX seed4
 
-    JSR VBlank
-    JSR PPUInit
+    JSR VBlank      ; Wait for the image to fully load before continuing
+    JSR PPUInit     ; Initialize the PPU before loading the rest.
