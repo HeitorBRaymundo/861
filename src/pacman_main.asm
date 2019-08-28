@@ -174,7 +174,7 @@ VBlank:
 
 
 Sprites:
-  .db $80, $00, %00000000, $88  ; 200, 201, 202, 203
+  .db $80, $00, %00000000, $88    ; 200, 201, 202, 203
   .db $80, $01, %00000000, $80    ; 204, 205, 206, 207
   .db $88, $02, %00000000, $88    ; 208, 209, 20A, 20B
   .db $88, $03, %00000000, $80    ; 20C, 20D, 20E, 20F
@@ -203,54 +203,54 @@ Sprites:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; write Background sprites ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    .bank 2
-    .org $0000
+  .bank 2
+  .org $0000
 
 Background:
-    .db %00000000
-    .db %00111100
-    .db %00100100
-    .db %00100100
-    .db %00111100
-    .db %00100000
-    .db %00100000
-    .db %00000000
-    ; least significant bits
+  .db %00000000
+  .db %00111100
+  .db %00100100
+  .db %00100100
+  .db %00111100
+  .db %00100000
+  .db %00100000
+  .db %00000000
+  ; least significant bits
 
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    .db %00000000
-    ; most significant bits
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  .db %00000000
+  ; most significant bits
 
 ;;;;;;;;;;;;;;;;;;;;;
 ; SPRITES - GO HERE ;
 ;;;;;;;;;;;;;;;;;;;;;
 
-    .org $1000		; write of the sprites
-    .include "pacman_left_right_sprite.asm"
-    .include "ghost_sprites.asm"
-    .include "pacman_up_down_sprite.asm"
+  .org $1000		; write of the sprites
+  .include "pacman_left_right_sprite.asm"
+  .include "ghost_sprites.asm"
+  .include "pacman_up_down_sprite.asm"
 
 ;;;;;;;;;;;;;
 ; VARIABLES ;
 ;;;;;;;;;;;;;
 
-    .bank 0
-    .zp
-    .org $0000
+  .bank 0
+  .zp
+  .org $0000
 
-    seed1: .ds 2
-    seed2: .ds 2
-    seed3: .ds 2
-    seed4: .ds 2
-    count1: .ds 1
-    count2: .ds 1
-    count3: .ds 1
-    count4: .ds 1
+  seed1: .ds 2
+  seed2: .ds 2
+  seed3: .ds 2
+  seed4: .ds 2
+  count1: .ds 1
+  count2: .ds 1
+  count3: .ds 1
+  count4: .ds 1
 
-    directionPacMan: .ds 1
+  directionPacMan: .ds 1
