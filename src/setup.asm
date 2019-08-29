@@ -58,7 +58,7 @@ Clear:
     STX seed3
     LDX #0
     STX seed4
-    LDX #2
+    LDX #1
     STX ghostSpeed
     LDX #0
     STX lowCounter

@@ -125,6 +125,27 @@ Ghost4:
   ADC count4
   STA count4
 
+GhostSpeedCounter:
+  CLC
+  LDX lowCounter
+  INX 
+  STX lowCounter
+  CPX #255
+  BNE continueMovement
+  CLC
+  LDX #0
+  STX lowCounter
+  LDX highCounter
+  INX
+  STX highCounter
+  CPX #3
+  BNE continueMovement
+  CLC
+  LDX ghostSpeed
+  INX
+  STX ghostSpeed
+
+continueMovement:
   JMP ghost1_movement
 
   .include "yellow_ghost.asm"
