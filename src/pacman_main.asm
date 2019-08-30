@@ -86,11 +86,6 @@ beep2: ; emite um beep em C# (#$C9)
   JMP volta
 
 beep3: ; emite um beep em C# (#$C9)
-  LDY #$F1
-  STY $4002
-  LDY #$C5
-  STY $400C
-
   LDA #0
   STA sounds
 
@@ -188,6 +183,10 @@ GhostSpeedCounter:
   LDX ghostSpeed
   INX
   STX ghostSpeed
+  LDX #0
+  STX sounds
+  LDX #0
+  STX highCounter
   LSR beepFrequency
 
 continueMovement:
@@ -208,11 +207,11 @@ collide:
   JMP Forever
 
 beep: ; emite um beep em C# (#$C9)
-  lda #$C9
-  sta $4000
-  lda #$00
-  sta $4004
-  rts
+  LDA #$D9
+  STA $4002
+  LDA #$F1
+  STA $4003
+  RTS
 
 ;;;;;;;;;;;;;;;;;;;
 ; END: end of NMI ;
