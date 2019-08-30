@@ -23,35 +23,59 @@ ghost2_movement:  ;Blue
     BEQ Ghost2Right
 
 Ghost2Up:   ;Blue
+    LDX #0
+movementLoopBlueUp:
     DEC $220
     DEC $224
     DEC $228
     DEC $22C
     JSR CheckCollisionF2P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopBlueUp
     JMP ghost3_movement
 
 Ghost2Down:    ;Blue
+    LDX #0
+movementLoopBlueDown:
     INC $220
     INC $224
     INC $228
     INC $22C
     JSR CheckCollisionF2P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopBlueDown
     JMP ghost3_movement
 
 Ghost2Left: ;Blue
+    LDX #0
+movementLoopBlueLeft:
     DEC $223
     DEC $227
     DEC $22B
     DEC $22F
     JSR CheckCollisionF2P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopBlueLeft
     JMP ghost3_movement
 
 Ghost2Right: ;Blue
+    LDX #0
+movementLoopBlueRight:
     INC $223
     INC $227
     INC $22B
     INC $22F
     JSR CheckCollisionF2P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopBlueRight
     JMP ghost3_movement
 
 CheckCollisionF2P:

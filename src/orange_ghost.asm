@@ -22,35 +22,59 @@ ghost3_movement:  ;Orange
     BEQ Ghost3Left
 
 Ghost3Up:   ;Orange
+    LDX #0
+movementLoopOrangeUp:
     DEC $230
     DEC $234
     DEC $238
     DEC $23C
     JSR CheckCollisionF3P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopOrangeUp
     JMP ghost4_movement
 
 Ghost3Down:    ;Orange
+    LDX #0
+movementLoopOrangeDown:
     INC $230
     INC $234
     INC $238
     INC $23C
     JSR CheckCollisionF3P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopOrangeDown
     JMP ghost4_movement
 
 Ghost3Left: ;Orange
+    LDX #0
+movementLoopOrangeLeft:
     DEC $233
     DEC $237
     DEC $23B
     DEC $23F
     JSR CheckCollisionF3P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopOrangeLeft
     JMP ghost4_movement
 
 Ghost3Right: ;Orange
+    LDX #0
+movementLoopOrangeRight:
     INC $233
     INC $237
     INC $23B
     INC $23F
     JSR CheckCollisionF3P
+    CLC
+    INX
+    CPX ghostSpeed
+    BNE movementLoopOrangeRight
     JMP ghost4_movement
 
 

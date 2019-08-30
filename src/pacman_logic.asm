@@ -86,3 +86,6 @@ PacRight:
     LDA #40
     STA directionPacMan
     JMP EndPacMan
+
+EndPacMan:
+    JMP Ghost1

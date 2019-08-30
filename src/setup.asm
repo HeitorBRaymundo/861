@@ -58,6 +58,13 @@ Clear:
     STX seed3
     LDX #0
     STX seed4
+    LDX #1
+    STX ghostSpeed
+    LDX #0
+    STX lowCounter
+    LDX #0
+    STX highCounter
+
 
     JSR VBlank      ; Wait for the image to fully load before continuing
     JSR PPUInit     ; Initialize the PPU before loading the rest.
