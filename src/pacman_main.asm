@@ -34,11 +34,13 @@ volta:
   STA $4016
   LDA #00
   STA $4016
-
+  CLC
   LDA $4016 ;A
   LDA $4016 ;B
   LDA $4016 ;Select
   LDA $4016 ;Start
+  AND #1
+  BNE Reset2
   LDA $4016 ; Cima
   AND #1
   BNE PacUp1
@@ -80,6 +82,9 @@ beep3: ; emite um beep em C# (#$C9)
   JMP volta
 
 PacMan_movement:
+  LDX pacmanLive
+  CPX #1
+  BNE Forever
   LDA directionPacMan
   CMP #10
   BEQ PacUp1
@@ -183,7 +188,9 @@ continueMovement:
 collide:
   ; game over hehe
   JSR beep
-  JMP 0x000
+  LDA #0
+  STA pacmanLive
+  JMP Forever
 
 beep: ; emite um beep em C# (#$C9)
   lda #$C9
@@ -342,3 +349,4 @@ Background:
   highCounter: .ds 1
   lowCounter: .ds 1
   ghostSpeed: .ds 1
+  pacmanLive: .ds 1
