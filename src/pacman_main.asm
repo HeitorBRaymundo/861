@@ -17,6 +17,19 @@ NMI:
 ; Loading Control Buttons
 ; Store # $ 01 and # $ 00 is for position 4016 to begin sending control data
 
+  ;JSR beep2
+  LDX sounds
+  CPX #0
+  BEQ beep2
+  LDX sounds
+  CPX #1
+  BEQ beep3
+
+volta:
+  LDA sounds
+  EOR #1
+  STA sounds
+
   LDA #$01
   STA $4016
   LDA #00
@@ -53,6 +66,20 @@ PacUp1:
 
 PacDown1:
   JMP PacDown
+
+beep2: ; emite um beep em C# (#$C9)
+  ldy #$B1
+  sty $4002
+  ldy #$00
+  sty $4003
+  JMP volta
+
+beep3: ; emite um beep em C# (#$C9)
+  lda #$F1
+  sta $4002
+  lda #$00
+  sta $4003
+  JMP volta
 
 PacMan_movement:
   LDX pacmanLive
@@ -133,7 +160,7 @@ Ghost4:
 GhostSpeedCounter:
   CLC
   LDX lowCounter
-  INX 
+  INX
   STX lowCounter
   CPX #255
   BNE continueMovement
@@ -318,6 +345,7 @@ Background:
   count2: .ds 1
   count3: .ds 1
   count4: .ds 1
+  sounds: .ds 1
   highCounter: .ds 1
   lowCounter: .ds 1
   ghostSpeed: .ds 1

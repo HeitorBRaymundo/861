@@ -33,7 +33,7 @@ Reset:
     sta $4015
     lda #%11001111  ; Configure channel Sq1 w/ duty 10 and volume F using internal counter
     sta $4000
-    
+
     JSR VBlank
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,6 +64,8 @@ Clear:
     STX lowCounter
     LDX #0
     STX highCounter
+    LDX #0
+    STX sounds
     LDX #1
     STX pacmanLive
  
