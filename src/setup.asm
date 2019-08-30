@@ -68,6 +68,8 @@ Clear:
     STX sounds
     LDX #1
     STX pacmanLive
+    LDX #128
+    STX beepFrequency
  
     JSR VBlank      ; Wait for the image to fully load before continuing
     JSR PPUInit     ; Initialize the PPU before loading the rest.

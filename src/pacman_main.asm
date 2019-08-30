@@ -22,7 +22,7 @@ NMI:
   CPX #1
   BEQ beep2
   LDX sounds
-  CPX #100
+  CPX beepFrequency
   BEQ beep3
 
 volta:
@@ -188,6 +188,7 @@ GhostSpeedCounter:
   LDX ghostSpeed
   INX
   STX ghostSpeed
+  LSR beepFrequency
 
 continueMovement:
   JMP ghost1_movement
@@ -364,3 +365,4 @@ Background:
   lowCounter: .ds 1
   ghostSpeed: .ds 1
   pacmanLive: .ds 1
+  beepFrequency: .ds 1
