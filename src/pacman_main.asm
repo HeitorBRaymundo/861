@@ -56,15 +56,27 @@ volta:
   JMP PacMan_movement
 
 PacRight1:
+  LDX pacmanLive
+  CPX #1
+  BNE Forever
   JMP PacRight
 
 PacLeft1:
+  LDX pacmanLive
+  CPX #1
+  BNE Forever
   JMP PacLeft
 
 PacUp1:
+  LDX pacmanLive
+  CPX #1
+  BNE Forever
   JMP PacUp
 
 PacDown1:
+  LDX pacmanLive
+  CPX #1
+  BNE Forever
   JMP PacDown
 
 beep2: ; emite um beep em C# (#$C9)
@@ -82,9 +94,6 @@ beep3: ; emite um beep em C# (#$C9)
   JMP volta
 
 PacMan_movement:
-  LDX pacmanLive
-  CPX #1
-  BNE Forever
   LDA directionPacMan
   CMP #10
   BEQ PacUp1
