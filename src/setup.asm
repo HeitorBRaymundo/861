@@ -64,7 +64,8 @@ Clear:
     STX lowCounter
     LDX #0
     STX highCounter
-
-
+    LDX #1
+    STX pacmanLive
+ 
     JSR VBlank      ; Wait for the image to fully load before continuing
     JSR PPUInit     ; Initialize the PPU before loading the rest.
