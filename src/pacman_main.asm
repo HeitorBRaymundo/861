@@ -209,9 +209,9 @@ collide:
 
 beep: ; emite um beep em C# (#$C9)
   lda #$C9
-  sta $4002
+  sta $4000
   lda #$00
-  sta $4003
+  sta $4004
   rts
 
 ;;;;;;;;;;;;;;;;;;;

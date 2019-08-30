@@ -68,7 +68,7 @@ Clear:
     STX sounds
     LDX #1
     STX pacmanLive
-    LDX #128
+    LDX #32
     STX beepFrequency
  
     JSR VBlank      ; Wait for the image to fully load before continuing
