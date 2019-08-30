@@ -19,16 +19,14 @@ NMI:
 
   ;JSR beep2
   LDX sounds
-  CPX #0
+  CPX #1
   BEQ beep2
   LDX sounds
-  CPX #1
+  CPX #100
   BEQ beep3
 
 volta:
-  LDA sounds
-  EOR #1
-  STA sounds
+  INC sounds
 
   LDA #$01
   STA $4016
@@ -80,17 +78,22 @@ PacDown1:
   JMP PacDown
 
 beep2: ; emite um beep em C# (#$C9)
-  ldy #$B1
-  sty $4002
-  ldy #$00
-  sty $4003
+  LDY #$A1
+  STY $4002
+  LDY #$00
+  STY $4003
+
   JMP volta
 
 beep3: ; emite um beep em C# (#$C9)
-  lda #$F1
-  sta $4002
-  lda #$00
-  sta $4003
+  LDY #$F1
+  STY $4002
+  LDY #$C5
+  STY $400C
+
+  LDA #0
+  STA sounds
+
   JMP volta
 
 PacMan_movement:
@@ -199,6 +202,8 @@ collide:
   JSR beep
   LDA #0
   STA pacmanLive
+  LDA #$00
+  STA $4015
   JMP Forever
 
 beep: ; emite um beep em C# (#$C9)
