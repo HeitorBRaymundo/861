@@ -14,7 +14,7 @@ CROSS_AS=${EXT}/asm6/asm6
 all: ${BIN} ${LOG} ${NES}
 
 ${NES}:
-	${CC} ${CCFLAGS} main.cpp -o ${NES}
+	${CC} ${CCFLAGS} ./emulator/main.cpp -o ${NES}
 
 ${BIN}:
 	@mkdir -p ${BIN}
