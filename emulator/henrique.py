@@ -9,37 +9,42 @@ def BPL():
     print("BPL rel")
 
 def JSR():
-    print("")
+    print("JSR abs")
 
 def BMI():
-    print("")
+    print("BMI rel")
 
 def BVC():
-    print("")
+    print("BVC rel")
 
 def RTS():
-    print("")
+    print("RTS impl")
 
 def BVS():
-    print("")
+    print("BVS rel")
 
 def BCC():
-    print("")
+    print("BCC rel")
 
 def BCS():
-    print("")
+    print("BCS rel")
 
 def BNE():
-    print("")
+    print("BNE rel")
 
 def BEQ():
-    print("")
+    print("BEQ rel")
 
 def JMP_abs():
-    print("")
+    print("JMP abs")
 
 def JMP_ind():
-    print("")
+    print("JMP ind")
+
+def SEI():
+    print("SEI impl")
+
+
 
 
 ################################
@@ -47,31 +52,31 @@ def JMP_ind():
 ################################
 
 def PHP():
-    print("")
+    print("PHP impl")
 
 def CLC():
-    print("")
+    print("CLC impl")
 
 def PLP():
-    print("")
+    print("PLP impl")
 
 def SEC():
-    print("")
+    print("SEC impl")
 
 def PHA():
-    print("")
+    print("PHA impl")
 
 def PLA():
-    print("")
+    print("PLA impl")
 
 def CLV():
-    print("")
+    print("CLV impl")
 
 def CLD():
-    print("")
+    print("CLD impl")
 
 def SED():
-    print("")
+    print("SED impl")
 
 
 
@@ -79,11 +84,11 @@ def SED():
 #        BIT OPERATIONS        #
 ################################
 
-def BIT():
-    print("")
+def BIT_zpg():
+    print("BIT zpg")
 
 def BIT_abs():
-    print("")
+    print("BIT abs")
 
 
 ################################
@@ -91,7 +96,7 @@ def BIT_abs():
 ################################
 
 def RTI():
-    print("")
+    print("RTI impl")
 
 def CLI():
-    print("")
+    print("CLI impl")
