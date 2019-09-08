@@ -2,3 +2,8 @@ nesasm
 .DS_Store
 **/*.fns
 **/*.nes
+
+**/bin/*
+**/ext/*
+**/log/*
+**/res/*
