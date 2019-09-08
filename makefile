@@ -1,12 +1,12 @@
 CC=g++
 CCFLAGS=-std=gnu++11 -O3
 
-TST=./tst
-RES=./res
-BIN=./bin
-LOG=./log
-EXT=./ext
-NES=./bin/nesemu
+TST=./emulator/tst
+RES=./emulator/res
+BIN=./emulator/bin
+LOG=./emulator/log
+EXT=./emulator/ext
+NES=./emulator/bin/nesemu
 
 TESTS=$(addprefix ${BIN}/, $(notdir $(patsubst %.s,%,$(sort $(wildcard ${TST}/*.s)))))
 CROSS_AS=${EXT}/asm6/asm6
