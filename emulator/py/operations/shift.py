@@ -69,7 +69,7 @@ class LSR_Op():
         self.operation = operation
 
     def execute():
-        #   0 -> [76543210] -> C 
+        #   0 -> [76543210] -> C
         print (self.operation)
 
 class LSR_zero_page_0x46(LSR_Op):
@@ -91,3 +91,35 @@ class LSR_zero_page_index_0x56(LSR_Op):
 class LSR_abs_X_0x05E(LSR_Op):
     def __init__(self, abs: int, X: int, operation: str):
         super().init(self, abs[X], "Op 5E")
+
+
+class ROR_Op():
+    operation = ''
+    position = 0
+    def __init__(self, position: int, operation: str):
+        self.position = position
+        self.operation = operation
+
+    def execute():
+        #   0 -> [76543210] -> C
+        print (self.operation)
+
+class ROR_zero_page_0x66(ROR_Op):
+    def __init__(self, zpg_index: int, operation: str):
+        super().init(self, zpg_index, "Op 66")
+
+class ROR_A_0x6A(ROR_Op):
+    def __init__(self, value_A: int, operation: str):
+        super().init(self, value_A, "Op 6A")
+
+class ROR_absolute_0x6E(ROR_Op):
+    def __init__(self, abs: int, operation: str):
+        super().init(self, abs, "Op 6E")
+
+class ROR_zero_page_index_0x76(ROR_Op):
+    def __init__(self, zpg_index: int, X: int, operation: str):
+        super().init(self, zpg_index[X], "Op 76")
+
+class ROR_abs_X_0x07E(ROR_Op):
+    def __init__(self, abs: int, X: int, operation: str):
+        super().init(self, abs[X], "Op 7E")
