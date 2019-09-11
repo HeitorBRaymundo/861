@@ -55,12 +55,12 @@ class IncreaseReg0x8A(Transfer_Op):
 
 class IncreaseReg0x98(Transfer_Op):
     def __init__(self):
-        super().init(self, 'Y', 'A', "Op CA")
+        super().init(self, 'Y', 'A', "Op 98")
 
 class IncreaseReg0xA8(Transfer_Op):
     def __init__(self):
-        super().init(self, 'A', 'Y', "Op CA")
+        super().init(self, 'A', 'Y', "Op A8")
 
 class IncreaseReg0xAA(Transfer_Op):
     def __init__(self):
-        super().init(self, 'A', 'X', "Op CA")
+        super().init(self, 'A', 'X', "Op AA")
