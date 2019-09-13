@@ -41,7 +41,14 @@ class System():
     def getFLAG(self, flag = 0):
         if (flag):
             return self.FLAGS[flag]
-        return self.FLAGS
+
+        return "{}{}{}{}{}{}{}".format(self.FLAGS["C"], self.FLAGS["Z"], self.FLAGS["I"], self.FLAGS["D"], self.FLAGS["B"], self.FLAGS["O"], self.FLAGS["N"],)
 
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
+
+    def getSP(self):
+        return self.SP
+
+    def setMEM(self, newValue):
+        self.SP = newValue
