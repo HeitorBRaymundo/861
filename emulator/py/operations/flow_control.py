@@ -2,44 +2,58 @@
 #  JUMP / BRANCH / RETURN / BREAK  #
 ####################################
 
-def BRK():
+class BRK0x00():
+    def __init__(self, operation: str):
     print("BRK impl")
 
-def BPL():
+class BPL0x10():
+    def __init__(self, operation: str):
     print("BPL rel")
 
-def JSR():
+class JSR0x20():
+    def __init__(self, operation: str):
     print("JSR abs")
 
-def BMI():
+class BMI0x30():
+    def __init__(self, operation: str):
     print("BMI rel")
 
-def BVC():
+class BVC0x50():
+    def __init__(self, operation: str):
     print("BVC rel")
 
-def RTS():
+class RTS0x60():
+    def __init__(self, operation: str):
     print("RTS impl")
 
-def BVS():
+class BVS0x70():
+    def __init__(self, operation: str):
     print("BVS rel")
 
-def BCC():
+class BCC0x90():
+    def __init__(self, operation: str):
     print("BCC rel")
 
-def BCS():
+class BCS0xB0():
+    def __init__(self, operation: str):
     print("BCS rel")
 
-def BNE():
+class BNE0xD0():
+    def __init__(self, operation: str):
     print("BNE rel")
 
-def BEQ():
+class BEQ0xF0():
+    def __init__(self, operation: str):
     print("BEQ rel")
 
-def JMP_abs():
+class JMP_abs0x4C():
+    def __init__(self, operation: str):
     print("JMP abs")
 
-def JMP_ind():
+class JMP_ind0x6C():
+    def __init__(self, operation: str):
     print("JMP ind")
 
-def SEI():
+class SEI0x78():
+    def __init__(self, operation: str):
     print("SEI impl")

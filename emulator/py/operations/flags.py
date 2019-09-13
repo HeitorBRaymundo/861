@@ -2,29 +2,38 @@
 #        FLAGS / STACK         #
 ################################
 
-def PHP():
+class PHP0x08():
+    def __init__(self, operation: str):
     print("PHP impl")
 
-def CLC():
+class CLC0x18():
+    def __init__(self, operation: str):
     print("CLC impl")
 
-def PLP():
+class PLP0x28():
+    def __init__(self, operation: str):
     print("PLP impl")
 
-def SEC():
+class SEC0x38():
+    def __init__(self, operation: str):
     print("SEC impl")
 
-def PHA():
+class PHA0x48():
+    def __init__(self, operation: str):
     print("PHA impl")
 
-def PLA():
+class PLA0x68():
+    def __init__(self, operation: str):
     print("PLA impl")
 
-def CLV():
+class CLV0xB8():
+    def __init__(self, operation: str):
     print("CLV impl")
 
-def CLD():
+class CLD0xD8():
+    def __init__(self, operation: str):
     print("CLD impl")
 
-def SED():
+class SED0xF8():
+    def __init__(self, operation: str):
     print("SED impl")

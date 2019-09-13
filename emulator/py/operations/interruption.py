@@ -2,8 +2,10 @@
 #         INTERUPTIONS         #
 ################################
 
-def RTI():
-    print("RTI impl")
+class RTI0x40():
+    def __init__(self, operation: str):
+        print("RTI impl")
 
-def CLI():
-    print("CLI impl")
+class CLI0x58():
+    def __init__(self, operation: str):
+        print("CLI impl")
