@@ -1,20 +1,17 @@
+from py import system
 
-pc = 0
-a = 0
-x = 0
-y = 0
+system = system.System()
 
-def main(file):
+def printSystemStatus():
+    return
+    print("")
 
-    # Read file
-    rom_bytes = open()
+
+# Read file
+with open('bin/brk', 'rb') as file:
+    rom_bytes = file.read()
 
     for i in range(0, len(rom_bytes)):
         opcode = hex(rom_bytes[i])
         # do stuff
         printSystemStatus()
-
-    return
-
-def printSystemStatus():
-    print("")
