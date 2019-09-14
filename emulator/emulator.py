@@ -1,4 +1,5 @@
 from py import system
+from py.operations import register_instructions
 
 systemCPU = system.System()
 
