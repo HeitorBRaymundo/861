@@ -2,6 +2,8 @@
 #         INTERUPTIONS         #
 ################################
 
+from py.system import *
+
 class RTI0x40(System):
     def __init__(self, operation: str):
         # Return from Interrupt

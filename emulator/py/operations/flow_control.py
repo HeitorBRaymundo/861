@@ -2,6 +2,8 @@
 #  JUMP / BRANCH / RETURN / BREAK  #
 ####################################
 
+from py.system import *
+
 class BRK0x00(System):
     def __init__(self, operation: str):
         # Force Break

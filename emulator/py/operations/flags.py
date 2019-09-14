@@ -2,6 +2,8 @@
 #        FLAGS / STACK         #
 ################################
 
+from py.system import *
+
 class PHP0x08(System):
     def __init__(self, operation: str):
         # Push Processor Status on Stack
