@@ -25,17 +25,19 @@ with open('bin/brk', 'rb') as file:
             print("LDA abs,y")
             i = i + 2
         elif opcode == '0xc8':
+            register_instructions.IncreaseReg0xC8()
             print("INY")
         elif opcode == '0xbe':
             print("LDX abs, y")
             i = i + 2
         else:
-            print(opcode)
-            print("Instrução invalida!")
+            pass
+            #print(opcode)
+            #print("Instrução invalida!")
 
 
         i = i + 1
         if (True):
-            print ("| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
+           print ("| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
         else:
-            print ("| x = ", system.getX, " | y = ", system.getY, " | sp = ", system.getSP, " | p[NV-BDIZC] = ", system.getFLAG," | MEM[{}] = ".format(rom_bytes[i + 1], rom_bytes[i + 2], " |"))
+           print ("| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = ".format(rom_bytes[i + 1], rom_bytes[i + 2], " |"))
