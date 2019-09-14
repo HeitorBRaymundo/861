@@ -86,4 +86,5 @@ class SEI0x78(System):
     def __init__(self, operation: str):
         # Set Interrupt Disable Status
         # 1 -> I
+        super().setFLAG("I", 1)
         print("SEI impl")
