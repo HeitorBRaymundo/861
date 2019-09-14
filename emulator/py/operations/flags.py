@@ -2,29 +2,63 @@
 #        FLAGS / STACK         #
 ################################
 
-def PHP():
-    print("PHP impl")
+from py.system import *
 
-def CLC():
-    print("CLC impl")
+class PHP0x08(System):
+    def __init__(self, operation: str):
+        # Push Processor Status on Stack
+        # push SR
+        print("PHP impl")
 
-def PLP():
-    print("PLP impl")
+class CLC0x18(System):
+    def __init__(self, operation: str):
+        # Clear Carry Flag
+        # 0 -> C
+        super().setFLAG("C", 0)
+        print("CLC impl")
 
-def SEC():
-    print("SEC impl")
+class PLP0x28(System):
+    def __init__(self, operation: str):
+        # Pull Processor Status from Stack
+        # pull SR
+        print("PLP impl")
 
-def PHA():
-    print("PHA impl")
+class SEC0x38(System):
+    def __init__(self, operation: str):
+        # Set Carry Flag
+        # 1 -> C
+        super().setFLAG("C", 1)
+        print("SEC impl")
 
-def PLA():
-    print("PLA impl")
+class PHA0x48(System):
+    def __init__(self, operation: str):
+        # Push Accumulator on Stack
+        # push A
+        print("PHA impl")
 
-def CLV():
-    print("CLV impl")
+class PLA0x68(System):
+    def __init__(self, operation: str):
+        # Pull Accumulator on Stack
+        # pull A
+        print("PLA impl")
 
-def CLD():
-    print("CLD impl")
+class CLV0xB8(System):
+    def __init__(self, operation: str):
+        # Clear Overflow Flag
+        # 0 -> V
+        super().setFLAG("V", 0)
+        print("CLV impl")
 
-def SED():
-    print("SED impl")
+class CLD0xD8(System):
+    def __init__(self, operation: str):
+        # Clear Decimal Mode
+        # 0 -> D
+        super().setFLAG("D", 0)
+        print("CLD impl")
+
+class SED0xF8(System):
+    def __init__(self, operation: str):
+        # Set Decimal Flag
+        # 1 -> D
+        super().setFLAG("D", 1)
+        print("SED impl")
