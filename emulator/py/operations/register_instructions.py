@@ -1,21 +1,34 @@
-class Increase_Op():
+from py.system import *
+
+class Increase_Op(System):
     register = ''
     operation = ''
     def __init__(self, register: str, operation: str):
         self.register = register
+        self.operation = operation
+        self.execute(register)
 
-    def execute():
+    def execute(self, register):
+        if (self.register == 'Y'):
+            print (super().getY())
+            super().setY(super().getY() + 1)
+            print (super().getY())
+        elif (self.register == 'X'):
+            print (super().getX())
+            super().setX(super().getX() + 1)
+            print (super().getX())
         # value_register ++
+
         print (self.operation)
 
 class IncreaseReg0xC8(Increase_Op):
     def __init__(self):
-        super().init(self, 'Y', "Op C8")
+        super().__init__('Y', "Op C8")
 
 
 class IncreaseReg0xE8(Increase_Op):
     def __init__(self):
-        super().init(self, 'X', "Op E8")
+        super().__init__(self, 'X', "Op E8")
 
 class Decrease_Op():
     register = ''
@@ -29,12 +42,12 @@ class Decrease_Op():
 
 class IncreaseReg0x88(Decrease_Op):
     def __init__(self):
-        super().init(self, 'Y', "Op 88")
+        super().__init__(self, 'Y', "Op 88")
 
 
 class IncreaseReg0xCA(Decrease_Op):
     def __init__(self):
-        super().init(self, 'X', "Op CA")
+        super().__init__(self, 'X', "Op CA")
 
 class Transfer_Op():
     first_register = ''
@@ -51,16 +64,16 @@ class Transfer_Op():
 
 class IncreaseReg0x8A(Transfer_Op):
     def __init__(self):
-        super().init(self, 'X', 'A', "Op 8A")
+        super().__init__(self, 'X', 'A', "Op 8A")
 
 class IncreaseReg0x98(Transfer_Op):
     def __init__(self):
-        super().init(self, 'Y', 'A', "Op 98")
+        super().__init__(self, 'Y', 'A', "Op 98")
 
 class IncreaseReg0xA8(Transfer_Op):
     def __init__(self):
-        super().init(self, 'A', 'Y', "Op A8")
+        super().__init__(self, 'A', 'Y', "Op A8")
 
 class IncreaseReg0xAA(Transfer_Op):
     def __init__(self):
-        super().init(self, 'A', 'X', "Op AA")
+        super().__init__(self, 'A', 'X', "Op AA")
