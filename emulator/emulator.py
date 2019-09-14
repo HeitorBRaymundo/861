@@ -1,5 +1,5 @@
 from py import system
-from py.operations import register_instructions
+from py.operations import *
 
 systemCPU = system.System()
 
@@ -9,7 +9,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('bin/brk', 'rb') as file:
+with open('./emulator/bin/brk', 'rb') as file:
     rom_bytes = file.read()
     rom_bytes = rom_bytes[5:]
     i = 0
@@ -25,7 +25,7 @@ with open('bin/brk', 'rb') as file:
             print("LDA abs,y")
             i = i + 2
         elif opcode == '0xc8':
-            register_instructions.IncreaseReg0xC8()
+            IncreaseReg0xC8()
             print("INY")
         elif opcode == '0xbe':
             print("LDX abs, y")
