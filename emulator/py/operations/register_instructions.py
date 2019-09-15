@@ -62,18 +62,18 @@ class Transfer_Op():
         print (self.operation)
 
 
-class IncreaseReg0x8A(Transfer_Op):
+class Transfer_TXA_0x8A(Transfer_Op):
     def __init__(self):
         super().__init__(self, 'X', 'A', "Op 8A")
 
-class IncreaseReg0x98(Transfer_Op):
+class Transfer_TYA_0x98(Transfer_Op):
     def __init__(self):
         super().__init__(self, 'Y', 'A', "Op 98")
 
-class IncreaseReg0xA8(Transfer_Op):
+class Transfer_TAY_0xA8(Transfer_Op):
     def __init__(self):
         super().__init__(self, 'A', 'Y', "Op A8")
 
-class IncreaseReg0xAA(Transfer_Op):
+class Transfer_TAX_0xAA(Transfer_Op):
     def __init__(self):
         super().__init__(self, 'A', 'X', "Op AA")
