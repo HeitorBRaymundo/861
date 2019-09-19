@@ -1,5 +1,9 @@
 from py import system
 from py.operations import register_instructions
+from py.operations import bit
+from py.operations import flags
+from py.operations import flow_control
+from py.operations import interruption
 
 systemCPU = system.System()
 
