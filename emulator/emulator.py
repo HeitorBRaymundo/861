@@ -14,8 +14,16 @@ def printSystemStatus():
 
 # Read file
 with open('./emulator/bin/brk-adc', 'rb') as file:
+    import pdb;
+    pdb.set_trace()
     rom_bytes = file.read()
-    rom_bytes = rom_bytes[5:]
+    # set the header size
+    header_size = 16
+    # get the binary header
+    header_bytes = rom_bytes[0:16]
+    # get the number of pgr_counters
+    pgr_counter = header_bytes[4:5]
+    rom_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
     i = 0
     while i < len(rom_bytes):
         opcode = hex(rom_bytes[i])
