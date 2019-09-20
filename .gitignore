@@ -7,3 +7,6 @@ nesasm
 **/ext/
 **/log/
 **/res/
+
+__pycache__/
+*__pycache__/
