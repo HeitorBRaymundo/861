@@ -23,10 +23,12 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
     header_bytes = rom_bytes[0:16]
     # get the number of pgr_counters
     pgr_counter = header_bytes[4:5]
-    rom_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
+    pgr_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
+
     i = 0
-    while i < len(rom_bytes):
-        opcode = hex(rom_bytes[i])
+
+    while i < len(pgr_bytes):
+        opcode = hex(pgr_bytes[i])
 
         if opcode == '0x0':
             pass
