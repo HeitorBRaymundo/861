@@ -10,7 +10,6 @@ systemCPU = system.System()
 
 def printSystemStatus():
     return
-    print(")
 
 
 # Read file

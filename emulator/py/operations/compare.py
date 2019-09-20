@@ -155,7 +155,7 @@ class CompareWithAcumulator0xDD(CMP_Op):
 
 class CompareWithX0xE0(CMP_Op):
     def __init__(self, imm: int, value_A: int, operation: str):
-        super().__init__(self, valueA, imm, "Op E0")`
+        super().__init__(self, valueA, imm, "Op E0")
 class CompareWithX0xE4(CMP_Op):
     def __init__(self, zpg_index: int, value_A: int, operation: str):
         super().__init__(self, valueA, zpg_index, "Op E4")
