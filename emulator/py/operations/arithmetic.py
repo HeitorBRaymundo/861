@@ -1,3 +1,5 @@
+from py.system import *
+
 class ADC_Op():
     value_second = 0
     system = ""
@@ -45,7 +47,7 @@ class AddWithCarry0x6D(ADC_Op):
 
 class AddWithCarry0x71(ADC_Op):
     def __init__(self, SystemCPU: System):
-        super().__init__(self, Y[índex], "Op 71")
+        super().__init__(self, Y[indrect], "Op 71")
 
 class AddWithCarry0x75(ADC_Op):
     def __init__(self, SystemCPU: System):
