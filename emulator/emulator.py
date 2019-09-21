@@ -10,11 +10,10 @@ systemCPU = system.System()
 
 def printSystemStatus():
     return
-    print("")
 
 
 # Read file
-with open('./emulator/bin/brk', 'rb') as file:
+with open('./emulator/bin/brk-adc', 'rb') as file:
     rom_bytes = file.read()
     rom_bytes = rom_bytes[5:]
     i = 0
@@ -29,36 +28,123 @@ with open('./emulator/bin/brk', 'rb') as file:
         elif opcode == '0xb9':
             print("LDA abs,y")
             i = i + 2
-        elif opcode == '0xc8':
-            IncreaseReg0xC8()
-            print("INY")
         elif opcode == '0xbe':
             print("LDX abs, y")
             i = i + 2
-        #else:
-            #pass
+        elif opcode == '0x06':
+            print("ASL zpg")
+        elif opcode == '0x0a':
+            print("ASL A")
+        elif opcode == '0x0e':
+            print("ASL abs")
+        elif opcode == '0x16':
+            print("ASL zpg,X")
+        elif opcode == '0x1e':
+            print("ASL abs,X")
+        elif opcode == '0x26':
+            print("ROL zpg")
+        elif opcode == '0x2a':
+            print("ROL A")
+        elif opcode == '0x2e':
+            print("ROL abs")
+        elif opcode == '0x36':
+            print("ROL zpg,X")
+        elif opcode == '0x3e':
+            print("ROL abs,X")
+        elif opcode == '0x46':
+            print("LSR zpg")
+        elif opcode == '0x4a':
+            print("LSR A")
+        elif opcode == '0x4e':
+            print("LSR abs")
+        elif opcode == '0x56':
+            print("LSR zpg,X")
+        elif opcode == '0x5e':
+            print("LSR abs,X")
+        elif opcode == '0x61':
+            print("ADC X,ind")
+        elif opcode == '0x65':
+            print("ADC zpg")
+        elif opcode == '0x66':
+            print("ROR zpg")
+        elif opcode == '0x69':
+            print("ADC #")
+            i = i + 1
+        elif opcode == '0x6a':
+            print("ROR A")
+        elif opcode == '0x6d':
+            print("ADC abs")
+            i = i + 1
+        elif opcode == '0x6e':
+            print("ROR abs")
+        elif opcode == '0x71':
+            print("ADC ind,Y")
+        elif opcode == '0x75':
+            print("ADC zpg,X")
+        elif opcode == '0x76':
+            print("ROR zpg,X")
+        elif opcode == '0x79':
+            print("ADC abs,Y")
+            i = i + 2
+        elif opcode == '0x7d':
+            print("ADC abs,X")
+            i = i + 2
+        elif opcode == '0x7e':
+            print("ROR abs,X")
+        elif opcode == '0x88':
+            print("DEY impl")
+        elif opcode == '0xc6':
+            print("DEC zpg")
+        elif opcode == '0xc8':
+            IncreaseReg0xC8()
+            print("INY impl")
+        elif opcode == '0xca':
+            print("DEX impl")
+        elif opcode == '0xce':
+            print("DEC abs")
+        elif opcode == '0xd6':
+            print("DEC zpg,X")
+        elif opcode == '0xde':
+            print("DEC abs,X")
+        elif opcode == '0xe1':
+            print("SBC X,ind")
+        elif opcode == '0xe5':
+            print("SBC zpg")
+        elif opcode == '0xe6':
+            print("INC zpg")
+        elif opcode == '0xe8':
+            print("INX impl")
+        elif opcode == '0xe9':
+            print("SBC #")
+        elif opcode == '0xed':
+            print("SBC abs")
+        elif opcode == '0xee':
+            print("INC abs")
+        elif opcode == '0xf1':
+            print("SBC ind,Y")
+        elif opcode == '0xf5':
+            print("SBC zpg,X")
+        elif opcode == '0xf6':
+            print("INC zpg,X")
+        elif opcode == '0xf9':
+            print("SBC abs,Y")
+        elif opcode == '0xfd':
+            print("SBC abs,X")
+        elif opcode == '0xfe':
+            print("INC abs,X")
             #print(opcode)
             #print("Instrução invalida!")
-
-
         # FUSCA \/
-
-
-
-        # IGOR \/
-
-
-
 
         # HEITOR \/
         elif opcode == '0x01':
-            compare.OrWithAcumulator0x01()
+            compare.OrWithAcumulator0x01(systemCPU, )
             print('ORA X, ind')
         elif opcode == '0x05':
             compare.OrWithAcumulator0x05()
             print('ORA zpg')
         elif opcode == '0x09':
-            compare.OrWithAcumulator0x09()
+            compare.OrWithAcumulator0x09(systemCPU, 10)
             print('ORA #')
         elif opcode == '0x0d':
             compare.OrWithAcumulator0x0D()
@@ -169,9 +255,83 @@ with open('./emulator/bin/brk', 'rb') as file:
 
 
         # CARTS \/
+        elif opcode == '0x81':
+            print("ASL zpg")
+        elif opcode == '0x84':
+            print("ASL A")
+        elif opcode == '0x85':
+            print("ASL abs")
+        elif opcode == '0x86':
+            print("ASL zpg,X")
+        elif opcode == '0x8a':
+            print("ASL abs,X")
+        elif opcode == '0x8c':
+            print("ROL zpg")
+        elif opcode == '0x8d':
+            print("ROL A")
+        elif opcode == '0x8e':
+            print("ROL abs")
+        elif opcode == '0x91':
+            print("ROL zpg,X")
+        elif opcode == '0x94':
+            print("ROL abs,X")
+        elif opcode == '0x95':
+            print("LSR zpg")
+        elif opcode == '0x96':
+            print("LSR A")
+        elif opcode == '0x98':
+            print("LSR abs")
+        elif opcode == '0x99':
+            print("LSR zpg,X")
+        elif opcode == '0x9a':
+            print("LSR abs,X")
+        elif opcode == '0x9d':
+            print("ADC X,ind")
+        elif opcode == '0xa0':
+            print("ADC zpg")
+        elif opcode == '0xa1':
+            print("ROR zpg")
+        elif opcode == '0xa2':
+            print("ADC #")
+        elif opcode == '0xa4':
+            print("ROR A")
+        elif opcode == '0xa5':
+            print("ADC abs")
+        elif opcode == '0xa6':
+            print("ROR abs")
+        elif opcode == '0xa8':
+            print("ADC ind,Y")
+        elif opcode == '0xa9':
+            print("ADC zpg,X")
+        elif opcode == '0xaa':
+            print("ROR zpg,X")
+        elif opcode == '0xac':
+            print("ADC abs,Y")
+        elif opcode == '0xad':
+            print("ADC abs,X")
+        elif opcode == '0xae':
+            print("ROR abs,X")
+        elif opcode == '0xb1':
+            print("DEY impl")
+        elif opcode == '0xb4':
+            print("DEC zpg")
+        elif opcode == '0xb5':
+            print("INY impl")
+        elif opcode == '0xb6':
+            print("DEX impl")
+        elif opcode == '0xb9':
+            print("DEC abs")
+        elif opcode == '0xba':
+            print("DEC zpg,X")
+        elif opcode == '0xbc':
+            print("DEC abs,X")
+        elif opcode == '0xbd':
+            print("SBC X,ind")
+        elif opcode == '0xbe':
+            print("SBC zpg")
 
-
-
+        else:
+            pass
 
 
         i = i + 1
