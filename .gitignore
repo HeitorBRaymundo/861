@@ -10,3 +10,4 @@ nesasm
 
 __pycache__/
 *__pycache__/
+./emulator/ext/*
