@@ -266,79 +266,101 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
 
         # CARTS \/
         elif opcode == '0x81':
-            print("ASL zpg")
+            print("STA X,ind")
         elif opcode == '0x84':
-            print("ASL A")
+            print("STY zpg")
         elif opcode == '0x85':
-            print("ASL abs")
+            print("STA zpg")
         elif opcode == '0x86':
-            print("ASL zpg,X")
+            print("STX zpg")
         elif opcode == '0x8a':
-            print("ASL abs,X")
+            print("TXA impl")
         elif opcode == '0x8c':
-            print("ROL zpg")
+            print("STY abs")
         elif opcode == '0x8d':
-            print("ROL A")
+            print("STA abs")
         elif opcode == '0x8e':
-            print("ROL abs")
+            print("STX abs")
         elif opcode == '0x91':
-            print("ROL zpg,X")
+            print("STA ind,Y")
         elif opcode == '0x94':
-            print("ROL abs,X")
+            print("STY zpg,X")
         elif opcode == '0x95':
-            print("LSR zpg")
+            print("STA zpg,X")
         elif opcode == '0x96':
-            print("LSR A")
+            print("STX zpg,Y")
         elif opcode == '0x98':
-            print("LSR abs")
+            print("TYA impl")
         elif opcode == '0x99':
-            print("LSR zpg,X")
+            print("STA abs,Y")
         elif opcode == '0x9a':
-            print("LSR abs,X")
+            print("TXS impl")
         elif opcode == '0x9d':
-            print("ADC X,ind")
+            print("STA abs,X")
         elif opcode == '0xa0':
-            print("ADC zpg")
+            print("LDY #")
         elif opcode == '0xa1':
-            print("ROR zpg")
+            print("LDA X,ind")
         elif opcode == '0xa2':
-            print("ADC #")
+            print("LDX #")
         elif opcode == '0xa4':
-            print("ROR A")
+            print("LDY zpg")
         elif opcode == '0xa5':
-            print("ADC abs")
+            print("LDA zpg")
         elif opcode == '0xa6':
-            print("ROR abs")
+            print("LDX zpg")
         elif opcode == '0xa8':
-            print("ADC ind,Y")
+            print("TAY impl")
         elif opcode == '0xa9':
-            print("ADC zpg,X")
+            print("LDA #")
         elif opcode == '0xaa':
-            print("ROR zpg,X")
+            print("TAX impl")
         elif opcode == '0xac':
-            print("ADC abs,Y")
+            print("LDY abs")
         elif opcode == '0xad':
-            print("ADC abs,X")
+            print("LDA abs")
         elif opcode == '0xae':
-            print("ROR abs,X")
+            print("LDX abs")
         elif opcode == '0xb1':
-            print("DEY impl")
+            print("LDA ind,Y")
         elif opcode == '0xb4':
-            print("DEC zpg")
+            print("LDY zpg,X")
         elif opcode == '0xb5':
-            print("INY impl")
+            print("LDA zpg,X")
         elif opcode == '0xb6':
-            print("DEX impl")
+            print("LDX zpg,Y")
         elif opcode == '0xb9':
-            print("DEC abs")
+            print("LDA abs,Y")
         elif opcode == '0xba':
-            print("DEC zpg,X")
+            print("TSX impl")
         elif opcode == '0xbc':
-            print("DEC abs,X")
+            print("LDY abs,X")
         elif opcode == '0xbd':
-            print("SBC X,ind")
+            print("LDA abs,X")
         elif opcode == '0xbe':
-            print("SBC zpg")
+            print("LDX abs,Y")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")"
 
         else:
             pass
