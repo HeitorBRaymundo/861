@@ -11,6 +11,7 @@ nesasm
 __pycache__/
 *__pycache__/
 ./emulator/ext/*
+emulator/ext/asm6/asm6
 
 __pycache__/
 *.py[cod]
