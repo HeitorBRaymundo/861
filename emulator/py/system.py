@@ -4,7 +4,7 @@ class System():
     Y = 0
     MEM = [0] * 255
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
-    SP = 0
+    stack = []
 
     def ___init__ (self):
         self.A = 0
@@ -12,7 +12,7 @@ class System():
         self.Y = 0
         self.MEM = [0] * 255
         self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
-        self.SP = 0
+        self.stack = []
 
     def getA(self):
         return self.A
@@ -47,8 +47,23 @@ class System():
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
 
-    def getSP(self):
-        return self.SP
-
     def setMEM(self, newValue):
         self.SP = newValue
+
+    def stack_push(self, value):
+        if len(self.stack) > 256:
+            raise Exception("Stack is already full!")
+        else:
+            self.stack.append(value)
+            return True
+
+    def stack_pop(self):
+        if len(self.stack) <= 0:
+            raise Exception("Stack is empty!")
+        else:
+            value = self.stack.pop()
+            return value
+
+if __name__ == '__main__':
+    system = System()
+    import pdb; pdb.set_trace()
