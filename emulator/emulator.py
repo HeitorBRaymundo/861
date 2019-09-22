@@ -15,7 +15,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('./emulator/bin/brk-adc', 'rb') as file:
+with open('./emulator/bin/brk-sub', 'rb') as file:
 
     rom_bytes = file.read()
 
@@ -31,7 +31,7 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
 
     while i < len(pgr_bytes):
         opcode = hex(pgr_bytes[i])
-
+        print (opcode)
         if opcode == '0x0':
             pass
         elif opcode == '0xa0':
@@ -86,12 +86,12 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
             print("LSR abs,X")
             i = i + 2
         elif opcode == '0x61':
-            print("ADC X,ind")
-            # AddWithCarry0x61(systemCPU)
+            print("ADC X,indirect")
+            AddWithCarry0x61(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x65':
-            # AddWithCarry0x65(systemCPU)
             print("ADC zpg")
+            AddWithCarry0x65(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0x66':
             print("ROR zpg")
@@ -99,36 +99,35 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         elif opcode == '0x69':
             print("ADC #")
             AddWithCarry0x69(systemCPU, pgr_bytes[i + 1])
-            print ("| a = ", systemCPU.getA(), " | x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ",  " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
             i = i + 1
         elif opcode == '0x6a':
             print("ROR A")
         elif opcode == '0x6d':
             print("ADC abs")
-            # AddWithCarry0x6D(systemCPU, )
-            i = i + 1
+            AddWithCarry0x6D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0x6e':
             print("ROR abs")
             i = i + 1
         elif opcode == '0x71':
             print("ADC ind,Y")
-            # AddWithCarry0x71(systemCPU)
+            # AddWithCarry0x71(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             #### ATENCAO AO INDEX
             i = i + 2
         elif opcode == '0x75':
             print("ADC zpg,X")
-            # AddWithCarry0x75(systemCPU)
-            i = i + 2
+            AddWithCarry0x75(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x76':
             print("ROR zpg,X")
             i = i + 2
         elif opcode == '0x79':
             print("ADC abs,Y")
-            # AddWithCarry0x79(systemCPU)
+            AddWithCarry0x79(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x7d':
             print("ADC abs,X")
-            # AddWithCarry0x7D(systemCPU)
+            AddWithCarry0x7D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x7e':
             print("ROR abs,X")
@@ -413,6 +412,7 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         else:
             pass
 
+        print ("| a = ", systemCPU.getA(), " | x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ",  " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
 
         i = i + 1
         # if (True):
