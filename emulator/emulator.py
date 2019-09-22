@@ -4,7 +4,9 @@ from py.operations import bit
 from py.operations import flags
 from py.operations import flow_control
 from py.operations import interruption
-from py.operations import compare
+# from py.operations import compare
+
+from py.operations import *
 
 systemCPU = system.System()
 
@@ -96,14 +98,14 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
             i = i + 1
         elif opcode == '0x69':
             print("ADC #")
-            # AddWithCarry0x69(systemCPU)
+            AddWithCarry0x69(systemCPU, pgr_bytes[i + 1])
+            print ("| a = ", systemCPU.getA(), " | x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ",  " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
             i = i + 1
         elif opcode == '0x6a':
             print("ROR A")
         elif opcode == '0x6d':
             print("ADC abs")
             # AddWithCarry0x6D(systemCPU, )
-            print (rom_bytes[i + 1])
             i = i + 1
         elif opcode == '0x6e':
             print("ROR abs")
@@ -193,15 +195,14 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         # FUSCA \/
 
         # HEITOR \/
-<<<<<<< HEAD
         # elif opcode == '0x01':
-        #     compare.OrWithAcumulator0x01()
+        #     compare.OrWithAcumulator0x01(systemCPU, )
         #     print('ORA X, ind')
         # elif opcode == '0x05':
         #     compare.OrWithAcumulator0x05()
         #     print('ORA zpg')
         # elif opcode == '0x09':
-        #     compare.OrWithAcumulator0x09()
+        #     compare.OrWithAcumulator0x09(systemCPU, 10)
         #     print('ORA #')
         # elif opcode == '0x0d':
         #     compare.OrWithAcumulator0x0D()
@@ -308,122 +309,6 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         # elif opcode == '0xec':
         #     compare.CompareWithX0xEC()
         #     print('CPX abs')
-=======
-        elif opcode == '0x01':
-            compare.OrWithAcumulator0x01(systemCPU, )
-            print('ORA X, ind')
-        elif opcode == '0x05':
-            compare.OrWithAcumulator0x05()
-            print('ORA zpg')
-        elif opcode == '0x09':
-            compare.OrWithAcumulator0x09(systemCPU, 10)
-            print('ORA #')
-        elif opcode == '0x0d':
-            compare.OrWithAcumulator0x0D()
-            print('ORA abs')
-        elif opcode == '0x11':
-            compare.OrWithAcumulator0x11()
-            print('ORA ind, Y')
-        elif opcode == '0x15':
-            compare.OrWithAcumulator0x15()
-            print('ORA zpg, X')
-        elif opcode == '0x19':
-            compare.OrWithAcumulator0x19()
-            print('ORA abs, Y')
-        elif opcode == '0x1d':
-            compare.OrWithAcumulator0x1D()
-            print('ORA abs, X')
-        elif opcode == '0x21':
-            compare.AndWithAcumulator0x21()
-            print('AND X, ind')
-        elif opcode == '0x25':
-            compare.AndWithAcumulator0x25()
-            print('AND zpg')
-        elif opcode == '0x29':
-            compare.AndWithAcumulator0x29()
-            print('AND #')
-        elif opcode == '0x2d':
-            compare.AndWithAcumulator0x2D()
-            print('AND abs')
-        elif opcode == '0x31':
-            compare.AndWithAcumulator0x31()
-            print('AND ind, Y')
-        elif opcode == '0x35':
-            compare.AndWithAcumulator0x35()
-            print('AND zpg, X')
-        elif opcode == '0x39':
-            compare.AndWithAcumulator0x39()
-            print('AND abs, Y')
-        elif opcode == '0x3d':
-            compare.AndWithAcumulator0x3D()
-            print('AND abs, X')
-        elif opcode == '0x41':
-            compare.ExclusiveOrWithAcumulator0x41()
-            print('EOR ind, Y')
-        elif opcode == '0x45':
-            compare.ExclusiveOrWithAcumulator0x45()
-            print('EOR zpg')
-        elif opcode == '0x49':
-            compare.ExclusiveOrWithAcumulator0x49()
-            print('EOR #')
-        elif opcode == '0x4d':
-            compare.ExclusiveOrWithAcumulator0x4D()
-            print('EOR abs')
-        elif opcode == '0x51':
-            compare.ExclusiveOrWithAcumulator0x51()
-            print('EOR ind, Y')
-        elif opcode == '0x55':
-            compare.ExclusiveOrWithAcumulator0x55()
-            print('EOR zpg, X')
-        elif opcode == '0x59':
-            compare.ExclusiveOrWithAcumulator0x59()
-            print('EOR abs, Y')
-        elif opcode == '0x5d':
-            compare.ExclusiveOrWithAcumulator0x5D()
-            print('EOR abs, X')
-        elif opcode == '0xc0':
-            compare.CompareWithY0xC0()
-            print('CPY #')
-        elif opcode == '0xc1':
-            compare.CompareWithAcumulator0xC1()
-            print('CMP X, ind')
-        elif opcode == '0xc4':
-            compare.CompareWithY0xC4()
-            print('CPY zpg')
-        elif opcode == '0xc5':
-            compare.CompareWithAcumulator0xC5()
-            print('CMP zpg')
-        elif opcode == '0xc9':
-            compare.CompareWithAcumulator0xC9()
-            print('CMP #')
-        elif opcode == '0xcc':
-            compare.CompareWithY0xCC()
-            print('CPY abs')
-        elif opcode == '0xcd':
-            compare.CompareWithAcumulator0xCD()
-            print('CMP abs')
-        elif opcode == '0xd1':
-            compare.CompareWithAcumulator0xD1()
-            print('CMP ind, Y')
-        elif opcode == '0xd5':
-            compare.CompareWithAcumulator0xD5()
-            print('CMP zpg, X')
-        elif opcode == '0xd9':
-            compare.CompareWithAcumulator0xD9()
-            print('CMP abs, Y')
-        elif opcode == '0xdd':
-            compare.CompareWithAcumulator0xDD()
-            print('CMP abs, X')
-        elif opcode == '0xe0':
-            compare.CompareWithX0xE0()
-            print('CPX #')
-        elif opcode == '0xe4':
-            compare.CompareWithX0xE4()
-            print('CPX zpg')
-        elif opcode == '0xec':
-            compare.CompareWithX0xEC()
-            print('CPX abs')
->>>>>>> 7ccef71a8bbbcb49a0f368bf63de7a1e492b2bfd
 
 
 
@@ -523,7 +408,7 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         elif opcode == '0x':
             print("BRK impl")
         elif opcode == '0x':
-            print("BRK impl")"
+            print("BRK impl")
 
         else:
             pass

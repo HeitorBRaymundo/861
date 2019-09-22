@@ -7,11 +7,15 @@ class ADC_Op():
         self.system = systemCPU
         self.value_second = value_second
 
-    def execute():
+    def execute(self):
+        self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
+        if (self.system.getA() % 255 != self.system.getA()):
+            self.system.setFLAG("C", 1)
+            self.system.setA(self.system.getA() % 255)
         # A + M + C -> A, C
         # checar se teve overflow
         # atualizar valor de A
-        print (self.operation)
+        # print (self.operation)
 
 class SBC_Op():
     value_second = 0
@@ -37,13 +41,14 @@ class AddWithCarry0x65(ADC_Op):
 
 
 class AddWithCarry0x69(ADC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, imm, "Op 69")
+    def __init__(self, SystemCPU: System, imm: int):
+        super().__init__(SystemCPU, imm)
+        super().execute()
 
 
 class AddWithCarry0x6D(ADC_Op):
     def __init__(self, SystemCPU: System):
-        super().__init__(self, abs, "Op 6D")
+        super().__init__(SystemCPU, abs)
 
 class AddWithCarry0x71(ADC_Op):
     def __init__(self, SystemCPU: System):

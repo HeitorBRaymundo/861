@@ -2,7 +2,7 @@ class System():
     A = 0
     X = 0
     Y = 0
-    MEM = [0] * 255
+    MEM = [0] * 2047
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
     stack = []
 
