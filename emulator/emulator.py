@@ -14,11 +14,21 @@ def printSystemStatus():
 
 # Read file
 with open('./emulator/bin/brk-adc', 'rb') as file:
+
     rom_bytes = file.read()
-    rom_bytes = rom_bytes[5:]
+
+    # set the header size
+    header_size = 16
+    # get the binary header
+    header_bytes = rom_bytes[0:16]
+    # get the number of pgr_counters
+    pgr_counter =  int.from_bytes(header_bytes[4:5], byteorder='big')
+    pgr_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
+
     i = 0
-    while i < len(rom_bytes):
-        opcode = hex(rom_bytes[i])
+
+    while i < len(pgr_bytes):
+        opcode = hex(pgr_bytes[i])
 
         if opcode == '0x0':
             pass
@@ -183,6 +193,7 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         # FUSCA \/
 
         # HEITOR \/
+<<<<<<< HEAD
         # elif opcode == '0x01':
         #     compare.OrWithAcumulator0x01()
         #     print('ORA X, ind')
@@ -297,84 +308,222 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
         # elif opcode == '0xec':
         #     compare.CompareWithX0xEC()
         #     print('CPX abs')
+=======
+        elif opcode == '0x01':
+            compare.OrWithAcumulator0x01(systemCPU, )
+            print('ORA X, ind')
+        elif opcode == '0x05':
+            compare.OrWithAcumulator0x05()
+            print('ORA zpg')
+        elif opcode == '0x09':
+            compare.OrWithAcumulator0x09(systemCPU, 10)
+            print('ORA #')
+        elif opcode == '0x0d':
+            compare.OrWithAcumulator0x0D()
+            print('ORA abs')
+        elif opcode == '0x11':
+            compare.OrWithAcumulator0x11()
+            print('ORA ind, Y')
+        elif opcode == '0x15':
+            compare.OrWithAcumulator0x15()
+            print('ORA zpg, X')
+        elif opcode == '0x19':
+            compare.OrWithAcumulator0x19()
+            print('ORA abs, Y')
+        elif opcode == '0x1d':
+            compare.OrWithAcumulator0x1D()
+            print('ORA abs, X')
+        elif opcode == '0x21':
+            compare.AndWithAcumulator0x21()
+            print('AND X, ind')
+        elif opcode == '0x25':
+            compare.AndWithAcumulator0x25()
+            print('AND zpg')
+        elif opcode == '0x29':
+            compare.AndWithAcumulator0x29()
+            print('AND #')
+        elif opcode == '0x2d':
+            compare.AndWithAcumulator0x2D()
+            print('AND abs')
+        elif opcode == '0x31':
+            compare.AndWithAcumulator0x31()
+            print('AND ind, Y')
+        elif opcode == '0x35':
+            compare.AndWithAcumulator0x35()
+            print('AND zpg, X')
+        elif opcode == '0x39':
+            compare.AndWithAcumulator0x39()
+            print('AND abs, Y')
+        elif opcode == '0x3d':
+            compare.AndWithAcumulator0x3D()
+            print('AND abs, X')
+        elif opcode == '0x41':
+            compare.ExclusiveOrWithAcumulator0x41()
+            print('EOR ind, Y')
+        elif opcode == '0x45':
+            compare.ExclusiveOrWithAcumulator0x45()
+            print('EOR zpg')
+        elif opcode == '0x49':
+            compare.ExclusiveOrWithAcumulator0x49()
+            print('EOR #')
+        elif opcode == '0x4d':
+            compare.ExclusiveOrWithAcumulator0x4D()
+            print('EOR abs')
+        elif opcode == '0x51':
+            compare.ExclusiveOrWithAcumulator0x51()
+            print('EOR ind, Y')
+        elif opcode == '0x55':
+            compare.ExclusiveOrWithAcumulator0x55()
+            print('EOR zpg, X')
+        elif opcode == '0x59':
+            compare.ExclusiveOrWithAcumulator0x59()
+            print('EOR abs, Y')
+        elif opcode == '0x5d':
+            compare.ExclusiveOrWithAcumulator0x5D()
+            print('EOR abs, X')
+        elif opcode == '0xc0':
+            compare.CompareWithY0xC0()
+            print('CPY #')
+        elif opcode == '0xc1':
+            compare.CompareWithAcumulator0xC1()
+            print('CMP X, ind')
+        elif opcode == '0xc4':
+            compare.CompareWithY0xC4()
+            print('CPY zpg')
+        elif opcode == '0xc5':
+            compare.CompareWithAcumulator0xC5()
+            print('CMP zpg')
+        elif opcode == '0xc9':
+            compare.CompareWithAcumulator0xC9()
+            print('CMP #')
+        elif opcode == '0xcc':
+            compare.CompareWithY0xCC()
+            print('CPY abs')
+        elif opcode == '0xcd':
+            compare.CompareWithAcumulator0xCD()
+            print('CMP abs')
+        elif opcode == '0xd1':
+            compare.CompareWithAcumulator0xD1()
+            print('CMP ind, Y')
+        elif opcode == '0xd5':
+            compare.CompareWithAcumulator0xD5()
+            print('CMP zpg, X')
+        elif opcode == '0xd9':
+            compare.CompareWithAcumulator0xD9()
+            print('CMP abs, Y')
+        elif opcode == '0xdd':
+            compare.CompareWithAcumulator0xDD()
+            print('CMP abs, X')
+        elif opcode == '0xe0':
+            compare.CompareWithX0xE0()
+            print('CPX #')
+        elif opcode == '0xe4':
+            compare.CompareWithX0xE4()
+            print('CPX zpg')
+        elif opcode == '0xec':
+            compare.CompareWithX0xEC()
+            print('CPX abs')
+>>>>>>> 7ccef71a8bbbcb49a0f368bf63de7a1e492b2bfd
 
 
 
         # CARTS \/
         elif opcode == '0x81':
-            print("ASL zpg")
+            print("STA X,ind")
         elif opcode == '0x84':
-            print("ASL A")
+            print("STY zpg")
         elif opcode == '0x85':
-            print("ASL abs")
+            print("STA zpg")
         elif opcode == '0x86':
-            print("ASL zpg,X")
+            print("STX zpg")
         elif opcode == '0x8a':
-            print("ASL abs,X")
+            print("TXA impl")
         elif opcode == '0x8c':
-            print("ROL zpg")
+            print("STY abs")
         elif opcode == '0x8d':
-            print("ROL A")
+            print("STA abs")
         elif opcode == '0x8e':
-            print("ROL abs")
+            print("STX abs")
         elif opcode == '0x91':
-            print("ROL zpg,X")
+            print("STA ind,Y")
         elif opcode == '0x94':
-            print("ROL abs,X")
+            print("STY zpg,X")
         elif opcode == '0x95':
-            print("LSR zpg")
+            print("STA zpg,X")
         elif opcode == '0x96':
-            print("LSR A")
+            print("STX zpg,Y")
         elif opcode == '0x98':
-            print("LSR abs")
+            print("TYA impl")
         elif opcode == '0x99':
-            print("LSR zpg,X")
+            print("STA abs,Y")
         elif opcode == '0x9a':
-            print("LSR abs,X")
+            print("TXS impl")
         elif opcode == '0x9d':
-            print("ADC X,ind")
+            print("STA abs,X")
         elif opcode == '0xa0':
-            print("ADC zpg")
+            print("LDY #")
         elif opcode == '0xa1':
-            print("ROR zpg")
+            print("LDA X,ind")
         elif opcode == '0xa2':
-            print("ADC #")
+            print("LDX #")
         elif opcode == '0xa4':
-            print("ROR A")
+            print("LDY zpg")
         elif opcode == '0xa5':
-            print("ADC abs")
+            print("LDA zpg")
         elif opcode == '0xa6':
-            print("ROR abs")
+            print("LDX zpg")
         elif opcode == '0xa8':
-            print("ADC ind,Y")
+            print("TAY impl")
         elif opcode == '0xa9':
-            print("ADC zpg,X")
+            print("LDA #")
         elif opcode == '0xaa':
-            print("ROR zpg,X")
+            print("TAX impl")
         elif opcode == '0xac':
-            print("ADC abs,Y")
+            print("LDY abs")
         elif opcode == '0xad':
-            print("ADC abs,X")
+            print("LDA abs")
         elif opcode == '0xae':
-            print("ROR abs,X")
+            print("LDX abs")
         elif opcode == '0xb1':
-            print("DEY impl")
+            print("LDA ind,Y")
         elif opcode == '0xb4':
-            print("DEC zpg")
+            print("LDY zpg,X")
         elif opcode == '0xb5':
-            print("INY impl")
+            print("LDA zpg,X")
         elif opcode == '0xb6':
-            print("DEX impl")
+            print("LDX zpg,Y")
         elif opcode == '0xb9':
-            print("DEC abs")
+            print("LDA abs,Y")
         elif opcode == '0xba':
-            print("DEC zpg,X")
+            print("TSX impl")
         elif opcode == '0xbc':
-            print("DEC abs,X")
+            print("LDY abs,X")
         elif opcode == '0xbd':
-            print("SBC X,ind")
+            print("LDA abs,X")
         elif opcode == '0xbe':
-            print("SBC zpg")
+            print("LDX abs,Y")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")
+        elif opcode == '0x':
+            print("BRK impl")"
 
         else:
             pass
