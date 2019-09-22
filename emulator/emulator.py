@@ -152,9 +152,11 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
             print("DEC abs,X")
             i = i + 2
         elif opcode == '0xe1':
+            # SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC X,ind")
             i = i + 2
         elif opcode == '0xe5':
+            SubWithCarry0xE5(systemCPU, pgr_bytes[i + 1])
             print("SBC zpg")
             i = i + 1
         elif opcode == '0xe6':
@@ -163,11 +165,13 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
         elif opcode == '0xe8':
             print("INX impl")
         elif opcode == '0xe9':
+            SubWithCarry0xE9(systemCPU, pgr_bytes[i + 1])
             print("SBC #")
             i = i + 1
         elif opcode == '0xed':
+            SubWithCarry0xED(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC abs")
-            i = i + 1
+            i = i + 2
         elif opcode == '0xee':
             print("INC abs")
             i = i + 1
@@ -175,15 +179,18 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
             print("SBC ind,Y")
             i = i + 2
         elif opcode == '0xf5':
+            SubWithCarry0xF5(systemCPU, pgr_bytes[i + 1])
             print("SBC zpg,X")
-            i = i + 2
+            i = i + 1
         elif opcode == '0xf6':
             print("INC zpg,X")
             i = i + 2
         elif opcode == '0xf9':
+            SubWithCarry0xF9(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC abs,Y")
             i = i + 2
         elif opcode == '0xfd':
+            SubWithCarry0xFD(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC abs,X")
             i = i + 2
         elif opcode == '0xfe':
