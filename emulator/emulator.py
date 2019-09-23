@@ -23,9 +23,15 @@ with open('./emulator/bin/brk-adc', 'rb') as file:
     header_size = 16
     # get the binary header
     header_bytes = rom_bytes[0:16]
+
+    # ve se o mirror ta setado
+    # '{:08b}'.format(header_bytes[6])[4]
+
     # get the number of pgr_counters
     pgr_counter =  int.from_bytes(header_bytes[4:5], byteorder='big')
     pgr_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
+
+    import pdb; pdb.set_trace()
 
     i = 0
 
