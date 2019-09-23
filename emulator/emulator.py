@@ -15,7 +15,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('./emulator/bin/brk-sub', 'rb') as file:
+with open('./emulator/bin/brk-inc-dec', 'rb') as file:
 
     rom_bytes = file.read()
 
@@ -31,7 +31,7 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
     pgr_counter =  int.from_bytes(header_bytes[4:5], byteorder='big')
     pgr_bytes = rom_bytes[header_size:header_size+(16* pgr_counter*1024)]
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     i = 0
 
@@ -139,14 +139,16 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
             print("ROR abs,X")
             i = i + 2
         elif opcode == '0x88':
+            DecreaseReg0x88(systemCPU)
             print("DEY impl")
         elif opcode == '0xc6':
             print("DEC zpg")
             i = i + 1
         elif opcode == '0xc8':
-            IncreaseReg0xC8()
+            IncreaseReg0xC8(systemCPU)
             print("INY impl")
         elif opcode == '0xca':
+            DecreaseReg0xCA(systemCPU)
             print("DEX impl")
         elif opcode == '0xce':
             print("DEC abs")
@@ -169,6 +171,7 @@ with open('./emulator/bin/brk-sub', 'rb') as file:
             print("INC zpg")
             i = i + 1
         elif opcode == '0xe8':
+            IncreaseReg0xE8(systemCPU)
             print("INX impl")
         elif opcode == '0xe9':
             SubWithCarry0xE9(systemCPU, pgr_bytes[i + 1])

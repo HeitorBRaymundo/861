@@ -36,7 +36,7 @@ class AddWithCarry0x61(ADC_Op):
 
 class AddWithCarry0x65(ADC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(zpg_pos))
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos))
         super().execute()
 
 
@@ -48,7 +48,7 @@ class AddWithCarry0x69(ADC_Op):
 
 class AddWithCarry0x6D(ADC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte))
         super().execute()
 
 class AddWithCarry0x71(ADC_Op):
@@ -57,17 +57,17 @@ class AddWithCarry0x71(ADC_Op):
 
 class AddWithCarry0x75(ADC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(zpg_pos + SystemCPU.getX()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos + SystemCPU.getX()))
         super().execute()
 
 class AddWithCarry0x79(ADC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte + SystemCPU.getY()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getY()))
         super().execute()
 
 class AddWithCarry0x7D(ADC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte + SystemCPU.getX()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getX()))
         super().execute()
 
 
@@ -80,7 +80,7 @@ class SubWithCarry0xE1(SBC_Op):
 
 class SubWithCarry0xE5(SBC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(zpg_pos))
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos))
         super().execute()
 
 
@@ -92,7 +92,7 @@ class SubWithCarry0xE9(SBC_Op):
 
 class SubWithCarry0xED(SBC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte))
         super().execute()
 
 class SubWithCarry0xF1(SBC_Op):
@@ -101,15 +101,15 @@ class SubWithCarry0xF1(SBC_Op):
 
 class SubWithCarry0xF5(SBC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(zpg_pos + SystemCPU.getX()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos + SystemCPU.getX()))
         super().execute()
 
 class SubWithCarry0xF9(SBC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte + SystemCPU.getY()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getY()))
         super().execute()
 
 class SubWithCarry0xFD(SBC_Op):
     def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
-        super().__init__(SystemCPU, SystemCPU.getMEM(absHighByte * 256 + absLowByte + SystemCPU.getX()))
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getX()))
         super().execute()

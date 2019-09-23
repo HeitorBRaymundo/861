@@ -1,53 +1,76 @@
 from py.system import *
 
-class Increase_Op(System):
+class Increase_Op():
     register = ''
-    operation = ''
-    def __init__(self, register: str, operation: str):
+    system = ''
+    def __init__(self, systemCPU: System, register: str):
         self.register = register
-        self.operation = operation
-        self.execute(register)
+        self.system = systemCPU
 
-    def execute(self, register):
+    def execute(self):
         if (self.register == 'Y'):
-            print (super().getY())
-            super().setY(super().getY() + 1)
-            print (super().getY())
+            print (self.system.getY())
+            self.system.setY(self.system.getY() + 1)
+            if (self.system.getY() % 255 != self.system.getY()):
+                self.system.setY(self.system.getY() % 255)
+                self.system.setFLAG("C", 1)
+            print (self.system.getY())
         elif (self.register == 'X'):
-            print (super().getX())
-            super().setX(super().getX() + 1)
-            print (super().getX())
-        # value_register ++
-
-        print (self.operation)
+            print (self.system.getX())
+            self.system.setX(self.system.getX() + 1)
+            if (self.system.getX() % 255 != self.system.getX()):
+                self.system.setX(self.system.getX() % 255)
+                self.system.setFLAG("C", 1)
+            print (self.system.getX())
 
 class IncreaseReg0xC8(Increase_Op):
-    def __init__(self):
-        super().__init__('Y', "Op C8")
+    def __init__(self, systemCPU: System):
+        super().__init__(systemCPU, 'Y')
+        super().execute()
 
 
 class IncreaseReg0xE8(Increase_Op):
-    def __init__(self):
-        super().__init__(self, 'X', "Op E8")
+    def __init__(self, systemCPU: System):
+        super().__init__(systemCPU, 'X')
+        super().execute()
 
 class Decrease_Op():
     register = ''
-    operation = ''
-    def __init__(self, register: str, operation: str):
+    system = ''
+    def __init__(self, systemCPU: System, register: str):
         self.register = register
+        self.system = systemCPU
 
-    def execute():
-        # value_register --
-        print (self.operation)
+    def execute(self):
+        if (self.register == 'Y'):
+            print (self.system.getY())
+            self.system.setY(self.system.getY() - 1)
+            if (self.system.getY() < 0):
+                self.system.setFLAG("N", 1)
+            if (self.system.getY() % 255 != self.system.getY()):
+                self.system.setY(self.system.getY() % 255)
+                self.system.setFLAG("C", 1)
+            print (self.system.getY())
+        elif (self.register == 'X'):
+            print (self.system.getX())
+            self.system.setX(self.system.getX() - 1)
+            if (self.system.getX() < 0):
+                self.system.setFLAG("N", 1)
+            if (self.system.getX() % 255 != self.system.getX()):
+                self.system.setX(self.system.getX() % 255)
+                self.system.setFLAG("C", 1)
+            print (self.system.getX())
 
-class IncreaseReg0x88(Decrease_Op):
-    def __init__(self):
-        super().__init__(self, 'Y', "Op 88")
+class DecreaseReg0x88(Decrease_Op):
+    def __init__(self, systemCPU: System):
+        super().__init__(systemCPU, 'Y')
+        super().execute()
 
 
-class IncreaseReg0xCA(Decrease_Op):
-    def __init__(self):
-        super().__init__(self, 'X', "Op CA")
+class DecreaseReg0xCA(Decrease_Op):
+    def __init__(self, systemCPU: System):
+        super().__init__(systemCPU, 'X')
+        super().execute()
 
 class Transfer_Op():
     first_register = ''
