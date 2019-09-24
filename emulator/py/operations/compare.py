@@ -12,14 +12,34 @@ class CMP_Op():
 
     def execute():
         if (self.group == 'ORA'):
-
+            res = first_value | second_value
+            self.system.setA(res)
+            if (not res):
+                self.system.setFLAG("Z", 1)
+            if (res < 0):
+                self.system.setFLAG("N", 1)
         elif (self.group == 'AND'):
-
-        elif (self.group == 'CPY'):
-
-        elif (self.group == 'CMP'):
-
-        elif (self.group == 'CPX'):
+            res = first_value & second_value
+            self.system.setA(res)
+            if (not res):
+                self.system.setFLAG("Z", 1)
+            if (res < 0):
+                self.system.setFLAG("N", 1)
+        elif (self.group == 'EOR'):
+            res = first_value ˆ second_value
+            self.system.setA(res)
+            if (not res):
+                self.system.setFLAG("Z", 1)
+            if (res < 0):
+                self.system.setFLAG("N", 1)
+        elif (self.group == 'CPY' || self.group == 'CMP' || self.group == 'CPX'):
+            res = first_value - second_value
+            if (first_value >= second_value):
+                self.system.setFLAG("C", 1)
+            if (first_value == second_value):
+                self.system.setFLAG("Z", 1)
+            if (res < 0):
+                self.system.setFLAG("N", 1)
 
 class OrWithAcumulator0x01(CMP_Op):
     def __init__(self, systemCPU: System, index: int):
@@ -143,7 +163,7 @@ class ExclusiveOrWithAcumulator0x5D(CMP_Op):
 
 class CompareWithY0xC0(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), imm, "CPY")
+        super().__init__(self, systemCPU, systemCPU.getY(), imm, "CPY")
         super().execute()
 
 class CompareWithAcumulator0xC1(CMP_Op):
@@ -153,7 +173,7 @@ class CompareWithAcumulator0xC1(CMP_Op):
 
 class CompareWithY0xC4(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), systemCPU.getMEM()[zpg_index], "CPY")
+        super().__init__(self, systemCPU, systemCPU.getY(), systemCPU.getMEM()[zpg_index], "CPY")
         super().execute()
 
 class CompareWithAcumulator0xC5(CMP_Op):
@@ -168,7 +188,7 @@ class CompareWithAcumulator0xC9(CMP_Op):
 
 class CompareWithY0xCC(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), systemCPU.getMEM()[abs], "CPY")
+        super().__init__(self, systemCPU, systemCPU.getY(), systemCPU.getMEM()[abs], "CPY")
         super().execute()
 
 class CompareWithAcumulator0xCD(CMP_Op):
@@ -198,15 +218,15 @@ class CompareWithAcumulator0xDD(CMP_Op):
 
 class CompareWithX0xE0(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), "CPX")
+        super().__init__(self, systemCPU, systemCPU.getX(), "CPX")
         super().execute()
 
 class CompareWithX0xE4(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), systemCPU.getMEM()[zpg_index], "CPX")
+        super().__init__(self, systemCPU, systemCPU.getX(), systemCPU.getMEM()[zpg_index], "CPX")
         super().execute()
 
 class CompareWithX0xEC(CMP_Op):
     def __init__(self, systemCPU: System):
-        super().__init__(self, systemCPU, systemCPU.getA(), systemCPU.getMEM()[abs], "CPX")
+        super().__init__(self, systemCPU, systemCPU.getX(), systemCPU.getMEM()[abs], "CPX")
         super().execute()
