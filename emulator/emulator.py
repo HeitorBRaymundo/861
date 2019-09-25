@@ -239,6 +239,116 @@ with open('./emulator/bin/compares', 'rb') as file:
             #print(opcode)
             #print("Instrução invalida!")
         # FUSCA \/
+        elif opcode == '0x8': # Flags / stack
+            print("PHP impl")
+            PHP0x08(systemCPU)
+            # i = i + 1
+        elif opcode == '0x18':
+            print("CLC impl")
+            CLC0x18(systemCPU)
+            # i = i + 1
+        elif opcode == '0x28':
+            print("PLP impl")
+            PLP0x28(systemCPU)
+            # i = i + 1
+        elif opcode == '0x38':
+            print("SEC impl")
+            SEC0x38(systemCPU)
+            # i = i + 1
+        elif opcode == '0x48':
+            print("PHA impl")
+            PHA0x48(systemCPU)
+            # i = i + 1
+        elif opcode == '0x68':
+            print("PLA impl")
+            PLA0x68(systemCPU)
+            # i = i + 1
+        elif opcode == '0xB8':
+            print("CLV impl")
+            CLV0xB8(systemCPU)
+            # i = i + 1
+        elif opcode == '0xD8':
+            print("CLD impl")
+            CLD0xD8(systemCPU)
+            # i = i + 1
+        elif opcode == '0xF8':
+            print("SED impl")
+            SED0xF8(systemCPU)
+            # i = i + 1
+        elif opcode == '0x24': # Bit test HELP
+            print("BIT zpg")
+            BIT_zpg0x24(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x2C':
+            print("BIT abs")
+            BIT_abs0x2C(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x40': # interrupt
+
+            RTI0x40(systemCPU)
+            # i = i + 1
+        elif opcode == '0x58':
+
+            CLI0x58(systemCPU)
+            # i = i + 1
+        elif opcode == '0xEA': # NOP
+            fusca = 0
+        elif opcode == '0x0': # Flow control HELP
+
+            BRK0x00(systemCPU)
+            # i = i + 1
+        elif opcode == '0x10':
+
+            BPL0x10(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x20':
+
+            JSR0x20(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x30':
+
+            BMI0x30(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x4C':
+
+            BVC0x50(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x50':
+
+            RTS0x60(systemCPU)
+            # i = i + 1
+        elif opcode == '0x60':
+
+            BVS0x70(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x6C':
+
+            BCC0x90(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x70':
+
+            BCS0xB0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x78':
+
+            BNE0xD0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x90':
+
+            BEQ0xF0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xB0':
+
+            JMP_abs0x4C(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xD0':
+
+            JMP_ind0x6C(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xF0':
+
+            SEI0x78(systemCPU)
+
 
         # HEITOR \/
         elif opcode == '0x1':
