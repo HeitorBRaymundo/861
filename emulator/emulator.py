@@ -12,7 +12,7 @@ from py.operations import *
 from memory_helper import *
 
 systemCPU = system.System()
-filename = './emulator/bin/transfer_stack'
+filename = './emulator/bin/transfer_registers'
 nesROM = Rom(filename)
 
 
@@ -514,12 +514,16 @@ while i < len(pgr_bytes):
     # TRANSFERS BETWEEN REGISTERS
     elif opcode == '0x8a':
         print("TXA impl")
+        Transfer_TXA_0x8A(first_register='X', second_register='A', system=systemCPU)
     elif opcode == '0x98':
         print("TYA impl")
+        Transfer_TYA_0x98(first_register='Y', second_register='A', system=systemCPU)
     elif opcode == '0xaa':
         print("TAX impl")
+        Transfer_TAX_0xAA(first_register='A', second_register='X', system=systemCPU)
     elif opcode == '0xa8':
         print("TAY impl")
+        Transfer_TAY_0xA8(first_register='A', second_register='Y', system=systemCPU)
 
     # TRANSFERS TO THE STACK POINTER
     elif opcode == '0x9a':
