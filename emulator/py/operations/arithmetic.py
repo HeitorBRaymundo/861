@@ -9,6 +9,14 @@ class ADC_Op():
 
     def execute(self):
         self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
+
+        if (self.system.getA() < 0):
+            self.system.setFLAG("N", 1)
+
+        if self.system.getA() == 0:
+            self.system.setFLAG("Z", 1)
+
+
         if (self.system.getA() % 255 != self.system.getA()):
             self.system.setFLAG("C", 1)
             self.system.setA(self.system.getA() % 255)
@@ -24,6 +32,9 @@ class SBC_Op():
         self.system.setA(self.system.getA() - (1 - self.system.getFLAG("C")) - self.value_second)
         if (self.system.getA() < 0):
             self.system.setFLAG("N", 1)
+
+        if self.system.getA() == 0:
+            self.system.setFLAG("Z", 1)
 
         if (self.system.getA() % 255 != self.system.getA()):
             self.system.setFLAG("C", 1)

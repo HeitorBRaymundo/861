@@ -15,7 +15,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('./emulator/bin/brk-inc-dec', 'rb') as file:
+with open('./emulator/bin/brk-adc', 'rb') as file:
 
     rom_bytes = file.read()
 
