@@ -112,7 +112,7 @@ class Load_Op():
             value_to_load = self.value
         else:
             try:
-                value_to_load = self.system.loadMem(position)
+                value_to_load = self.system.loadMem(self.position)
             except:
                 raise Exception('Invalid number from memory!')
 

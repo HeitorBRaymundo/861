@@ -48,6 +48,36 @@ Reset:
 NMI:
    ;NOTE: NMI code goes here
    LDX #10
+
+   LDY #33
+   STY $44
+   LDA $44
+
+   LDY #25
+   STY $44,X
+   LDA $44,X
+
+   LDX #10
+   STX $4400
+   LDA $4400
+
+   LDA #15
+   STA $4400,X
+   LDA $4400,X
+
+   LDA #17
+   STA $4400,Y
+   LDA $4400,Y
+
+   LDA #18
+   STA ($44,X)
+   LDA ($44,X)
+
+   LDA #$19
+   STA ($44),Y
+   LDA ($44),Y
+
+   STY $4400
 IRQ:
 
    ;NOTE: IRQ code goes here
