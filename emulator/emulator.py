@@ -52,47 +52,62 @@ with open('./emulator/bin/compares', 'rb') as file:
         elif opcode == '0xbe':
             print("LDX abs, y")
             i = i + 2
-        elif opcode == '0x06':
+        elif opcode == '0x6':
             print("ASL zpg")
+            ASL_zero_page_0x06(systemCPU, pgr_bytes[i + 1])
             i = i + 1
-        elif opcode == '0x0a':
+        elif opcode == '0xa':
             print("ASL A")
-        elif opcode == '0x0e':
+            ASL_A_0x0A(systemCPU)
+        elif opcode == '0xe':
             print("ASL abs")
-            i = i + 1
+            ASL_absolute_0x0E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0x16':
             print("ASL zpg,X")
-            i = i + 2
+            ASL_zero_page_0x16(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x1e':
             print("ASL abs,X")
+            ASL_absolute_0x1E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x26':
             print("ROL zpg")
+            ROL_zero_page_0x26(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0x2a':
             print("ROL A")
+            ROL_A_0x2A(systemCPU)
         elif opcode == '0x2e':
             print("ROL abs")
-            i = i + 1
+            ROL_absolute_0x2E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0x36':
             print("ROL zpg,X")
-            i = i + 2
+            ROL_zero_page_index_0x36(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x3e':
             print("ROL abs,X")
+            ROL_abs_X_0x03E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x46':
             print("LSR zpg")
+            LSR_zero_page_0x46(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0x4a':
             print("LSR A")
+            LSR_A_0x4A(systemCPU)
         elif opcode == '0x4e':
             print("LSR abs")
-            i = i + 1
+            LSR_absolute_0x4E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0x56':
             print("LSR zpg,X")
-            i = i + 2
+            LSR_zero_page_index_0x56(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x5e':
             print("LSR abs,X")
+            LSR_abs_X_0x05E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x61':
             print("ADC X,indirect")
@@ -104,6 +119,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x66':
             print("ROR zpg")
+            ROR_zero_page_0x66(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0x69':
             print("ADC #")
@@ -111,13 +127,15 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x6a':
             print("ROR A")
+            ROR_A_0x6A(systemCPU)
         elif opcode == '0x6d':
             print("ADC abs")
             AddWithCarry0x6D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x6e':
             print("ROR abs")
-            i = i + 1
+            ROR_absolute_0x6E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0x71':
             print("ADC ind,Y")
             # AddWithCarry0x71(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
@@ -129,7 +147,8 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x76':
             print("ROR zpg,X")
-            i = i + 2
+            ROR_zero_page_index_0x76(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x79':
             print("ADC abs,Y")
             AddWithCarry0x79(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
@@ -140,12 +159,14 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 2
         elif opcode == '0x7e':
             print("ROR abs,X")
+            ROR_abs_X_0x7E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x88':
             DecreaseReg0x88(systemCPU)
             print("DEY impl")
         elif opcode == '0xc6':
             print("DEC zpg")
+            DEC_zero_page_0xC6(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0xc8':
             IncreaseReg0xC8(systemCPU)
@@ -155,12 +176,15 @@ with open('./emulator/bin/compares', 'rb') as file:
             print("DEX impl")
         elif opcode == '0xce':
             print("DEC abs")
-            i = i + 1
+            DEC_absolute_0xCE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0xd6':
             print("DEC zpg,X")
-            i = i + 2
+            DEC_zero_page_X_0xD6(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0xde':
             print("DEC abs,X")
+            DEC_absolute_X_0xDE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xe1':
             # SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
@@ -172,6 +196,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0xe6':
             print("INC zpg")
+            INC_zero_page_0xE6(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0xe8':
             IncreaseReg0xE8(systemCPU)
@@ -186,7 +211,8 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 2
         elif opcode == '0xee':
             print("INC abs")
-            i = i + 1
+            INC_absolute_0xEE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0xf1':
             print("SBC ind,Y")
             i = i + 2
@@ -196,7 +222,8 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0xf6':
             print("INC zpg,X")
-            i = i + 2
+            INC_zero_page_X_0xF6(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 1
         elif opcode == '0xf9':
             SubWithCarry0xF9(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC abs,Y")
@@ -207,6 +234,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 2
         elif opcode == '0xfe':
             print("INC abs,X")
+            INC_absolute_X_0xFE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
             #print(opcode)
             #print("Instrução invalida!")
