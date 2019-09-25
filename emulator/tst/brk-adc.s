@@ -45,12 +45,13 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 Reset:
     ADC #30
-    ADC $30, X
     ADC $10
     ADC #11
     ADC #200
     ADC $256
     ADC #11
     ADC $300, X
+    ADC ($32, X)
     ADC $257, Y
     ADC $10, X
+    ADC ($32), Y

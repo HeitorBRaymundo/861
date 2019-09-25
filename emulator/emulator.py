@@ -15,7 +15,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('./emulator/bin/beq', 'rb') as file:
+with open('./emulator/bin/brk-sub', 'rb') as file:
 
     rom_bytes = file.read()
 
@@ -112,8 +112,8 @@ with open('./emulator/bin/beq', 'rb') as file:
             i = i + 2
         elif opcode == '0x61':
             print("ADC X,indirect")
-            AddWithCarry0x61(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
-            i = i + 2
+            AddWithCarry0x61(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0x65':
             print("ADC zpg")
             AddWithCarry0x65(systemCPU, pgr_bytes[i + 1])
@@ -139,9 +139,9 @@ with open('./emulator/bin/beq', 'rb') as file:
             i = i + 2
         elif opcode == '0x71':
             print("ADC ind,Y")
-            # AddWithCarry0x71(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            AddWithCarry0x71(systemCPU, pgr_bytes[i + 1])
             #### ATENCAO AO INDEX
-            i = i + 2
+            i = i + 1
         elif opcode == '0x75':
             print("ADC zpg,X")
             AddWithCarry0x75(systemCPU, pgr_bytes[i + 1])
@@ -188,9 +188,9 @@ with open('./emulator/bin/beq', 'rb') as file:
             DEC_absolute_X_0xDE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xe1':
-            # SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1])
             print("SBC X,ind")
-            i = i + 2
+            i = i + 1
         elif opcode == '0xe5':
             SubWithCarry0xE5(systemCPU, pgr_bytes[i + 1])
             print("SBC zpg")
@@ -216,7 +216,8 @@ with open('./emulator/bin/beq', 'rb') as file:
             i = i + 2
         elif opcode == '0xf1':
             print("SBC ind,Y")
-            i = i + 2
+            SubWithCarry0xF1(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0xf5':
             SubWithCarry0xF5(systemCPU, pgr_bytes[i + 1])
             print("SBC zpg,X")

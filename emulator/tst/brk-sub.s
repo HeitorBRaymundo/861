@@ -54,3 +54,5 @@ Reset:
     SBC $300, X
     SBC $257, Y
     SBC $10, X
+    SBC ($32, X)
+    SBC ($32), Y

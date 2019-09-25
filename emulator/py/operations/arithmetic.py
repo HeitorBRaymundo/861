@@ -41,8 +41,9 @@ class SBC_Op():
             self.system.setA(self.system.getA() % 255)
 
 class AddWithCarry0x61(ADC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, SystemCPU.MEM[SystemCPU.getY()], "Op 61")
+    def __init__(self, SystemCPU: System, indirectByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(SystemCPU.loadMem((indirectByte + SystemCPU.getX())) + SystemCPU.loadMem(indirectByte + 1) << 8))
+        super().execute()
 
 
 class AddWithCarry0x65(ADC_Op):
@@ -63,8 +64,9 @@ class AddWithCarry0x6D(ADC_Op):
         super().execute()
 
 class AddWithCarry0x71(ADC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, Y[indrect], "Op 71")
+    def __init__(self, SystemCPU: System, indirectByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem((SystemCPU.loadMem(indirectByte) + SystemCPU.loadMem(indirectByte + 1) << 8) + SystemCPU.getY()))
+        super().execute()
 
 class AddWithCarry0x75(ADC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
@@ -85,8 +87,9 @@ class AddWithCarry0x7D(ADC_Op):
 
 
 class SubWithCarry0xE1(SBC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, X[index], "Op E1")
+    def __init__(self, SystemCPU: System, indirectByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(SystemCPU.loadMem((indirectByte + SystemCPU.getX())) + SystemCPU.loadMem(indirectByte + 1) << 8))
+        super().execute()
 
 
 class SubWithCarry0xE5(SBC_Op):
@@ -107,8 +110,9 @@ class SubWithCarry0xED(SBC_Op):
         super().execute()
 
 class SubWithCarry0xF1(SBC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, Y[índex], "Op F1")
+    def __init__(self, SystemCPU: System, indirectByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem((SystemCPU.loadMem(indirectByte) + SystemCPU.loadMem(indirectByte + 1) << 8) + SystemCPU.getY()))
+        super().execute()
 
 class SubWithCarry0xF5(SBC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
