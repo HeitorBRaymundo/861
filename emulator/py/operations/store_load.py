@@ -13,7 +13,7 @@ class Store_Op():
         except:
             raise Exception('Invalid register!')
 
-        self.system.mem.setMem(self.position, register_value)
+        self.system.setMem(self.position, register_value)
 
         return True
 

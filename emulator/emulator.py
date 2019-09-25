@@ -26,15 +26,6 @@ while i < len(pgr_bytes):
 
     if opcode == '0x0':
         continue
-    elif opcode == '0xa0':
-        print("LDY abs")
-        i = i + 1
-    elif opcode == '0xb9':
-        print("LDA abs,y")
-        i = i + 2
-    elif opcode == '0xbe':
-        print("LDX abs, y")
-        i = i + 2
     elif opcode == '0x06':
         print("ASL zpg")
         i = i + 1
@@ -310,7 +301,7 @@ while i < len(pgr_bytes):
         print("STA (Indirect, X)")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
-        addr = get_indirect_addr_x(operand, offset)
+        addr = get_indirect_addr_x(systemCPU, operand, offset)
         StoreInA0x81(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x84':
@@ -337,6 +328,7 @@ while i < len(pgr_bytes):
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
+        import pdb; pdb.set_trace()
         i = i + 2
     elif opcode == '0x8d':
         print("STA Absolute")
@@ -355,36 +347,36 @@ while i < len(pgr_bytes):
     elif opcode == '0x91':
         print("STA (Indirect), Y")
         operand = pgr_bytes[i + 1]
-        offset = system.Y
-        addr = get_indirect_addr_y(operand, offset)
+        offset = systemCPU.Y
+        addr = get_indirect_addr_y(systemCPU, operand, offset)
         StoreInA0x91(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x94':
         print("STY Zero Page, X")
         operand = pgr_bytes[i + 1]
+        offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x94(register='Y', address=addr, system=systemCPU)
-        offset = system.Y
         i = i + 1
     elif opcode == '0x95':
         print("STA Zero Page, X")
         operand = pgr_bytes[i + 1]
-        offset = system.X
+        offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInA0x95(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x96':
         print("STX Zero Page, Y")
         operand = pgr_bytes[i + 1]
+        offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x96(register='X', address=addr, system=systemCPU)
-        offset = system.Y
         i = i + 1
     elif opcode == '0x99':
         print("STA Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
-        offset = system.Y
+        offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         StoreInA0x99(register='A', address=addr, system=systemCPU)
         i = i + 2
@@ -392,7 +384,7 @@ while i < len(pgr_bytes):
         print("STA Absolute, X")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
-        offset = system.X
+        offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
         StoreInA0x9D(register='A', address=addr, system=systemCPU)
         i = i + 2
@@ -406,8 +398,8 @@ while i < len(pgr_bytes):
     elif opcode == '0xa1':
         print("LDA (Indirect, X)")
         operand = pgr_bytes[i + 1]
-        offset = system.X
-        addr = get_indirect_addr_x(system, operand, offset)
+        offset = systemCPU.X
+        addr = get_indirect_addr_x(systemCPU, operand, offset)
         LoadFromA0xA1(register='A', position=addr, system=systemCPU, value=None)
         i = i + 1
     elif opcode == '0xa2':
@@ -436,7 +428,7 @@ while i < len(pgr_bytes):
     elif opcode == '0xa9':
         print("LDA #Immediate")
         operand = pgr_bytes[i + 1]
-        LoadFromA0xA9(register='X', position=-1, system=systemCPU, value=operand)
+        LoadFromA0xA9(register='A', position=-1, system=systemCPU, value=operand)
         i = i + 1
     elif opcode == '0xac':
         print("LDY Absolute")
@@ -462,28 +454,28 @@ while i < len(pgr_bytes):
     elif opcode == '0xb1':
         print("LDA (Indirect), Y")
         operand = pgr_bytes[i + 1]
-        offset = system.Y
-        addr = get_indirect_addr_y(system, operand, offset)
+        offset = systemCPU.Y
+        addr = get_indirect_addr_y(systemCPU, operand, offset)
         LoadFromA0xB1(register='A', position=addr, system=systemCPU, value=None)
         i = i + 1
     elif opcode == '0xb4':
         print("LDY Zero Page, X")
         operand = pgr_bytes[i + 1]
-        offset = system.X
+        offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromY0xB4(register='Y', position=addr, system=systemCPU, value=None)
         i = i + 1
     elif opcode == '0xb5':
         print("LDA Zero Page, X")
         operand = pgr_bytes[i + 1]
-        offset = system.X
+        offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromA0xB5(register='A', position=addr, system=systemCPU, value=None)
         i = i + 1
     elif opcode == '0xb6':
         print("LDX Zero Page, Y")
         operand = pgr_bytes[i + 1]
-        offset = system.Y
+        offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         LoadFromX0xB6(register='X', position=addr, system=systemCPU, value=None)
         i = i + 1
@@ -491,7 +483,7 @@ while i < len(pgr_bytes):
         print("LDA Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
-        offset = system.Y
+        offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadFromA0xB9(register='A', position=addr, system=systemCPU, value=None)
         i = i + 2
@@ -507,7 +499,7 @@ while i < len(pgr_bytes):
         print("LDA Absolute, X")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
-        offset = system.X
+        offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadInA0xBD(register='A', position=addr, system=systemCPU, value=None)
         i = i + 2
@@ -515,7 +507,7 @@ while i < len(pgr_bytes):
         print("LDX Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
-        offset = system.Y
+        offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadFromX0xBE(register='X', position=addr, system=systemCPU, value=None)
         i = i + 2
