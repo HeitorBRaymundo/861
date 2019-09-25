@@ -163,6 +163,7 @@ with open('./emulator/bin/shift', 'rb') as file:
             print("DEY impl")
         elif opcode == '0xc6':
             print("DEC zpg")
+            DEC_zero_page_0xC6(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0xc8':
             IncreaseReg0xC8(systemCPU)
@@ -172,12 +173,15 @@ with open('./emulator/bin/shift', 'rb') as file:
             print("DEX impl")
         elif opcode == '0xce':
             print("DEC abs")
-            i = i + 1
+            DEC_absolute_0xCE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0xd6':
             print("DEC zpg,X")
-            i = i + 2
+            DEC_zero_page_X_0xD6(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
         elif opcode == '0xde':
             print("DEC abs,X")
+            DEC_absolute_X_0xDE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xe1':
             # SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
@@ -189,6 +193,7 @@ with open('./emulator/bin/shift', 'rb') as file:
             i = i + 1
         elif opcode == '0xe6':
             print("INC zpg")
+            INC_zero_page_0xE6(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0xe8':
             IncreaseReg0xE8(systemCPU)
@@ -203,7 +208,8 @@ with open('./emulator/bin/shift', 'rb') as file:
             i = i + 2
         elif opcode == '0xee':
             print("INC abs")
-            i = i + 1
+            INC_absolute_0xEE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 2
         elif opcode == '0xf1':
             print("SBC ind,Y")
             i = i + 2
@@ -213,7 +219,8 @@ with open('./emulator/bin/shift', 'rb') as file:
             i = i + 1
         elif opcode == '0xf6':
             print("INC zpg,X")
-            i = i + 2
+            INC_zero_page_X_0xF6(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+            i = i + 1
         elif opcode == '0xf9':
             SubWithCarry0xF9(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             print("SBC abs,Y")
@@ -224,6 +231,7 @@ with open('./emulator/bin/shift', 'rb') as file:
             i = i + 2
         elif opcode == '0xfe':
             print("INC abs,X")
+            INC_absolute_X_0xFE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
             #print(opcode)
             #print("Instrução invalida!")
