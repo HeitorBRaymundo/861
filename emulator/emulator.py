@@ -12,7 +12,7 @@ from py.operations import *
 from memory_helper import *
 
 systemCPU = system.System()
-filename = './emulator/bin/load'
+filename = './emulator/bin/transfer_stack'
 nesROM = Rom(filename)
 
 
@@ -524,10 +524,10 @@ while i < len(pgr_bytes):
     # TRANSFERS TO THE STACK POINTER
     elif opcode == '0x9a':
         print("TXS impl")
-        Transfer_X_to_SP_Op_0x9A(system=systemCPU)
+        Transfer_X_to_SP_Op_0x9A(system=systemCPU).execute()
     elif opcode == '0xba':
         print("TSX impl")
-        Transfer_SP_to_X_Op_0xBA(system=systemCPU)
+        Transfer_SP_to_X_Op_0xBA(system=systemCPU).execute()
     elif opcode == '0x':
         print("BRK impl")
 
