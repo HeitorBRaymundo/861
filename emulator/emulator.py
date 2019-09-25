@@ -1,3 +1,4 @@
+import sys
 from py import system
 from py.operations import register_instructions
 from py.operations import bit
@@ -11,10 +12,14 @@ from rom import Rom
 from py.operations import *
 from memory_helper import *
 
+try:
+    file = sys.argv[1]
+except:
+    pass
+
 systemCPU = system.System()
 filename = './emulator/bin/transfer_registers'
-nesROM = Rom(filename)
-
+nesROM = Rom(file)
 
 pgr_bytes = nesROM.prg_rom
 
@@ -23,155 +28,155 @@ i = 0
 
 while i < len(pgr_bytes):
     opcode = hex(pgr_bytes[i])
+    addr = None
 
     if opcode == '0x0':
+        i = i + 1
         continue
     elif opcode == '0x06':
-        print("ASL zpg")
         i = i + 1
     elif opcode == '0x0a':
-        print("ASL A")
+        pass
     elif opcode == '0x0e':
-        print("ASL abs")
-        i = i + 1
+        pass
+        i = i + 2
     elif opcode == '0x16':
-        print("ASL zpg,X")
+        pass
         i = i + 2
     elif opcode == '0x1e':
-        print("ASL abs,X")
+        pass
         i = i + 2
     elif opcode == '0x26':
-        print("ROL zpg")
+        pass
         i = i + 1
     elif opcode == '0x2a':
-        print("ROL A")
+        pass
     elif opcode == '0x2e':
-        print("ROL abs")
-        i = i + 1
-    elif opcode == '0x36':
-        print("ROL zpg,X")
+        pass
         i = i + 2
+    elif opcode == '0x36':
+        pass
+        i = i + 1
     elif opcode == '0x3e':
-        print("ROL abs,X")
+        pass
         i = i + 2
     elif opcode == '0x46':
-        print("LSR zpg")
+        pass
         i = i + 1
     elif opcode == '0x4a':
-        print("LSR A")
+        pass
     elif opcode == '0x4e':
-        print("LSR abs")
+        pass
         i = i + 1
     elif opcode == '0x56':
-        print("LSR zpg,X")
+        pass
         i = i + 2
     elif opcode == '0x5e':
-        print("LSR abs,X")
+        pass
         i = i + 2
     elif opcode == '0x61':
-        print("ADC X,ind")
+        pass
         # AddWithCarry0x61(systemCPU)
         i = i + 2
     elif opcode == '0x65':
         # AddWithCarry0x65(systemCPU)
-        print("ADC zpg")
+        pass
         i = i + 1
     elif opcode == '0x66':
-        print("ROR zpg")
+        pass
         i = i + 1
     elif opcode == '0x69':
-        print("ADC #")
         AddWithCarry0x69(systemCPU, pgr_bytes[i + 1])
         print ("| a = ", systemCPU.getA(), " | x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ",  " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
         i = i + 1
     elif opcode == '0x6a':
-        print("ROR A")
+        pass
     elif opcode == '0x6d':
-        print("ADC abs")
+        pass
         # AddWithCarry0x6D(systemCPU, )
         i = i + 1
     elif opcode == '0x6e':
-        print("ROR abs")
+        pass
         i = i + 1
     elif opcode == '0x71':
-        print("ADC ind,Y")
+        pass
         # AddWithCarry0x71(systemCPU)
         #### ATENCAO AO INDEX
         i = i + 2
     elif opcode == '0x75':
-        print("ADC zpg,X")
+        pass
         # AddWithCarry0x75(systemCPU)
         i = i + 2
     elif opcode == '0x76':
-        print("ROR zpg,X")
+        pass
         i = i + 2
     elif opcode == '0x79':
-        print("ADC abs,Y")
+        pass
         # AddWithCarry0x79(systemCPU)
         i = i + 2
     elif opcode == '0x7d':
-        print("ADC abs,X")
+        pass
         # AddWithCarry0x7D(systemCPU)
         i = i + 2
     elif opcode == '0x7e':
-        print("ROR abs,X")
+        pass
         i = i + 2
     elif opcode == '0x88':
-        print("DEY impl")
+        pass
     elif opcode == '0xc6':
-        print("DEC zpg")
+        pass
         i = i + 1
     elif opcode == '0xc8':
-        IncreaseReg0xC8()
-        print("INY impl")
+        pass
+
     elif opcode == '0xca':
-        print("DEX impl")
+        pass
     elif opcode == '0xce':
-        print("DEC abs")
+        pass
         i = i + 1
     elif opcode == '0xd6':
-        print("DEC zpg,X")
+        pass
         i = i + 2
     elif opcode == '0xde':
-        print("DEC abs,X")
+        pass
         i = i + 2
     elif opcode == '0xe1':
-        print("SBC X,ind")
+        pass
         i = i + 2
     elif opcode == '0xe5':
-        print("SBC zpg")
+        pass
         i = i + 1
     elif opcode == '0xe6':
-        print("INC zpg")
+        pass
         i = i + 1
     elif opcode == '0xe8':
-        print("INX impl")
+        pass
     elif opcode == '0xe9':
-        print("SBC #")
+        pass
         i = i + 1
     elif opcode == '0xed':
-        print("SBC abs")
+        pass
         i = i + 1
     elif opcode == '0xee':
-        print("INC abs")
+        pass
         i = i + 1
     elif opcode == '0xf1':
-        print("SBC ind,Y")
+        pass
         i = i + 2
     elif opcode == '0xf5':
-        print("SBC zpg,X")
+        pass
         i = i + 2
     elif opcode == '0xf6':
-        print("INC zpg,X")
+        pass
         i = i + 2
     elif opcode == '0xf9':
-        print("SBC abs,Y")
+        pass
         i = i + 2
     elif opcode == '0xfd':
-        print("SBC abs,X")
+        pass
         i = i + 2
     elif opcode == '0xfe':
-        print("INC abs,X")
+        pass
         i = i + 2
         #print(opcode)
         #print("Instrução invalida!")
@@ -298,81 +303,69 @@ while i < len(pgr_bytes):
     # CARTS \/
     # STORES
     elif opcode == '0x81':
-        print("STA (Indirect, X)")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_indirect_addr_x(systemCPU, operand, offset)
         StoreInA0x81(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x84':
-        print("STY Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         StoreInY0x84(register='Y', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x85':
-        print("STA Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         StoreInY0x84(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x86':
-        print("STX Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         StoreInX0x86(register='X', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x8c':
-        print("STY Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0x8d':
-        print("STA Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInA0x8D(register='A', address=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0x8e':
-        print("STX Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInX0x8E(register='X', address=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0x91':
-        print("STA (Indirect), Y")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.Y
         addr = get_indirect_addr_y(systemCPU, operand, offset)
         StoreInA0x91(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x94':
-        print("STY Zero Page, X")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x94(register='Y', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x95':
-        print("STA Zero Page, X")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInA0x95(register='A', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x96':
-        print("STX Zero Page, Y")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x96(register='X', address=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0x99':
-        print("STA Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = systemCPU.Y
@@ -380,7 +373,6 @@ while i < len(pgr_bytes):
         StoreInA0x99(register='A', address=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0x9d':
-        print("STA Absolute, X")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = systemCPU.X
@@ -390,96 +382,81 @@ while i < len(pgr_bytes):
 
     # LOADS
     elif opcode == '0xa0':
-        print("LDY #Immediate")
         operand = pgr_bytes[i + 1]
         LoadFromY0xA0(register='Y', position=-1, system=systemCPU, value=operand)
         i = i + 1
     elif opcode == '0xa1':
-        print("LDA (Indirect, X)")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_indirect_addr_x(systemCPU, operand, offset)
         LoadFromA0xA1(register='A', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xa2':
-        print("LDX #Immediate")
         operand = pgr_bytes[i + 1]
         LoadFromX0xA2(register='X', position=-1, system=systemCPU, value=operand)
         i = i + 1
     elif opcode == '0xa4':
-        print("LDY Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         LoadFromY0xA4(register='Y', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xa5':
-        print("LDA Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         LoadFromA0xA5(register='A', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xa6':
-        print("LDX Zero Page")
         operand = pgr_bytes[i + 1]
         addr = get_zero_page_addr(operand)
         LoadFromX0xA6(register='X', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xa9':
-        print("LDA #Immediate")
         operand = pgr_bytes[i + 1]
         LoadFromA0xA9(register='A', position=-1, system=systemCPU, value=operand)
         i = i + 1
     elif opcode == '0xac':
-        print("LDY Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadFromY0xAC(register='Y', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xad':
-        print("LDA Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadInA0xAD(register='A', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xae':
-        print("LDX Absolute")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadFromX0xAE(register='X', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xb1':
-        print("LDA (Indirect), Y")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.Y
         addr = get_indirect_addr_y(systemCPU, operand, offset)
         LoadFromA0xB1(register='A', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xb4':
-        print("LDY Zero Page, X")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromY0xB4(register='Y', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xb5':
-        print("LDA Zero Page, X")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromA0xB5(register='A', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xb6':
-        print("LDX Zero Page, Y")
         operand = pgr_bytes[i + 1]
         offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         LoadFromX0xB6(register='X', position=addr, system=systemCPU)
         i = i + 1
     elif opcode == '0xb9':
-        print("LDA Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = systemCPU.Y
@@ -487,7 +464,6 @@ while i < len(pgr_bytes):
         LoadFromA0xB9(register='A', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xbc':
-        print("LDY Absolute, X")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = system.X
@@ -495,7 +471,6 @@ while i < len(pgr_bytes):
         LoadFromY0xBC(register='Y', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xbd':
-        print("LDA Absolute, X")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = systemCPU.X
@@ -503,7 +478,6 @@ while i < len(pgr_bytes):
         LoadInA0xBD(register='A', position=addr, system=systemCPU)
         i = i + 2
     elif opcode == '0xbe':
-        print("LDX Absolute, Y")
         operand_low = pgr_bytes[i + 1]
         operand_high = pgr_bytes[i + 2]
         offset = systemCPU.Y
@@ -513,27 +487,22 @@ while i < len(pgr_bytes):
 
     # TRANSFERS BETWEEN REGISTERS
     elif opcode == '0x8a':
-        print("TXA impl")
         Transfer_TXA_0x8A(first_register='X', second_register='A', system=systemCPU)
     elif opcode == '0x98':
-        print("TYA impl")
         Transfer_TYA_0x98(first_register='Y', second_register='A', system=systemCPU)
     elif opcode == '0xaa':
-        print("TAX impl")
         Transfer_TAX_0xAA(first_register='A', second_register='X', system=systemCPU)
     elif opcode == '0xa8':
-        print("TAY impl")
         Transfer_TAY_0xA8(first_register='A', second_register='Y', system=systemCPU)
 
     # TRANSFERS TO THE STACK POINTER
     elif opcode == '0x9a':
-        print("TXS impl")
         Transfer_X_to_SP_Op_0x9A(system=systemCPU).execute()
     elif opcode == '0xba':
-        print("TSX impl")
         Transfer_SP_to_X_Op_0xBA(system=systemCPU).execute()
     elif opcode == '0x':
-        print("BRK impl")
+        pass
+
 
     else:
         pass
@@ -541,7 +510,7 @@ while i < len(pgr_bytes):
 
     i = i + 1
 
-    if (True):
+    if addr is None:
        print ("|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
     else:
-       print ("| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = ".format(rom_bytes[i + 1], rom_bytes[i + 2], " |"))
+       print ("| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))

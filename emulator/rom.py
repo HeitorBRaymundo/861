@@ -12,6 +12,7 @@ class Rom():
         self.header = self.file.read(16)
 
         if not self.header[:3] == b'NES':
+            import pdb; pdb.set_trace()
             raise Exception("Invalid ROM for NES!")
 
         self.prg_rom_size = self.header[4]
