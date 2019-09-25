@@ -15,7 +15,7 @@ def printSystemStatus():
 
 
 # Read file
-with open('./emulator/bin/compares', 'rb') as file:
+with open('./emulator/bin/beq', 'rb') as file:
 
     rom_bytes = file.read()
 
@@ -36,6 +36,7 @@ with open('./emulator/bin/compares', 'rb') as file:
     i = 0
 
     while i < len(pgr_bytes):
+        print("i: ", i)
         opcode = hex(pgr_bytes[i])
 
         if opcode != '0x0':
@@ -263,15 +264,15 @@ with open('./emulator/bin/compares', 'rb') as file:
             print("PLA impl")
             PLA0x68(systemCPU)
             # i = i + 1
-        elif opcode == '0xB8':
+        elif opcode == '0xb8':
             print("CLV impl")
             CLV0xB8(systemCPU)
             # i = i + 1
-        elif opcode == '0xD8':
+        elif opcode == '0xd8':
             print("CLD impl")
             CLD0xD8(systemCPU)
             # i = i + 1
-        elif opcode == '0xF8':
+        elif opcode == '0xf8':
             print("SED impl")
             SED0xF8(systemCPU)
             # i = i + 1
@@ -279,7 +280,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             print("BIT zpg")
             BIT_zpg0x24(systemCPU, pgr_bytes[i + 1])
             i = i + 1
-        elif opcode == '0x2C':
+        elif opcode == '0x2c':
             print("BIT abs")
             BIT_abs0x2C(systemCPU, pgr_bytes[i + 1])
             i = i + 1
@@ -291,8 +292,8 @@ with open('./emulator/bin/compares', 'rb') as file:
 
             CLI0x58(systemCPU)
             # i = i + 1
-        elif opcode == '0xEA': # NOP
-            fusca = 0
+        elif opcode == '0xea': # NOP
+            print("NOP")
         elif opcode == '0x0': # Flow control HELP
 
             BRK0x00(systemCPU)
@@ -309,45 +310,48 @@ with open('./emulator/bin/compares', 'rb') as file:
 
             BMI0x30(systemCPU, pgr_bytes[i + 1])
             i = i + 1
-        elif opcode == '0x4C':
-
-            BVC0x50(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0x50':
-
-            RTS0x60(systemCPU)
-            # i = i + 1
-        elif opcode == '0x60':
-
-            BVS0x70(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0x6C':
-
-            BCC0x90(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0x70':
-
-            BCS0xB0(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0x78':
-
-            BNE0xD0(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0x90':
-
-            BEQ0xF0(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
-        elif opcode == '0xB0':
+        elif opcode == '0x4c':
 
             JMP_abs0x4C(systemCPU, pgr_bytes[i + 1])
             i = i + 1
-        elif opcode == '0xD0':
+        elif opcode == '0x50':
+
+            BVC0x50(systemCPU)
+            # i = i + 1
+        elif opcode == '0x60':
+
+            RTS0x60(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x6C':
 
             JMP_ind0x6C(systemCPU, pgr_bytes[i + 1])
             i = i + 1
-        elif opcode == '0xF0':
+        elif opcode == '0x70':
+
+            BVS0x70(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0x78':
 
             SEI0x78(systemCPU)
+            # i = i + 1
+        elif opcode == '0x90':
+
+            BCC0x90(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xb0':
+
+            BCS0xB0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xd0':
+
+            BNE0xD0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
+        elif opcode == '0xf0':
+            print("BEQ rel")
+            print(hex(pgr_bytes[i + 1]))
+            print(hex(pgr_bytes[i + 2]))
+            # BEQ0xF0(systemCPU)
+            # i = i + 1
 
 
         # HEITOR \/
