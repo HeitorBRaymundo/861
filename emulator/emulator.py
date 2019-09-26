@@ -260,43 +260,52 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
      #print(opcode)
         #print("Instrução invalida!")
-    
+
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
         # print("PHP impl")
         PHP0x08(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x18':
         # print("CLC impl")
         CLC0x18(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x28':
         # print("PLP impl")
         PLP0x28(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x38':
         # print("SEC impl")
         SEC0x38(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x48':
         # print("PHA impl")
         PHA0x48(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x68':
         # print("PLA impl")
         PLA0x68(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0xb8':
         # print("CLV impl")
         CLV0xB8(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0xd8':
         # print("CLD impl")
         CLD0xD8(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0xf8':
         # print("SED impl")
         SED0xF8(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 1
         # i = i + 1
     elif opcode == '0x24': # Bit test HELP
         # print("BIT zpg")
@@ -317,11 +326,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         CLI0x58(systemCPU)
         # i = i + 1
     elif opcode == '0xea': # NOP
-        pass
+        systemCPU.program_counter = systemCPU.program_counter + 1
     elif opcode == '0x0': # Flow control HELP
         # BRK0x00(systemCPU)
         # i = i + 1
-        pass
+        systemCPU.program_counter = systemCPU.program_counter + 1
     elif opcode == '0x10':
 
         BPL0x10(systemCPU, pgr_bytes[i + 1])
