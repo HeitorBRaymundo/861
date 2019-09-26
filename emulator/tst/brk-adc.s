@@ -54,3 +54,5 @@ Reset:
     ADC $300, X
     ADC $257, Y
     ADC $10, X
+    ADC ($10, X)
+    ADC ($10), Y

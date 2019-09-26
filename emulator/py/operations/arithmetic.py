@@ -10,16 +10,17 @@ class ADC_Op():
     def execute(self):
         self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
 
-        if (self.system.getA() < 0):
-            self.system.setFLAG("N", 1)
-
-        if self.system.getA() == 0:
-            self.system.setFLAG("Z", 1)
-
-
         if (self.system.getA() % 255 != self.system.getA()):
             self.system.setFLAG("C", 1)
             self.system.setA(self.system.getA() % 255)
+
+        if self.system.getA() == 0:
+            self.system.setFLAG("Z", 1)
+        else:
+            self.system.setFLAG("Z", 0)
+
+        if (self.system.getA() > 127):
+            self.system.setFLAG("N", 1)
 
 class SBC_Op():
     value_second = 0
@@ -41,8 +42,8 @@ class SBC_Op():
             self.system.setA(self.system.getA() % 255)
 
 class AddWithCarry0x61(ADC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, SystemCPU.MEM[SystemCPU.getY()], "Op 61")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(self, SystemCPU.loadMem(pos))
 
 
 class AddWithCarry0x65(ADC_Op):
@@ -63,8 +64,8 @@ class AddWithCarry0x6D(ADC_Op):
         super().execute()
 
 class AddWithCarry0x71(ADC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, Y[indrect], "Op 71")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(self, SystemCPU.loadMem(pos))
 
 class AddWithCarry0x75(ADC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):

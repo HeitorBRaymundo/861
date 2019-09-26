@@ -90,7 +90,8 @@ while i < len(pgr_bytes):
         i = i + 2
     elif opcode == '0x61':
         print("ADC X,indirect")
-        AddWithCarry0x61(systemCPU, pgr_bytes[i + 1])
+        addr = get_indirect_addr_x(systemCPU, pgr_bytes[i + 1], systemCPU.getX())
+        AddWithCarry0x61(systemCPU, addr)
         i = i + 1
     elif opcode == '0x65':
         print("ADC zpg")
@@ -117,7 +118,8 @@ while i < len(pgr_bytes):
         i = i + 2
     elif opcode == '0x71':
         print("ADC ind,Y")
-        AddWithCarry0x71(systemCPU, pgr_bytes[i + 1])
+        addr = get_indirect_addr_y(systemCPU, pgr_bytes[i + 1], systemCPU.getY())
+        AddWithCarry0x71(systemCPU, addr)
         i = i + 1
     elif opcode == '0x75':
         print("ADC zpg,X")
