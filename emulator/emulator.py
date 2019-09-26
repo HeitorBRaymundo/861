@@ -329,9 +329,9 @@ with open('./emulator/bin/php-plp', 'rb') as file:
         elif opcode == '0xea': # NOP
             pass
         elif opcode == '0x0': # Flow control HELP
-
-            BRK0x00(systemCPU)
+            # BRK0x00(systemCPU)
             # i = i + 1
+            pass
         elif opcode == '0x10':
 
             BPL0x10(systemCPU, pgr_bytes[i + 1])

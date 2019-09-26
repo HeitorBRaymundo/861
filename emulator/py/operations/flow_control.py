@@ -85,6 +85,10 @@ class BEQ0xF0():
     def __init__(self, system, mem_position):
         # Branch on Result Zero
         # branch on Z = 1
+        print("mem_position: ", mem_position)
+        print("mem_position bin: ", '{0:08b}'.format(mem_position))
+        comp_2 = (~mem_position)
+        print("comp_2: ", '{0:08b}'.format(comp_2))
         if (system.getFLAG("Z") == 1):
             branch()
         print("BEQ rel")

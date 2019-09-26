@@ -52,4 +52,4 @@ label2:
   NOP
 
 Reset:
-  BIT $303
+  BEQ Reset
