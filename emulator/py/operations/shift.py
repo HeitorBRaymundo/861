@@ -149,7 +149,7 @@ class ROR_Op():
             self.system.setA((self.system.getA()  >> 1) + isInCarry)
         else:
             isInCarry = self.system.getFLAG("C") * 128
-            self.system.setFLAG("C", self.system.loadMem(system.position) % 2)
+            self.system.setFLAG("C", self.system.loadMem(self.position) % 2)
             self.system.setMem(self.position, self.system.loadMem(self.position)  >> 1 + isInCarry)
 
 class ROR_zero_page_0x66(ROR_Op):

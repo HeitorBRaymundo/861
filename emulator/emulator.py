@@ -68,7 +68,7 @@ while i < len(pgr_bytes):
         i = i + 1
     elif opcode == '0x3e':
         print("ROL abs,X")
-        ROL_abs_X_0x03E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        ROL_abs_X_0x3E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x46':
         print("LSR zpg")
