@@ -53,5 +53,5 @@ label2:
 
 Reset:
   INY
-  BEQ label2
+  BEQ label
   BEQ label2

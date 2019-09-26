@@ -347,11 +347,11 @@ with open('./emulator/bin/beq', 'rb') as file:
             BNE0xD0(systemCPU, pgr_bytes[i + 1])
             i = i + 1
         elif opcode == '0xf0':
-            print("BEQ rel")
-            print(hex(pgr_bytes[i + 1]))
-            print(hex(pgr_bytes[i + 2]))
-            # BEQ0xF0(systemCPU)
-            # i = i + 1
+            # print("BEQ rel")
+            # print(hex(pgr_bytes[i + 1]))
+            # print(hex(pgr_bytes[i + 2]))
+            BEQ0xF0(systemCPU, pgr_bytes[i + 1])
+            i = i + 1
 
 
         # HEITOR \/
