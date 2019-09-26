@@ -56,8 +56,7 @@ class System():
             return value
 
     def getSP(self):
-        
-        return hex(len(self.stack) * 8 + 0x100)
+        return hex(0x1ff - len(self.stack) * 8)
 
     def setMem(self, address, value):
         try:
