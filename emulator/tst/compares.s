@@ -44,7 +44,13 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   ora $4400,Y
+   ldy #0
+   lda #0
+   ora $400,Y
+   lda #10
+   sta $400,Y
+   and $400,Y
+
    eor $44,X
    asl $130 ; Abort execution
    iny

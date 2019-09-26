@@ -36,15 +36,6 @@ while i < len(pgr_bytes):
     if opcode == '0x0':
         i = i + 1
         continue
-    elif opcode == '0xa0':
-        print("LDY abs")
-        i = i + 1
-    elif opcode == '0xb9':
-        print("LDA abs,y")
-        i = i + 2
-    elif opcode == '0xbe':
-        print("LDX abs, y")
-        i = i + 2
     elif opcode == '0x6':
         print("ASL zpg")
         ASL_zero_page_0x06(systemCPU, pgr_bytes[i + 1])

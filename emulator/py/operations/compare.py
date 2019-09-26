@@ -12,19 +12,25 @@ class CMP_Op():
 
     def execute(self):
         if (self.group == 'ORA'):
+            print (self.first_value, self.second_value, self.first_value | self.second_value)
             res = self.first_value | self.second_value
             self.system.setA(res)
             if (not res):
                 self.system.setFLAG("Z", 1)
             if (res < 0):
                 self.system.setFLAG("N", 1)
+            if (res >= 0):
+                self.system.setFLAG("N", 0)
         elif (self.group == 'AND'):
+            print(self.first_value, self.second_value, self.first_value & self.second_value)
             res = self.first_value & self.second_value
             self.system.setA(res)
             if (not res):
                 self.system.setFLAG("Z", 1)
             if (res < 0):
                 self.system.setFLAG("N", 1)
+            if (res >= 0):
+                self.system.setFLAG("N", 0)
         elif (self.group == 'EOR'):
             res = self.first_value ^ self.second_value
             self.system.setA(res)
@@ -32,6 +38,8 @@ class CMP_Op():
                 self.system.setFLAG("Z", 1)
             if (res < 0):
                 self.system.setFLAG("N", 1)
+            if (res >= 0):
+                self.system.setFLAG("N", 0)
         elif (self.group == 'CPY' or self.group == 'CMP' or self.group == 'CPX'):
             res = self.first_value - self.second_value
             if (self.first_value >= self.second_value):
@@ -40,6 +48,8 @@ class CMP_Op():
                 self.system.setFLAG("Z", 1)
             if (res < 0):
                 self.system.setFLAG("N", 1)
+            if (res >= 0):
+                self.system.setFLAG("N", 0)
 
 class OrWithAcumulator0x01(CMP_Op):
     def __init__(self, systemCPU: System, index: int):
