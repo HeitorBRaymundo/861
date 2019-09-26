@@ -52,7 +52,4 @@ label2:
   NOP
 
 Reset:
-  SEC
-  PHP
-  CLC
-  PLP
+  BIT $303

@@ -100,6 +100,7 @@ class JMP_ind0x6C():
     def __init__(self, system, mem_position):
         print("JMP ind")
 
+# OK
 class SEI0x78():
     def __init__(self, system):
         # Set Interrupt Disable Status

@@ -4,6 +4,7 @@ from py.operations import bit
 from py.operations import flags
 from py.operations import flow_control
 from py.operations import interruption
+# from memory_helper import *
 # from py.operations import compare
 
 from py.operations import *
@@ -13,9 +14,40 @@ systemCPU = system.System()
 def printSystemStatus():
     return
 
+def get_zero_page_addr(address_in, offset=0):
+    return address_in + offset
+
+
+def get_absolute_addr(address_in_low, address_in_high, offset=0):
+    return (address_in_high << 8 | address_in_low) + offset
+
+
+# def convert_8bit_twos(self, num):
+#        if (num & (1 << 7)):
+#            return -((num ^ 0xFF) + 1)
+#        else:
+#            return num
+# def get_relative_addr(address_in):
+#     offset = convert_8bit_twos(get_PC_byte())
+#     addr = PC + offset
+#     return addr
+
+
+def get_indirect_addr(system, address_in, reg_offset=0):
+    addr = system.loadMem(address_in) + (system.loadMem(address_in + 1) << 8)
+    return addr + reg_offset
+
+
+def get_indirect_addr_x(system, address_in, register_x):
+    return get_indirect_addr(system, address_in+register_x)
+
+
+def get_indirect_addr_y(system, address_in, register_y):
+    return get_indirect_addr(system, address_in, register_y)
+
 
 # Read file
-with open('./emulator/bin/beq', 'rb') as file:
+with open('./emulator/bin/php-plp', 'rb') as file:
 
     rom_bytes = file.read()
 
@@ -241,49 +273,51 @@ with open('./emulator/bin/beq', 'rb') as file:
             #print("Instrução invalida!")
         # FUSCA \/
         elif opcode == '0x8': # Flags / stack
-            print("PHP impl")
+            # print("PHP impl")
             PHP0x08(systemCPU)
             # i = i + 1
         elif opcode == '0x18':
-            print("CLC impl")
+            # print("CLC impl")
             CLC0x18(systemCPU)
             # i = i + 1
         elif opcode == '0x28':
-            print("PLP impl")
+            # print("PLP impl")
             PLP0x28(systemCPU)
             # i = i + 1
         elif opcode == '0x38':
-            print("SEC impl")
+            # print("SEC impl")
             SEC0x38(systemCPU)
             # i = i + 1
         elif opcode == '0x48':
-            print("PHA impl")
+            # print("PHA impl")
             PHA0x48(systemCPU)
             # i = i + 1
         elif opcode == '0x68':
-            print("PLA impl")
+            # print("PLA impl")
             PLA0x68(systemCPU)
             # i = i + 1
         elif opcode == '0xb8':
-            print("CLV impl")
+            # print("CLV impl")
             CLV0xB8(systemCPU)
             # i = i + 1
         elif opcode == '0xd8':
-            print("CLD impl")
+            # print("CLD impl")
             CLD0xD8(systemCPU)
             # i = i + 1
         elif opcode == '0xf8':
-            print("SED impl")
+            # print("SED impl")
             SED0xF8(systemCPU)
             # i = i + 1
         elif opcode == '0x24': # Bit test HELP
-            print("BIT zpg")
-            BIT_zpg0x24(systemCPU, pgr_bytes[i + 1])
+            # print("BIT zpg")
+            address = get_zero_page_addr(pgr_bytes[i + 1])
+            BIT_zpg0x24(systemCPU, address)
             i = i + 1
         elif opcode == '0x2c':
-            print("BIT abs")
-            BIT_abs0x2C(systemCPU, pgr_bytes[i + 1])
-            i = i + 1
+            # print("BIT abs")
+            address = get_absolute_addr(pgr_bytes[i + 1], pgr_bytes[i + 2])
+            BIT_abs0x2C(systemCPU, address)
+            i = i + 2
         elif opcode == '0x40': # interrupt
 
             RTI0x40(systemCPU)
@@ -293,7 +327,7 @@ with open('./emulator/bin/beq', 'rb') as file:
             CLI0x58(systemCPU)
             # i = i + 1
         elif opcode == '0xea': # NOP
-            print("NOP")
+            pass
         elif opcode == '0x0': # Flow control HELP
 
             BRK0x00(systemCPU)

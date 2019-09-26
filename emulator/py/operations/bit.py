@@ -4,12 +4,50 @@
 
 from py.system import *
 
+# OK
 class BIT_zpg0x24():
-    def __init__(self, zpg: int, A: int, SR: int):
+    def __init__(self, system, address):
         # bits 7 and 6 of operand are transfered to bit 7 and 6 of SR (N,V);
         # the zeroflag is set to the result of operand AND accumulator.
-        print("BIT zpg")
 
+        a = system.getA()
+        value_in_mem = system.loadMem(address)
+
+        bin = '{0:08b}'.format(value_in_mem)
+
+        bit7 = bin[7:8]
+        bit6 = bin[6:7]
+
+        system.setFLAG("N", bit7)
+        system.setFLAG("V", bit6)
+
+        andResult = a & value_in_mem
+        if (andResult == 0):
+            system.setFLAG("Z", 1)
+        else:
+            system.setFLAG("Z", 0)
+        # print("BIT zpg")
+
+# OK
 class BIT_abs0x2C():
-    def __init__(self, absolute: int, A: int, SR: int):
-        print("BIT abs")
+    def __init__(self, system, address):
+
+        # print("address: ", address)
+        a = system.getA()
+        value_in_mem = system.loadMem(address)
+        # print("value_in_mem: ", value_in_mem)
+
+        bin = '{0:08b}'.format(value_in_mem)
+
+        bit7 = bin[7:8]
+        bit6 = bin[6:7]
+
+        system.setFLAG("N", bit7)
+        system.setFLAG("V", bit6)
+
+        andResult = a & value_in_mem
+        if (andResult == 0):
+            system.setFLAG("Z", 1)
+        else:
+            system.setFLAG("Z", 0)
+        # print("BIT abs")

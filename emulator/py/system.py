@@ -2,7 +2,8 @@ class System():
     A = 0
     X = 0
     Y = 0
-    mem = [10] * 2048
+    mem = [0] * 2048
+    mem[771] = 25
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "V": 0, "N": 0}
     stack = []
 
