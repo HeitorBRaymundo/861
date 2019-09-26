@@ -57,8 +57,8 @@ class OrWithAcumulator0x09(CMP_Op):
         super().execute()
 
 class OrWithAcumulator0x0D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "ORA")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "ORA")
         super().execute()
 
 class OrWithAcumulator0x11(CMP_Op):
@@ -72,13 +72,13 @@ class OrWithAcumulator0x15(CMP_Op):
         super().execute()
 
 class OrWithAcumulator0x19(CMP_Op):
-    def __init__(self, systemCPU: System, index: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(systemCPU.getY() + index), "ORA")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(systemCPU.getY() + absHighByte * 256 + absLowByte), "ORA")
         super().execute()
 
 class OrWithAcumulator0x1D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "ORA")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(systemCPU.getX() + absHighByte * 256 + absLowByte), "ORA")
         super().execute()
 
 class AndWithAcumulator0x21(CMP_Op):
@@ -97,8 +97,8 @@ class AndWithAcumulator0x29(CMP_Op):
         super().execute()
 
 class AndWithAcumulator0x2D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "AND")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "AND")
         super().execute()
 
 class AndWithAcumulator0x31(CMP_Op):
@@ -112,13 +112,13 @@ class AndWithAcumulator0x35(CMP_Op):
         super().execute()
 
 class AndWithAcumulator0x39(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs + systemCPU.getY()), "AND")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte + systemCPU.getY()), "AND")
         super().execute()
 
 class AndWithAcumulator0x3D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "AND")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "AND")
         super().execute()
 
 class ExclusiveOrWithAcumulator0x41(CMP_Op):
@@ -137,8 +137,8 @@ class ExclusiveOrWithAcumulator0x49(CMP_Op):
         super().execute()
 
 class ExclusiveOrWithAcumulator0x4D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), abs, "EOR")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), absHighByte * 256 + absLowByte, "EOR")
         super().execute()
 
 class ExclusiveOrWithAcumulator0x51(CMP_Op):
@@ -152,13 +152,13 @@ class ExclusiveOrWithAcumulator0x55(CMP_Op):
         super().execute()
 
 class ExclusiveOrWithAcumulator0x59(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs + systemCPU.getY()), "EOR")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte + systemCPU.getY()), "EOR")
         super().execute()
 
 class ExclusiveOrWithAcumulator0x5D(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs + systemCPU.getX()), "EOR")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte + systemCPU.getX()), "EOR")
         super().execute()
 
 class CompareWithY0xC0(CMP_Op):
@@ -187,13 +187,13 @@ class CompareWithAcumulator0xC9(CMP_Op):
         super().execute()
 
 class CompareWithY0xCC(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getY(), systemCPU.loadMem(abs), "CPY")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getY(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "CPY")
         super().execute()
 
 class CompareWithAcumulator0xCD(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "CMP")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "CMP")
         super().execute()
 
 class CompareWithAcumulator0xD1(CMP_Op):
@@ -207,13 +207,13 @@ class CompareWithAcumulator0xD5(CMP_Op):
         super().execute()
 
 class CompareWithAcumulator0xD9(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "CMP")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "CMP")
         super().execute()
 
 class CompareWithAcumulator0xDD(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(abs), "CMP")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "CMP")
         super().execute()
 
 class CompareWithX0xE0(CMP_Op):
@@ -227,6 +227,6 @@ class CompareWithX0xE4(CMP_Op):
         super().execute()
 
 class CompareWithX0xEC(CMP_Op):
-    def __init__(self, systemCPU: System, abs: int):
-        super().__init__(systemCPU, systemCPU.getX(), systemCPU.loadMem(abs), "CPX")
+    def __init__(self, systemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(systemCPU, systemCPU.getX(), systemCPU.loadMem(absHighByte * 256 + absLowByte), "CPX")
         super().execute()

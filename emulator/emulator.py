@@ -255,7 +255,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0xd':
             print('ORA abs')
-            OrWithAcumulator0x0D(systemCPU, pgr_bytes[i + 1])
+            OrWithAcumulator0x0D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x11':
             print('ORA ind, Y')
@@ -267,11 +267,11 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x19':
             print('ORA abs, Y')
-            OrWithAcumulator0x19(systemCPU, pgr_bytes[i + 1])
+            OrWithAcumulator0x19(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x1d':
             print('ORA abs, X')
-            OrWithAcumulator0x1D(systemCPU, pgr_bytes[i + 1])
+            OrWithAcumulator0x1D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x21':
             print('AND X, ind')
@@ -287,7 +287,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x2d':
             print('AND abs')
-            AndWithAcumulator0x2D(systemCPU, pgr_bytes[i + 1])
+            AndWithAcumulator0x2D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x31':
             print('AND ind, Y')
@@ -299,11 +299,11 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x39':
             print('AND abs, Y')
-            AndWithAcumulator0x39(systemCPU, pgr_bytes[i + 1])
+            AndWithAcumulator0x39(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x3d':
             print('AND abs, X')
-            AndWithAcumulator0x3D(systemCPU, pgr_bytes[i + 1])
+            AndWithAcumulator0x3D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x41':
             print('EOR ind, Y')
@@ -319,7 +319,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x4d':
             print('EOR abs')
-            ExclusiveOrWithAcumulator0x4D(systemCPU, pgr_bytes[i + 1])
+            ExclusiveOrWithAcumulator0x4D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x51':
             print('EOR ind, Y')
@@ -331,11 +331,11 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0x59':
             print('EOR abs, Y')
-            ExclusiveOrWithAcumulator0x59(systemCPU, pgr_bytes[i + 1])
+            ExclusiveOrWithAcumulator0x59(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0x5d':
             print('EOR abs, X')
-            ExclusiveOrWithAcumulator0x5D(systemCPU, pgr_bytes[i + 1])
+            ExclusiveOrWithAcumulator0x5D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xc0':
             print('CPY #')
@@ -363,7 +363,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 2
         elif opcode == '0xcd':
             print('CMP abs')
-            CompareWithAcumulator0xCD(systemCPU, pgr_bytes[i + 1])
+            CompareWithAcumulator0xCD(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xd1':
             print('CMP ind, Y')
@@ -375,11 +375,11 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0xd9':
             print('CMP abs, Y')
-            CompareWithAcumulator0xD9(systemCPU, pgr_bytes[i + 1])
+            CompareWithAcumulator0xD9(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xdd':
             print('CMP abs, X')
-            CompareWithAcumulator0xDD(systemCPU, pgr_bytes[i + 1])
+            CompareWithAcumulator0xDD(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
         elif opcode == '0xe0':
             print('CPX #')
@@ -391,7 +391,7 @@ with open('./emulator/bin/compares', 'rb') as file:
             i = i + 1
         elif opcode == '0xec':
             print('CPX abs')
-            CompareWithX0xEC(systemCPU, pgr_bytes[i + 1])
+            CompareWithX0xEC(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
             i = i + 2
 
 
