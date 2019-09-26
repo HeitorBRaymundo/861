@@ -5,14 +5,18 @@ class System():
     mem = [0] * 2048
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
     stack = []
+    rom = None
+    program_counter = 0
 
-    def ___init__ (self):
+    def __init__ (self, rom):
         self.A = 0
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
         self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "V": 0, "N": 0}
         self.stack = []
+        self.rom = rom
+        self.program_counter = self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] >> 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]
 
     def getA(self):
         return self.A
@@ -56,8 +60,7 @@ class System():
             return value
 
     def getSP(self):
-
-        return hex(len(self.stack) * 8 + 0x100)
+        return hex(0x1ff - len(self.stack) * 8)
 
     def setMem(self, address, value):
         try:

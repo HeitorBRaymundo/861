@@ -11,19 +11,25 @@ class Increase_Op():
 
     def execute(self):
         if (self.register == 'Y'):
-            print (self.system.getY())
             self.system.setY(self.system.getY() + 1)
+
+            if self.system.getY() == 0:
+                self.system.setFLAG("Z", 1)
+
             if (self.system.getY() % 255 != self.system.getY()):
                 self.system.setY(self.system.getY() % 255)
                 self.system.setFLAG("C", 1)
-            print (self.system.getY())
+
         elif (self.register == 'X'):
-            print (self.system.getX())
             self.system.setX(self.system.getX() + 1)
+
+            if self.system.getX() == 0:
+                self.system.setFLAG("Z", 1)
+
             if (self.system.getX() % 255 != self.system.getX()):
                 self.system.setX(self.system.getX() % 255)
                 self.system.setFLAG("C", 1)
-            print (self.system.getX())
+
 
 class IncreaseReg0xC8(Increase_Op):
     def __init__(self, systemCPU: System):
@@ -45,23 +51,30 @@ class Decrease_Op():
 
     def execute(self):
         if (self.register == 'Y'):
-            print (self.system.getY())
             self.system.setY(self.system.getY() - 1)
-            if (self.system.getY() < 0):
-                self.system.setFLAG("N", 1)
+            # if (self.system.getY() < 0):
+            #     self.system.setFLAG("N", 1)
+
+            if self.system.getY() == 0:
+                self.system.setFLAG("Z", 1)
+
             if (self.system.getY() % 255 != self.system.getY()):
                 self.system.setY(self.system.getY() % 255)
                 self.system.setFLAG("C", 1)
-            print (self.system.getY())
+
         elif (self.register == 'X'):
-            print (self.system.getX())
             self.system.setX(self.system.getX() - 1)
-            if (self.system.getX() < 0):
-                self.system.setFLAG("N", 1)
+
+            if self.system.getY() == 0:
+                self.system.setFLAG("Z", 1)
+
+            # if (self.system.getX() < 0):
+            #     self.system.setFLAG("N", 1)
+
             if (self.system.getX() % 255 != self.system.getX()):
                 self.system.setX(self.system.getX() % 255)
                 self.system.setFLAG("C", 1)
-            print (self.system.getX())
+
 
 class DecreaseReg0x88(Decrease_Op):
     def __init__(self, systemCPU: System):

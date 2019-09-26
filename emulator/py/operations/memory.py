@@ -8,12 +8,23 @@ class DEC_Op():
         self.system = systemCPU
 
     def execute(self):
-        # M - 1 -> M
+        value = self.system.loadMem(position)
+        value = value - 1
+        if (value % 255 != value):
+            self.system.setFLAG("C", 1)
+            self.system.setMem(position, value % 255)
+        if (self.system.loadMem(position) == 0):
+            self.system.setFLAG("Z", 1)
+        else:
+            self.system.setFLAG("Z", 0)
+        if (self.system.loadMem(position) > 127):
+            self.system.setFLAG("N", 1)
+
         print (self.operation)
 
 class DEC_zero_page_0xC6(DEC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(systemCPU, zpg_index)
+        super().__init__(systemCPU, zpg_pos)
         super().execute()
 
 class DEC_absolute_0xCE(DEC_Op):
@@ -39,12 +50,21 @@ class INC_Op():
         self.system = systemCPU
 
     def execute(self):
-        # M + 1 -> M
-        print (self.operation)
+        value = self.system.loadMem(position)
+        value = value + 1
+        if (value % 255 != value):
+            self.system.setFLAG("C", 1)
+            self.system.setMem(position, value % 255)
+        if (self.system.loadMem(position) == 0):
+            self.system.setFLAG("Z", 1)
+        else:
+            self.system.setFLAG("Z", 0)
+        if (self.system.loadMem(position) > 127):
+            self.system.setFLAG("N", 1)
 
 class INC_zero_page_0xE6(INC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(systemCPU, zpg_index)
+        super().__init__(systemCPU, zpg_pos)
         super().execute()
 
 class INC_absolute_0xEE(INC_Op):
