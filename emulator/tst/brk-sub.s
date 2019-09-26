@@ -44,13 +44,13 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-    ADC #30
-    ADC $30, X
-    ADC $10
-    ADC #11
-    ADC #200
-    ADC $256
-    ADC #11
-    ADC $300, X
-    ADC $257, Y
-    ADC $10, X
+    ADC #222
+    SBC $30, X
+    SBC $10
+    SBC #30
+    SBC #200
+    SBC $256
+    SBC #11
+    SBC $300, X
+    SBC $257, Y
+    SBC $10, X
