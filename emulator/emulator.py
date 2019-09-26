@@ -45,11 +45,11 @@ while i < len(pgr_bytes):
         i = i + 2
     elif opcode == '0x16':
         print("ASL zpg,X")
-        ASL_zero_page_0x16(systemCPU, pgr_bytes[i + 1])
+        ASL_zero_page_index_0x16(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x1e':
         print("ASL abs,X")
-        ASL_absolute_0x1E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        ASL_abs_X_0x01E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x26':
         print("ROL zpg")
