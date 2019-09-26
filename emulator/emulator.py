@@ -23,7 +23,6 @@ nesROM = Rom(file)
 
 pgr_bytes = nesROM.prg_rom
 
-# DAQUI PRA CA EU ACHO Q TA ERRADO
 i = 0
 
 while i < len(pgr_bytes):
@@ -31,154 +30,191 @@ while i < len(pgr_bytes):
     addr = None
 
     if opcode == '0x0':
-        i = i + 1
         continue
-    elif opcode == '0x06':
+    elif opcode == '0x6':
+        print("ASL zpg")
+        ASL_zero_page_0x06(systemCPU, pgr_bytes[i + 1])
         i = i + 1
-    elif opcode == '0x0a':
-        pass
-    elif opcode == '0x0e':
-        pass
+    elif opcode == '0xa':
+        print("ASL A")
+        ASL_A_0x0A(systemCPU)
+    elif opcode == '0xe':
+        print("ASL abs")
+        ASL_absolute_0x0E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x16':
-        pass
-        i = i + 2
+        print("ASL zpg,X")
+        ASL_zero_page_0x16(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x1e':
-        pass
+        print("ASL abs,X")
+        ASL_absolute_0x1E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x26':
-        pass
+        print("ROL zpg")
+        ROL_zero_page_0x26(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x2a':
-        pass
+        print("ROL A")
+        ROL_A_0x2A(systemCPU)
     elif opcode == '0x2e':
-        pass
+        print("ROL abs")
+        ROL_absolute_0x2E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x36':
-        pass
+        print("ROL zpg,X")
+        ROL_zero_page_index_0x36(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x3e':
-        pass
+        print("ROL abs,X")
+        ROL_abs_X_0x03E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x46':
-        pass
+        print("LSR zpg")
+        LSR_zero_page_0x46(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x4a':
-        pass
+        print("LSR A")
+        LSR_A_0x4A(systemCPU)
     elif opcode == '0x4e':
-        pass
-        i = i + 1
-    elif opcode == '0x56':
-        pass
+        print("LSR abs")
+        LSR_absolute_0x4E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
+    elif opcode == '0x56':
+        print("LSR zpg,X")
+        LSR_zero_page_index_0x56(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x5e':
-        pass
+        print("LSR abs,X")
+        LSR_abs_X_0x05E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x61':
-        pass
-        # AddWithCarry0x61(systemCPU)
-        i = i + 2
+        print("ADC X,indirect")
+        AddWithCarry0x61(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x65':
-        # AddWithCarry0x65(systemCPU)
-        pass
+        print("ADC zpg")
+        AddWithCarry0x65(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x66':
-        pass
+        print("ROR zpg")
+        ROR_zero_page_0x66(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x69':
+        print("ADC #")
         AddWithCarry0x69(systemCPU, pgr_bytes[i + 1])
-        print ("| a = ", systemCPU.getA(), " | x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ",  " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
         i = i + 1
     elif opcode == '0x6a':
-        pass
+        print("ROR A")
+        ROR_A_0x6A(systemCPU)
     elif opcode == '0x6d':
-        pass
-        # AddWithCarry0x6D(systemCPU, )
-        i = i + 1
+        print("ADC abs")
+        AddWithCarry0x6D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        i = i + 2
     elif opcode == '0x6e':
-        pass
-        i = i + 1
+        print("ROR abs")
+        ROR_absolute_0x6E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        i = i + 2
     elif opcode == '0x71':
-        pass
-        # AddWithCarry0x71(systemCPU)
-        #### ATENCAO AO INDEX
-        i = i + 2
+        print("ADC ind,Y")
+        AddWithCarry0x71(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x75':
-        pass
-        # AddWithCarry0x75(systemCPU)
-        i = i + 2
+        print("ADC zpg,X")
+        AddWithCarry0x75(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x76':
-        pass
-        i = i + 2
+        print("ROR zpg,X")
+        ROR_zero_page_index_0x76(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0x79':
-        pass
-        # AddWithCarry0x79(systemCPU)
+        print("ADC abs,Y")
+        AddWithCarry0x79(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x7d':
-        pass
-        # AddWithCarry0x7D(systemCPU)
+        print("ADC abs,X")
+        AddWithCarry0x7D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x7e':
-        pass
+        print("ROR abs,X")
+        ROR_abs_X_0x7E(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x88':
-        pass
+        DecreaseReg0x88(systemCPU)
+        print("DEY impl")
     elif opcode == '0xc6':
-        pass
+        print("DEC zpg")
+        DEC_zero_page_0xC6(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0xc8':
-        pass
-
+        IncreaseReg0xC8(systemCPU)
+        print("INY impl")
     elif opcode == '0xca':
-        pass
+        DecreaseReg0xCA(systemCPU)
+        print("DEX impl")
     elif opcode == '0xce':
-        pass
-        i = i + 1
-    elif opcode == '0xd6':
-        pass
+        print("DEC abs")
+        DEC_absolute_0xCE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
+    elif opcode == '0xd6':
+        print("DEC zpg,X")
+        DEC_zero_page_X_0xD6(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0xde':
-        pass
+        print("DEC abs,X")
+        DEC_absolute_X_0xDE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0xe1':
-        pass
-        i = i + 2
+        SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1])
+        print("SBC X,ind")
+        i = i + 1
     elif opcode == '0xe5':
-        pass
+        SubWithCarry0xE5(systemCPU, pgr_bytes[i + 1])
+        print("SBC zpg")
         i = i + 1
     elif opcode == '0xe6':
-        pass
+        print("INC zpg")
+        INC_zero_page_0xE6(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0xe8':
-        pass
+        IncreaseReg0xE8(systemCPU)
+        print("INX impl")
     elif opcode == '0xe9':
-        pass
+        SubWithCarry0xE9(systemCPU, pgr_bytes[i + 1])
+        print("SBC #")
         i = i + 1
     elif opcode == '0xed':
-        pass
-        i = i + 1
+        SubWithCarry0xED(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        print("SBC abs")
+        i = i + 2
     elif opcode == '0xee':
-        pass
-        i = i + 1
+        print("INC abs")
+        INC_absolute_0xEE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        i = i + 2
     elif opcode == '0xf1':
-        pass
-        i = i + 2
+        print("SBC ind,Y")
+        SubWithCarry0xF1(systemCPU, pgr_bytes[i + 1])
+        i = i + 1
     elif opcode == '0xf5':
-        pass
-        i = i + 2
+        SubWithCarry0xF5(systemCPU, pgr_bytes[i + 1])
+        print("SBC zpg,X")
+        i = i + 1
     elif opcode == '0xf6':
-        pass
-        i = i + 2
+        print("INC zpg,X")
+        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        i = i + 1
     elif opcode == '0xf9':
-        pass
+        SubWithCarry0xF9(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        print("SBC abs,Y")
         i = i + 2
     elif opcode == '0xfd':
-        pass
+        SubWithCarry0xFD(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        print("SBC abs,X")
         i = i + 2
     elif opcode == '0xfe':
-        pass
-        i = i + 2
-        #print(opcode)
+        print("INC abs,X")
+        INC_absolute_X_0xFE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
+        i = i + 2        #print(opcode)
         #print("Instrução invalida!")
     # FUSCA \/
 
