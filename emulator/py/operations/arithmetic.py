@@ -86,8 +86,9 @@ class AddWithCarry0x7D(ADC_Op):
 
 
 class SubWithCarry0xE1(SBC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, X[index], "Op E1")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(pos))
+        super().execute()
 
 
 class SubWithCarry0xE5(SBC_Op):
@@ -108,8 +109,9 @@ class SubWithCarry0xED(SBC_Op):
         super().execute()
 
 class SubWithCarry0xF1(SBC_Op):
-    def __init__(self, SystemCPU: System):
-        super().__init__(self, Y[índex], "Op F1")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(pos))
+        super().execute()
 
 class SubWithCarry0xF5(SBC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):

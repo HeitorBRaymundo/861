@@ -30,6 +30,7 @@ while i < len(pgr_bytes):
     addr = None
 
     if opcode == '0x0':
+        i = i + 1
         continue
     elif opcode == '0x6':
         print("ASL zpg")
@@ -167,7 +168,8 @@ while i < len(pgr_bytes):
         DEC_absolute_X_0xDE(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0xe1':
-        SubWithCarry0xE1(systemCPU, pgr_bytes[i + 1])
+        addr = get_indirect_addr_x(systemCPU, pgr_bytes[i + 1], systemCPU.getX())
+        SubWithCarry0xE1(systemCPU, addr)
         print("SBC X,ind")
         i = i + 1
     elif opcode == '0xe5':
@@ -195,7 +197,8 @@ while i < len(pgr_bytes):
         i = i + 2
     elif opcode == '0xf1':
         print("SBC ind,Y")
-        SubWithCarry0xF1(systemCPU, pgr_bytes[i + 1])
+        addr = get_indirect_addr_y(systemCPU, pgr_bytes[i + 1], systemCPU.getY())
+        SubWithCarry0xF1(systemCPU, addr)
         i = i + 1
     elif opcode == '0xf5':
         SubWithCarry0xF5(systemCPU, pgr_bytes[i + 1])
