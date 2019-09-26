@@ -122,8 +122,9 @@ class Load_Op():
         else:
             self.system.setFLAG('Z', 0)
 
-        # set negative flag
-        self.system.FLAGS["N"] = int_to_bit(value_to_load)[0]
+        if register == 'A':
+            # set negative flag
+            self.system.FLAGS["N"] = int_to_bit(value_to_load)[0]
 
         # put the value into the register
         try:
