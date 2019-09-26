@@ -45,7 +45,7 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 Reset:
    asl $130 ; Abort execution
-   iny 
+   iny
 NMI:
 
    ;NOTE: NMI code goes here
