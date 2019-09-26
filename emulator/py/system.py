@@ -3,7 +3,7 @@ class System():
     X = 0
     Y = 0
     mem = [10] * 2048
-    FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
+    FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "V": 0, "N": 0}
     stack = []
 
     def ___init__ (self):
@@ -11,7 +11,7 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
+        self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "V": 0, "N": 0}
         self.stack = []
 
     def getA(self):
@@ -36,7 +36,7 @@ class System():
         if (flag):
             return self.FLAGS[flag]
 
-        return "{}{}{}{}{}{}{}".format(self.FLAGS["C"], self.FLAGS["Z"], self.FLAGS["I"], self.FLAGS["D"], self.FLAGS["B"], self.FLAGS["O"], self.FLAGS["N"],)
+        return "{}{}{}{}{}{}{}".format(self.FLAGS["N"],self.FLAGS["V"],self.FLAGS["B"],self.FLAGS["D"],self.FLAGS["I"],self.FLAGS["Z"],self.FLAGS["C"],)
 
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue

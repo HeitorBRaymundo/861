@@ -4,61 +4,96 @@
 
 from py.system import *
 
+# OK
 class PHP0x08():
     def __init__(self, system):
         # Push Processor Status on Stack
         # push SR
-        print("PHP impl")
+        # print("binary", system.getFLAG())
+        # print("decimal", int(system.getFLAG(), 2))
+        systemRegister = [0, 0, 0, 0, 0, 0, 0]
+        systemRegister[0] = system.getFLAG("C")
+        systemRegister[1] = system.getFLAG("Z")
+        systemRegister[2] = system.getFLAG("I")
+        systemRegister[3] = system.getFLAG("D")
+        systemRegister[4] = system.getFLAG("B")
+        systemRegister[5] = system.getFLAG("V")
+        systemRegister[6] = system.getFLAG("N")
 
+        # print(systemRegister)
+
+        system.stack_push(systemRegister)
+        # print("PHP impl")
+
+# OK
 class CLC0x18():
     def __init__(self, system):
         # Clear Carry Flag
         # 0 -> C
-        super().setFLAG("C", 0)
-        print("CLC impl")
+        system.setFLAG("C", 0)
+        # print("CLC impl")
 
+# OK
 class PLP0x28():
     def __init__(self, system):
         # Pull Processor Status from Stack
         # pull SR
-        print("PLP impl")
+        systemRegister = system.stack_pop()
 
+        system.setFLAG("C", systemRegister[0])
+        system.setFLAG("Z", systemRegister[1])
+        system.setFLAG("I", systemRegister[2])
+        system.setFLAG("D", systemRegister[3])
+        system.setFLAG("B", systemRegister[4])
+        system.setFLAG("V", systemRegister[5])
+        system.setFLAG("N", systemRegister[6])
+
+        # print("PLP impl")
+
+# OK
 class SEC0x38():
     def __init__(self, system):
         # Set Carry Flag
         # 1 -> C
-        super().setFLAG("C", 1)
-        print("SEC impl")
+        system.setFLAG("C", 1)
+        # print("SEC impl")
 
+# OK
 class PHA0x48():
     def __init__(self, system):
         # Push Accumulator on Stack
         # push A
-        print("PHA impl")
+        system.stack_push(system.getA())
+        # print("PHA impl")
 
+# OK
 class PLA0x68():
     def __init__(self, system):
-        # Pull Accumulator on Stack
+        # Pull Accumulator from Stack
         # pull A
-        print("PLA impl")
+        system.setA(system.stack_pop())
+        # print("PLA impl")
 
+# OK
 class CLV0xB8():
     def __init__(self, system):
         # Clear Overflow Flag
         # 0 -> V
-        super().setFLAG("V", 0)
-        print("CLV impl")
+        system.setFLAG("V", 0)
+        # print("CLV impl")
 
+# OK
 class CLD0xD8():
     def __init__(self, system):
         # Clear Decimal Mode
         # 0 -> D
-        super().setFLAG("D", 0)
-        print("CLD impl")
+        system.setFLAG("D", 0)
+        # print("CLD impl")
 
+# OK
 class SED0xF8():
     def __init__(self, system):
         # Set Decimal Flag
         # 1 -> D
-        super().setFLAG("D", 1)
-        print("SED impl")
+        system.setFLAG("D", 1)
+        # print("SED impl")

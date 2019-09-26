@@ -14,5 +14,5 @@ class CLI0x58():
     def __init__(self, system):
         # Clear Interrupt Disable Bit
         # 0 -> I
-        super().setFLAG("I", 0)
+        system.setFLAG("I", 0)
         print("CLI impl")

@@ -52,6 +52,7 @@ label2:
   NOP
 
 Reset:
-  INY
-  BEQ label
-  BEQ label2
+  SEC
+  PHP
+  CLC
+  PLP
