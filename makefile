@@ -1,15 +1,12 @@
-EXECUTAR=python3 ./emulator/emulator.py
-
 CC=g++
 CCFLAGS=-std=gnu++11 -O3
 
 TST=./emulator/tst
 RES=./emulator/res
-BIN=./bin
+BIN=./emulator/bin
 LOG=./emulator/log
 EXT=./emulator/ext
 NES=./emulator/bin/nesemu
-
 
 TESTS=$(addprefix ${BIN}/, $(notdir $(patsubst %.s,%,$(sort $(wildcard ${TST}/*.s)))))
 CROSS_AS=${EXT}/asm6/asm6
@@ -40,7 +37,6 @@ test: ${CROSS_AS} ${BIN} ${LOG} ${NES} ${TESTS}
 			result="${LOG}/$$(basename $$test).log"; \
 			expected="${RES}/$$(basename $$test).r"; \
 			printf "Running $$test: "; \
-			${EXECUTAR} $$test > $$result 2>&1; \
 			${NES} $$test > $$result 2>&1; \
 			errors=`diff -y --suppress-common-lines $$expected $$result | grep '^' | wc -l`; \
 			if [ "$$errors" -eq 0 ]; then \

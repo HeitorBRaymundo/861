@@ -6,6 +6,12 @@ def get_absolute_addr(address_in_low, address_in_high, offset=0):
     return (address_in_high << 8 | address_in_low) + offset
 
 
+
+# def convert_8bit_twos(self, num):
+#        if (num & (1 << 7)):
+#            return -((num ^ 0xFF) + 1)
+#        else:
+#            return num
 # def get_relative_addr(address_in):
 #     offset = convert_8bit_twos(get_PC_byte())
 #     addr = PC + offset
