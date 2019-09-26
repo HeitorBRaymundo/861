@@ -55,6 +55,10 @@ class System():
             value = self.stack.pop()
             return value
 
+    def getSP(self):
+        
+        return hex(len(self.stack) * 8 + 0x100)
+
     def setMem(self, address, value):
         try:
             # map the addres between 0 to 0x0800

@@ -7,3 +7,5 @@ from py.operations.compare import *
 from py.operations.memory import *
 from py.operations.register_instructions import *
 from py.operations.shift import *
+from py.operations.store_load import *
+from py.operations.transfer_sp import *

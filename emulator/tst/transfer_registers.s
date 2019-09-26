@@ -44,7 +44,27 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   ora $4400,Y
-   eor $44,X
-   asl $130 ; Abort execution
-   iny
+
+NMI:
+   ;NOTE: NMI code goes here
+   LDX #10
+   LDY #25
+
+   TXA
+   TYA
+   TAX
+   LDA #33
+   TAY
+IRQ:
+
+   ;NOTE: IRQ code goes here
+
+;----------------------------------------------------------------
+; interrupt vectors
+;----------------------------------------------------------------
+
+   .org $fffa
+
+   .dw NMI
+   .dw Reset
+   .dw IRQ
