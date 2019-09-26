@@ -289,7 +289,7 @@ while i < len(pgr_bytes):
         AndWithAcumulator0x3D(systemCPU, pgr_bytes[i + 1], pgr_bytes[i + 2])
         i = i + 2
     elif opcode == '0x41':
-        print('EOR ind, Y')
+        print('EOR ind, X')
         ExclusiveOrWithAcumulator0x41(systemCPU, pgr_bytes[i + 1])
         i = i + 1
     elif opcode == '0x45':
