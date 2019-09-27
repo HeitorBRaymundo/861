@@ -47,9 +47,17 @@ Reset:
 
 NMI:
     ;NOTE: NMI code goes here
-    label:
-        ADC #1
-        BEQ label
+    ADC #1
+    JSR end
+    LDX #23
+    LDY #44
+    JMP (end2)
+
+    end:
+        LDA #10
+        RTS
+
+    end2:
 
 IRQ:
 

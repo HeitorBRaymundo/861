@@ -23,9 +23,8 @@ systemCPU = system.System(nesROM)
 pgr_bytes = nesROM.prg_rom
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
+
     opcode = hex(pgr_bytes[systemCPU.program_counter])
-
-
     addr = None
 
     if opcode == '0x0':
@@ -337,29 +336,33 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         BPL0x10(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
         # i = i + 1
     elif opcode == '0x20':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JSR0x20(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.stack_push(systemCPU.program_counter)
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
         # i = i + 1
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
         BMI0x30(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
         # i = i + 1
     elif opcode == '0x4c':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
     elif opcode == '0x50':
         systemCPU.program_counter = systemCPU.program_counter + 1
         BVC0x50(systemCPU)
         # i = i + 0
     elif opcode == '0x60':
-        systemCPU.program_counter = systemCPU.program_counter + 1
-        RTS0x60(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 0
-    elif opcode == '0x6C':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_ind0x6C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.stack_pop()
+    elif opcode == '0x6c':
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+
     elif opcode == '0x70':
         systemCPU.program_counter = systemCPU.program_counter + 2
         BVS0x70(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
@@ -785,7 +788,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     else:
         pass
 
-    # if addr is None:
-    #    print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
-    # else:
-    #    print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(),"| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))
+    if addr is None:
+       print ("|pc = ", hex(systemCPU.program_counter + 0xC000),"|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
+    else:
+       print ("|pc = ", hex(systemCPU.program_counter + 0xC000),"|a = ",systemCPU.getA(),"| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))
