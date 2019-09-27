@@ -4,7 +4,7 @@ CC=g++
 CCFLAGS=-std=gnu++11 -O3
 
 TST=./emulator/tst
-RES=./emulator/res
+RES=./res
 BIN=./bin
 LOG=./emulator/log
 EXT=./emulator/ext

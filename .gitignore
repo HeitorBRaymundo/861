@@ -6,7 +6,7 @@ nesasm
 **/bin/
 **/ext/
 **/log/
-**/res/
+
 
 emulator/bin/nesemu
 emulator/ext/asm6/asm6
