@@ -6,12 +6,12 @@ from py.system import *
 
 class BRK0x00():
     def __init__(self, system):
-        system.setFLAG("I", 1)
         pass
         # Force Break
         # interrupt,                       N Z C I D V
         # push PC+2, push SR               - - - 1 - -
-
+# OK
+# tested
 class BPL0x10():
     def __init__(self, system, mem_position):
         # Branch on Result Plus
@@ -27,6 +27,8 @@ class JSR0x20():
         # push (PC+2),                     N Z C I D V
         # (PC+1) -> PCL                    - - - - - -
         # (PC+2) -> PCH
+
+# tested
 class BMI0x30():
     def __init__(self, system, mem_position):
         # Branch on Result Minus
@@ -55,14 +57,14 @@ class BVS0x70():
         # branch on V = 1
         if (system.getFLAG("V") == 1):
             system.program_counter = mem_position
-
+# tested
 class BCC0x90():
     def __init__(self, system, mem_position):
         # Branch on Carry Clear
         # branch on C = 0
         if (system.getFLAG("C") == 0):
             system.program_counter = mem_position
-
+# tested
 class BCS0xB0():
     def __init__(self, system, mem_position):
         # Branch on Carry Set
@@ -70,6 +72,7 @@ class BCS0xB0():
         if (system.getFLAG("C") == 1):
             system.program_counter = mem_position
 
+# tested
 class BNE0xD0():
     def __init__(self, system, mem_position):
         # Branch on Result not Zero

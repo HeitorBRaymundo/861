@@ -160,8 +160,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xF5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf6':
-        systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf9':
         systemCPU.program_counter = systemCPU.program_counter + 3
         SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
@@ -259,8 +259,9 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         high = pgr_bytes[systemCPU.program_counter - 1]
         systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
     elif opcode == '0x50':
-        systemCPU.program_counter = systemCPU.program_counter + 1
-        BVC0x50(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BVC0x50(systemCPU, setPCToAddress)
         # i = i + 0
     elif opcode == '0x60':
         systemCPU.program_counter = systemCPU.stack_pop()

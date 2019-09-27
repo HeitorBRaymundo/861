@@ -31,8 +31,8 @@ class DEC_absolute_0xCE(DEC_Op):
         super().execute()
 
 class DEC_zero_page_X_0xD6(DEC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, zpg_index + X)
+    def __init__(self, SystemCPU: System, absLowByte: int):
+        super().__init__(SystemCPU, absLowByte + SystemCPU.X)
         super().execute()
 
 class DEC_absolute_X_0xDE(DEC_Op):
@@ -71,8 +71,8 @@ class INC_absolute_0xEE(INC_Op):
         super().execute()
 
 class INC_zero_page_X_0xF6(INC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, zpg_index + X)
+    def __init__(self, SystemCPU: System, absLowByte: int):
+        super().__init__(SystemCPU, absLowByte + SystemCPU.X)
         super().execute()
 
 class INC_absolute_X_0xFE(INC_Op):
