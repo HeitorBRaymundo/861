@@ -22,6 +22,8 @@ systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
+# import pdb; pdb.set_trace()
+
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
 
@@ -55,6 +57,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
 
     elif opcode == '0x2a':
+        systemCPU.program_counter = systemCPU.program_counter + 1
         print("ROL A")
         ROL_A_0x2A(systemCPU)
     elif opcode == '0x2e':
@@ -77,6 +80,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
 
     elif opcode == '0x4a':
+        systemCPU.program_counter = systemCPU.program_counter + 1
         print("LSR A")
         LSR_A_0x4A(systemCPU)
     elif opcode == '0x4e':
@@ -792,6 +796,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
+        print ("Erro")
         pass
 
     if addr is None:

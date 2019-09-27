@@ -46,46 +46,28 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
 
 NMI:
-  ADC #20
-  LSR A
-  STA $21
-  LSR A
-  LDX #2
-  STA $300, X
-  LSR A
-  LSR A
-  LSR A
-  LSR A
-  STA $20
-  LSR $20
-  LSR $20
-  LSR $20
-  LDA $20
-  ADC #1
-  STA $300
-  LSR $300
-  LDA $300
-  ADC #1
-  LDX #1
-  LSR $20, X
-  LDA $21
-  ADC #1
-  INX
-  LSR $300, X
-  LDA $302
-  ADC #1
-      ;NOTE: NMI code goes here
+   ;NOTE: NMI code goes here
+  PHP
+  CLC
+  PLP
+  SEC
+  PHA
+  CLI
+  PLA
+  SEI
+  CLV
+  CLD
+  SED
+IRQ:
 
-  IRQ:
+   ;NOTE: IRQ code goes here
 
-     ;NOTE: IRQ code goes here
+;----------------------------------------------------------------
+; interrupt vectors
+;----------------------------------------------------------------
 
-  ;----------------------------------------------------------------
-  ; interrupt vectors
-  ;----------------------------------------------------------------
+   .org $fffa
 
-.org $fffa
-
-.dw NMI
-.dw Reset
-.dw IRQ
+   .dw NMI
+   .dw Reset
+   .dw IRQ
