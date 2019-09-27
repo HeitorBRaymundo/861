@@ -148,10 +148,10 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         SubWithCarry0xE9(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xed':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xED(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        SubWithCarry0xED(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xee':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf1':
         systemCPU.program_counter = systemCPU.program_counter + 2
         address = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
@@ -161,16 +161,16 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         SubWithCarry0xF5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf6':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf9':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xfd':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xFD(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        SubWithCarry0xFD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xfe':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
+        INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
         systemCPU.program_counter = systemCPU.program_counter + 1
