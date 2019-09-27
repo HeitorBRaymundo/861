@@ -895,6 +895,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         pass
 
     if addr is None:
-       print ("|pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"|a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), " | y = 0x%0.2X" %  systemCPU.getY(), " | sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
+       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
     else:
-       print ("|pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"|a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), " | y = 0x%0.2X" %  systemCPU.getY(), " | sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[0x%0.4X" % addr, "] = 0x%0.2X" % systemCPU.loadMem(addr)," |")
+       print (" |pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[0x%0.4X]" % addr, "= 0x%0.2X" % systemCPU.loadMem(addr),"|")
