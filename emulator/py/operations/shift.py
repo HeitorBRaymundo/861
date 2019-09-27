@@ -10,11 +10,11 @@ class ASL_Op():
     def execute(self):
         #  C <- [76543210] <- 0
         if (self.position == -1):
-            if (self.system.getA() > 128):
+            if (self.system.getA() >= 128):
                 self.system.setFLAG("C", 1)
             self.system.setA((self.system.getA() << 1) % 255)
         else:
-            if (self.system.loadMem(self.position) > 128):
+            if (self.system.loadMem(self.position) >= 128):
                 self.system.setFLAG("C", 1)
             self.system.setMem(self.position, (self.system.loadMem(self.position) << 1) % 255)
 

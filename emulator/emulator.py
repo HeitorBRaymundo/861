@@ -1,15 +1,7 @@
 import sys
 from py import system
-from py.operations import register_instructions
-from py.operations import bit
-from py.operations import flags
-from py.operations import flow_control
-from py.operations import interruption
-from py.operations import store_load
-from py.operations import transfer_sp
-from py.operations import compare
-from rom import Rom
 from py.operations import *
+from rom import Rom
 from memory_helper import *
 
 try:
@@ -22,10 +14,10 @@ systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
+# import pdb; pdb.set_trace()
+
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
-
-
     addr = None
 
     if opcode == '0x0':
@@ -40,281 +32,193 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0xe':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ASL_absolute_0x0E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x16':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        ASL_zero_page_0x16(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
+        ASL_zero_page_index_0x16(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x1e':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        ASL_absolute_0x1E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
+        ASL_abs_X_0x01E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x26':
-        print("ROL zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x2a':
-        print("ROL A")
+        systemCPU.program_counter = systemCPU.program_counter + 1
         ROL_A_0x2A(systemCPU)
     elif opcode == '0x2e':
-        print("ROL abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROL_absolute_0x2E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x36':
-        print("ROL zpg,X")
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_index_0x36(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x3e':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        ROL_abs_X_0x03E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
+        ROL_abs_X_0x3E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x46':
-        print("LSR zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x4a':
-        print("LSR A")
+        systemCPU.program_counter = systemCPU.program_counter + 1
         LSR_A_0x4A(systemCPU)
     elif opcode == '0x4e':
-        print("LSR abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_absolute_0x4E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x56':
-        print("LSR zpg,X")
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_index_0x56(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x5e':
-        print("LSR abs,X")
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_abs_X_0x05E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x61':
-        print("ADC X,indirect")
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
-        AddWithCarry0x61(systemCPU, addr)
-
+        address = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
+        AddWithCarry0x61(systemCPU, address)
     elif opcode == '0x65':
-        print("ADC zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x65(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x66':
-        print("ROR zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_0x66(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x69':
-        print("ADC #")
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x69(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x6a':
-        print("ROR A")
         systemCPU.program_counter = systemCPU.program_counter + 1
         ROR_A_0x6A(systemCPU)
-
     elif opcode == '0x6d':
-        print("ADC abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x6D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x6e':
-        print("ROR abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_absolute_0x6E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x71':
-        print("ADC ind,Y")
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
-        AddWithCarry0x71(systemCPU, addr)
-
+        address = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
+        AddWithCarry0x71(systemCPU, address)
     elif opcode == '0x75':
-        print("ADC zpg,X")
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x75(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x76':
-        print("ROR zpg,X")
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_index_0x76(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x79':
-        print("ADC abs,Y")
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x79(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x7d':
-        print("ADC abs,X")
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x7D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x7e':
-        print("ROR abs,X")
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x88':
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
-        print("DEY impl")
     elif opcode == '0xc6':
-        print("DEC zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         DEC_zero_page_0xC6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xC8(systemCPU)
-        print("INY impl")
     elif opcode == '0xca':
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0xCA(systemCPU)
-        print("DEX impl")
     elif opcode == '0xce':
-        print("DEC abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
         DEC_absolute_0xCE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xd6':
-        print("DEC zpg,X")
         systemCPU.program_counter = systemCPU.program_counter + 2
         DEC_zero_page_X_0xD6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xde':
-        print("DEC abs,X")
         systemCPU.program_counter = systemCPU.program_counter + 3
         DEC_absolute_X_0xDE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xe1':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
-        SubWithCarry0xE1(systemCPU, addr)
-        print("SBC X,ind")
-
+        address = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
+        SubWithCarry0xE1(systemCPU, address)
     elif opcode == '0xe5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xE5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        print("SBC zpg")
-
     elif opcode == '0xe6':
-        print("INC zpg")
         systemCPU.program_counter = systemCPU.program_counter + 2
         INC_zero_page_0xE6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xE8(systemCPU)
-        print("INX impl")
     elif opcode == '0xe9':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xE9(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        print("SBC #")
-
     elif opcode == '0xed':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xED(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-        print("SBC abs")
-
+        SubWithCarry0xED(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xee':
-        print("INC abs")
         systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
+        INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf1':
-        print("SBC ind,Y")
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
-        SubWithCarry0xF1(systemCPU, addr)
-
+        address = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
+        SubWithCarry0xF1(systemCPU, address)
     elif opcode == '0xf5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xF5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        print("SBC zpg,X")
-
     elif opcode == '0xf6':
-        print("INC zpg,X")
-        systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xf9':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-        print("SBC abs,Y")
-
+        SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xfd':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        SubWithCarry0xFD(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-        print("SBC abs,X")
-
+        SubWithCarry0xFD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xfe':
-        print("INC abs,X")
         systemCPU.program_counter = systemCPU.program_counter + 3
-        INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-     #print(opcode)
-        #print("Instrução invalida!")
-
+        INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
-        # print("PHP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHP0x08(systemCPU)
         # i = i + 0
     elif opcode == '0x18':
-        # print("CLC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLC0x18(systemCPU)
         # i = i + 0
     elif opcode == '0x28':
-        # print("PLP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLP0x28(systemCPU)
         # i = i + 0
     elif opcode == '0x38':
-        # print("SEC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         SEC0x38(systemCPU)
         # i = i + 0
     elif opcode == '0x48':
-        # print("PHA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHA0x48(systemCPU)
         # i = i + 0
     elif opcode == '0x68':
-        # print("PLA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLA0x68(systemCPU)
         # i = i + 0
     elif opcode == '0xb8':
-        # print("CLV impl")
+
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLV0xB8(systemCPU)
         # i = i + 0
     elif opcode == '0xd8':
-        # print("CLD impl")
+
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLD0xD8(systemCPU)
         # i = i + 0
     elif opcode == '0xf8':
-        # print("SED impl")
+
         systemCPU.program_counter = systemCPU.program_counter + 1
         SED0xF8(systemCPU)
         # i = i + 0
     elif opcode == '0x24': # Bit test HELP
-        # print("BIT zpg")
+
         systemCPU.program_counter = systemCPU.program_counter + 2
         address = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         BIT_zpg0x24(systemCPU, address)
         # i = i + 1
     elif opcode == '0x2c':
-        # print("BIT abs")
+
         systemCPU.program_counter = systemCPU.program_counter + 3
         address = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         BIT_abs0x2C(systemCPU, address)
@@ -334,35 +238,43 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 1
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BPL0x10(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BPL0x10(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x20':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JSR0x20(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.stack_push(systemCPU.program_counter)
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
         # i = i + 1
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BMI0x30(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BMI0x30(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x4c':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
     elif opcode == '0x50':
-        systemCPU.program_counter = systemCPU.program_counter + 1
-        BVC0x50(systemCPU)
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BVC0x50(systemCPU, setPCToAddress)
         # i = i + 0
     elif opcode == '0x60':
-        systemCPU.program_counter = systemCPU.program_counter + 1
-        RTS0x60(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 0
-    elif opcode == '0x6C':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_ind0x6C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.stack_pop()
+    elif opcode == '0x6c':
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+
     elif opcode == '0x70':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BVS0x70(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BVS0x70(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x78':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -370,180 +282,240 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 0
     elif opcode == '0x90':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BCC0x90(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BCC0x90(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xb0':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BCS0xB0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BCS0xB0(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xd0':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BNE0xD0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BNE0xD0(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xf0':
-        # print("BEQ rel")
-        # print(hex(pgr_bytes[systemCPU.program_counter - 1]))
-        # print(hex(pgr_bytes[i + 2]))
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        BEQ0xF0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
 
+
+
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BEQ0xF0(systemCPU, setPCToAddress)
+        # i = i + 1
 
     # HEITOR \/
     elif opcode == '0x1':
-      print('ORA X, ind')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x01(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_indirect_addr_x(systemCPU, operand, offset)
+      OrWithAcumulator0x01(systemCPU, address)
     elif opcode == '0x5':
-      print('ORA zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x05(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      OrWithAcumulator0x05(systemCPU, address)
     elif opcode == '0x9':
-      print('ORA #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x09(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      OrWithAcumulator0x09(systemCPU, operand)
     elif opcode == '0xd':
-      print('ORA abs')
       systemCPU.program_counter = systemCPU.program_counter + 3
-      OrWithAcumulator0x0D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      OrWithAcumulator0x0D(systemCPU, address)
     elif opcode == '0x11':
-      print('ORA ind, Y')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x11(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      OrWithAcumulator0x11(systemCPU, address)
     elif opcode == '0x15':
-      print('ORA zpg, X')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x15(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_zero_page_addr(operand, offset)
+      OrWithAcumulator0x15(systemCPU, address)
     elif opcode == '0x19':
-      print('ORA abs, Y')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x19(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.Y
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      OrWithAcumulator0x19(systemCPU, address)
     elif opcode == '0x1d':
-      print('ORA abs, X')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      OrWithAcumulator0x1D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      OrWithAcumulator0x1D(systemCPU, address)
     elif opcode == '0x21':
-      print('AND X, ind')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x21(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
+      AndWithAcumulator0x21(systemCPU, address)
     elif opcode == '0x25':
-      print('AND zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x25(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      AndWithAcumulator0x25(systemCPU, address)
     elif opcode == '0x29':
-      print('AND #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x29(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      AndWithAcumulator0x29(systemCPU, operand)
     elif opcode == '0x2d':
-      print('AND abs')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x2D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      AndWithAcumulator0x2D(systemCPU, address)
     elif opcode == '0x31':
-      print('AND ind, Y')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x31(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      AndWithAcumulator0x31(systemCPU, address)
     elif opcode == '0x35':
-      print('AND zpg, X')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x35(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_zero_page_addr(operand, offset)
+      AndWithAcumulator0x35(systemCPU, address)
     elif opcode == '0x39':
-      print('AND abs, Y')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x39(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.Y
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      AndWithAcumulator0x39(systemCPU, address)
     elif opcode == '0x3d':
-      print('AND abs, X')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      AndWithAcumulator0x3D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      AndWithAcumulator0x3D(systemCPU, address)
     elif opcode == '0x41':
-      print('EOR ind, X')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x41(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      ExclusiveOrWithAcumulator0x41(systemCPU, address)
     elif opcode == '0x45':
-      print('EOR zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x45(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      ExclusiveOrWithAcumulator0x45(systemCPU, address)
     elif opcode == '0x49':
-      print('EOR #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x49(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      ExclusiveOrWithAcumulator0x49(systemCPU, operand)
     elif opcode == '0x4d':
-      print('EOR abs')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x4D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      ExclusiveOrWithAcumulator0x4D(systemCPU, address)
     elif opcode == '0x51':
-      print('EOR ind, Y')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x51(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      ExclusiveOrWithAcumulator0x51(systemCPU, address)
     elif opcode == '0x55':
-      print('EOR zpg, X')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x55(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_zero_page_addr(operand, offset)
+      ExclusiveOrWithAcumulator0x55(systemCPU, address)
     elif opcode == '0x59':
-      print('EOR abs, Y')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x59(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.Y
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      ExclusiveOrWithAcumulator0x59(systemCPU, address)
     elif opcode == '0x5d':
-      print('EOR abs, X')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      ExclusiveOrWithAcumulator0x5D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      ExclusiveOrWithAcumulator0x5D(systemCPU, address)
     elif opcode == '0xc0':
-      print('CPY #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithY0xC0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      CompareWithY0xC0(systemCPU, operand)
     elif opcode == '0xc1':
-      print('CMP X, ind')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xC1(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
+      CompareWithAcumulator0xC1(systemCPU, address)
     elif opcode == '0xc4':
-      print('CPY zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithY0xC4(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      CompareWithY0xC4(systemCPU, address)
     elif opcode == '0xc5':
-      print('CMP zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xC5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      CompareWithAcumulator0xC5(systemCPU, address)
     elif opcode == '0xc9':
-      print('CMP #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xC9(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      CompareWithAcumulator0xC9(systemCPU, operand)
     elif opcode == '0xcc':
-      print('CPY abs')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithY0xCC(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithY0xCC(systemCPU, address)
     elif opcode == '0xcd':
-      print('CMP abs')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xCD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithAcumulator0xCD(systemCPU, address)
     elif opcode == '0xd1':
-      print('CMP ind, Y')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xD1(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      CompareWithAcumulator0xD1(systemCPU, address)
     elif opcode == '0xd5':
-      print('CMP zpg, X')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xD5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_zero_page_addr(operand, offset)
+      CompareWithAcumulator0xD5(systemCPU, address)
     elif opcode == '0xd9':
-      print('CMP abs, Y')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xD9(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.Y
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      CompareWithAcumulator0xD9(systemCPU, address)
     elif opcode == '0xdd':
-      print('CMP abs, X')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithAcumulator0xDD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      offset = systemCPU.X
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      CompareWithAcumulator0xDD(systemCPU, address)
     elif opcode == '0xe0':
-      print('CPX #')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithX0xE0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      CompareWithX0xE0(systemCPU, operand)
     elif opcode == '0xe4':
-      print('CPX zpg')
       systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithX0xE4(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+      operand = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_zero_page_addr(operand)
+      CompareWithX0xE4(systemCPU, address)
     elif opcode == '0xec':
-      print('CPX abs')
-      systemCPU.program_counter = systemCPU.program_counter + 2
-      CompareWithX0xEC(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
-
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      operand_low = pgr_bytes[systemCPU.program_counter - 2]
+      operand_high = pgr_bytes[systemCPU.program_counter - 1]
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithX0xEC(systemCPU, address)
 
     # CARTS \/
     # STORES
@@ -785,9 +757,19 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
+        print ("Erro")
         pass
 
     if addr is None:
-       print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
+       print ("| pc = 0x%0.4X".lower() % int(hex(systemCPU.program_counter + 0xC000), 16),\
+              " | a = 0x%0.2X".lower() % systemCPU.getA(), "| x = 0x%0.2X".lower() %  systemCPU.getX(), \
+              "| y = 0x%0.2X".lower() %  systemCPU.getY(), "| sp = 0x%0.4X".lower() %  int(systemCPU.getSP(), 16), \
+              "| p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
     else:
-       print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(),"| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))
+       print ("| pc = 0x%0.4X".lower() % int(hex(systemCPU.program_counter + 0xC000), 16),\
+              " | a = 0x%0.2X".lower() % systemCPU.getA(), \
+              "| x = 0x%0.2X".lower() %  systemCPU.getX(), \
+              "| y = 0x%0.2X".lower() %  systemCPU.getY(), \
+              "| sp = 0x%0.4X".lower() %  int(systemCPU.getSP(), 16), \
+              "| p[NV-BDIZC] = ", systemCPU.getFLAG(),\
+              "| MEM[0x%0.4X]" % addr, " = 0x%0.2X".lower() % systemCPU.loadMem(addr),"|")

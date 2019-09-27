@@ -13,10 +13,10 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
+        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 0, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
-        self.program_counter = self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] >> 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]
+        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
 
     def getA(self):
         return self.A
@@ -40,7 +40,7 @@ class System():
         if (flag):
             return self.FLAGS[flag]
 
-        return "{}{}{}{}{}{}{}".format(self.FLAGS["C"], self.FLAGS["Z"], self.FLAGS["I"], self.FLAGS["D"], self.FLAGS["B"], self.FLAGS["O"], self.FLAGS["N"],)
+        return "{}{}{}{}{}{}{}".format(self.FLAGS["N"], self.FLAGS["V"], self.FLAGS["B"], self.FLAGS["D"], self.FLAGS["I"], self.FLAGS["Z"], self.FLAGS["C"],)
 
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
@@ -50,7 +50,7 @@ class System():
             raise Exception("Stack is already full!")
         else:
             self.stack.append(value)
-            return True
+
 
     def stack_pop(self):
         if len(self.stack) <= 0:

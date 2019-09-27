@@ -1,16 +1,16 @@
 ################################
 #        FLAGS / STACK         #
 ################################
-
 from py.system import *
 
+int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
+
 # OK
+# tested
 class PHP0x08():
     def __init__(self, system):
         # Push Processor Status on Stack
         # push SR
-        # print("binary", system.getFLAG())
-        # print("decimal", int(system.getFLAG(), 2))
         systemRegister = [0, 0, 0, 0, 0, 0, 0]
         systemRegister[0] = system.getFLAG("C")
         systemRegister[1] = system.getFLAG("Z")
@@ -20,20 +20,18 @@ class PHP0x08():
         systemRegister[5] = system.getFLAG("V")
         systemRegister[6] = system.getFLAG("N")
 
-        # print(systemRegister)
-
         system.stack_push(systemRegister)
-        # print("PHP impl")
 
 # OK
+# tested
 class CLC0x18():
     def __init__(self, system):
         # Clear Carry Flag
         # 0 -> C
         system.setFLAG("C", 0)
-        # print("CLC impl")
 
 # OK
+# tested
 class PLP0x28():
     def __init__(self, system):
         # Pull Processor Status from Stack
@@ -48,52 +46,58 @@ class PLP0x28():
         system.setFLAG("V", systemRegister[5])
         system.setFLAG("N", systemRegister[6])
 
-        # print("PLP impl")
 
 # OK
+# tested
 class SEC0x38():
     def __init__(self, system):
         # Set Carry Flag
         # 1 -> C
         system.setFLAG("C", 1)
-        # print("SEC impl")
 
 # OK
+# tested
 class PHA0x48():
     def __init__(self, system):
         # Push Accumulator on Stack
         # push A
         system.stack_push(system.getA())
-        # print("PHA impl")
 
 # OK
+# tested
 class PLA0x68():
     def __init__(self, system):
         # Pull Accumulator from Stack
         # pull A
-        system.setA(system.stack_pop())
-        # print("PLA impl")
+        acumulator = system.stack_pop()
+        if (acumulator == 0):
+            system.setFLAG("Z", 1)
+
+        if (int_to_bit(acumulator)[0] == 1):
+            system.setFLAG("N", 1)
+
+        system.setA(acumulator)
 
 # OK
+# tested
 class CLV0xB8():
     def __init__(self, system):
         # Clear Overflow Flag
         # 0 -> V
         system.setFLAG("V", 0)
-        # print("CLV impl")
 
 # OK
+# tested
 class CLD0xD8():
     def __init__(self, system):
         # Clear Decimal Mode
         # 0 -> D
         system.setFLAG("D", 0)
-        # print("CLD impl")
 
 # OK
+# tested
 class SED0xF8():
     def __init__(self, system):
         # Set Decimal Flag
         # 1 -> D
         system.setFLAG("D", 1)
-        # print("SED impl")
