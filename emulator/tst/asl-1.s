@@ -53,6 +53,7 @@ NMI:
   ASL A
   ASL A
   ASL A
+  brk
       ;NOTE: NMI code goes here
 
   IRQ:

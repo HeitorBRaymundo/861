@@ -56,6 +56,8 @@ NMI:
 
   end2:
     NOP
+    
+  brk
 
 IRQ:
 

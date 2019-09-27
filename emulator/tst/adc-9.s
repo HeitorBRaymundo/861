@@ -58,6 +58,7 @@ NMI:
     ADC $10, X
     ADC ($10, X)
     ADC ($20), Y
+    brk
 
 
 IRQ:

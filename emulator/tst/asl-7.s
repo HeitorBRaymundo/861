@@ -74,6 +74,7 @@ NMI:
   ASL $300, X
   LDA $302
   ADC #1
+  brk
       ;NOTE: NMI code goes here
 
   IRQ:

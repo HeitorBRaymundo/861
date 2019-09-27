@@ -48,6 +48,7 @@ Reset:
 NMI:
     SEC
     ADC #30
+    brk
 
 
 IRQ:

@@ -53,7 +53,6 @@ NMI:
     ADC #1
     BRK
 
-
 IRQ:
 
 .org $fffa
