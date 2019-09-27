@@ -46,8 +46,9 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
 
 NMI:
-    ;NOTE: NMI code goes here
+    ;NOTE: NMI code goes herez
     label:
+        ADC #1
         ADC #1
         BEQ label
 

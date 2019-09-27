@@ -44,6 +44,8 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
+
+NMI:
     ADC #30
     ADC $30, X
     ADC $10
@@ -56,3 +58,12 @@ Reset:
     ADC $10, X
     ADC ($10, X)
     ADC ($20), Y
+
+
+IRQ:
+
+.org $fffa
+
+.dw NMI
+.dw Reset
+.dw IRQ

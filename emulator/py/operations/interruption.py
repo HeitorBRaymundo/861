@@ -4,6 +4,7 @@
 
 from py.system import *
 
+# OK
 class RTI0x40():
     def __init__(self, system):
         # Return from Interrupt
@@ -19,11 +20,7 @@ class RTI0x40():
         system.setFLAG("N", systemRegister[6])
 
         # restore PC from stack
-        pc = system.stack_pop()
-        # TODO restore PC
-
-
-        # print("RTI impl")
+        system.program_counter = system.stack_pop()
 
 # OK
 class CLI0x58():
@@ -31,4 +28,4 @@ class CLI0x58():
         # Clear Interrupt Disable Bit
         # 0 -> I
         system.setFLAG("I", 0)
-        print("CLI impl")
+        # print("CLI impl")

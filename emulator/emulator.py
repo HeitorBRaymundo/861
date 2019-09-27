@@ -22,9 +22,10 @@ systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
+# import pdb; pdb.set_trace()
+
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
-
 
     addr = None
 
@@ -55,6 +56,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
 
     elif opcode == '0x2a':
+        systemCPU.program_counter = systemCPU.program_counter + 1
         print("ROL A")
         ROL_A_0x2A(systemCPU)
     elif opcode == '0x2e':
@@ -77,6 +79,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
 
     elif opcode == '0x4a':
+        systemCPU.program_counter = systemCPU.program_counter + 1
         print("LSR A")
         LSR_A_0x4A(systemCPU)
     elif opcode == '0x4e':
@@ -263,32 +266,32 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
-        # print("PHP impl")
+        print("PHP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHP0x08(systemCPU)
         # i = i + 0
     elif opcode == '0x18':
-        # print("CLC impl")
+        print("CLC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLC0x18(systemCPU)
         # i = i + 0
     elif opcode == '0x28':
-        # print("PLP impl")
+        print("PLP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLP0x28(systemCPU)
         # i = i + 0
     elif opcode == '0x38':
-        # print("SEC impl")
+        print("SEC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         SEC0x38(systemCPU)
         # i = i + 0
     elif opcode == '0x48':
-        # print("PHA impl")
+        print("PHA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHA0x48(systemCPU)
         # i = i + 0
     elif opcode == '0x68':
-        # print("PLA impl")
+        print("PLA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLA0x68(systemCPU)
         # i = i + 0
@@ -334,35 +337,40 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 1
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BPL0x10(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BPL0x10(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x20':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JSR0x20(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        address = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        JSR0x20(systemCPU, address)
+        # i = i + 2
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BMI0x30(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BMI0x30(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x4c':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        # i = i + 3
     elif opcode == '0x50':
-        systemCPU.program_counter = systemCPU.program_counter + 1
-        BVC0x50(systemCPU)
-        # i = i + 0
+        systemCPU.program_counter = systemCPU.program_counter + 2
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BVC0x50(systemCPU, setPCToAddress)
+        # i = i + 1
     elif opcode == '0x60':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        RTS0x60(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        RTS0x60(systemCPU)
         # i = i + 0
     elif opcode == '0x6C':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        JMP_ind0x6C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 1
+        systemCPU.program_counter = systemCPU.program_counter + 3
+        JMP_ind0x6C(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        # i = i + 3
     elif opcode == '0x70':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BVS0x70(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BVS0x70(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0x78':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -370,22 +378,26 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 0
     elif opcode == '0x90':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BCC0x90(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BCC0x90(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xb0':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BCS0xB0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BCS0xB0(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xd0':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BNE0xD0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BNE0xD0(systemCPU, setPCToAddress)
         # i = i + 1
     elif opcode == '0xf0':
         # print("BEQ rel")
         # print(hex(pgr_bytes[systemCPU.program_counter - 1]))
         # print(hex(pgr_bytes[i + 2]))
         systemCPU.program_counter = systemCPU.program_counter + 2
-        BEQ0xF0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        BEQ0xF0(systemCPU, setPCToAddress)
         # i = i + 1
 
     # HEITOR \/
@@ -879,6 +891,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
+        print ("Erro")
         pass
 
     if addr is None:

@@ -32,7 +32,7 @@ ${LOG}:
 	@mkdir -p ${LOG}
 
 
-test: ${CROSS_AS} ${BIN} ${LOG} ${NES} ${TESTS}
+test: ${CROSS_AS} ${BIN} ${LOG} ${TESTS}
 	@{  echo "************************* Tests ******************************"; \
 		test_failed=0; \
 		test_passed=0; \

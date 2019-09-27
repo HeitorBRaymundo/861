@@ -4,6 +4,8 @@
 
 from py.system import *
 
+int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
+
 # OK
 class PHP0x08():
     def __init__(self, system):
@@ -71,7 +73,14 @@ class PLA0x68():
     def __init__(self, system):
         # Pull Accumulator from Stack
         # pull A
-        system.setA(system.stack_pop())
+        acumulator = system.stack_pop()
+        if (acumulator == 0):
+            system.setFLAG("Z", 1)
+
+        if (int_to_bit(value_to_load)[0] == 1):
+            system.setFLAG("N", 1)
+
+        system.setA(acumulator)
         # print("PLA impl")
 
 # OK
