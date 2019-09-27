@@ -47,14 +47,14 @@ Reset:
 
 NMI:
    ;NOTE: NMI code goes here
-   LDX #10
-   LDY #25
 
-   TXA
-   TYA
-   TAX
-   LDA #33
-   TAY
+   LDA #$15
+   LDX #11
+   STA $45, X
+   ADC #10
+   LDA $45, X
+   ADC #1
+
 IRQ:
 
    ;NOTE: IRQ code goes here
