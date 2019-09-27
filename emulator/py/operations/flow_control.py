@@ -22,12 +22,12 @@ class BPL0x10():
 
 class JSR0x20():
     def __init__(self, system, mem_position):
+        pass
         # Jump to New Location Saving Return Address
         # push (PC+2),                     N Z C I D V
         # (PC+1) -> PCL                    - - - - - -
         # (PC+2) -> PCH
         # print("JSR abs")
-
 class BMI0x30():
     def __init__(self, system, mem_position):
         # Branch on Result Minus
@@ -46,6 +46,7 @@ class BVC0x50():
 
 class RTS0x60():
     def __init__(self, system):
+        pass
         # Return from Subroutine
         # pull PC, PC+1 -> PC
         # print("RTS impl")
@@ -93,6 +94,7 @@ class BEQ0xF0():
 
 class JMP_abs0x4C():
     def __init__(self, system, mem_position):
+        pass
         # Jump to New Location
         # (PC+1) -> PCL
         # (PC+2) -> PCH
@@ -100,6 +102,7 @@ class JMP_abs0x4C():
 
 class JMP_ind0x6C():
     def __init__(self, system, mem_position):
+        pass
         # print("JMP ind")
 
 # OK
