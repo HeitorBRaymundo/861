@@ -60,6 +60,7 @@ NMI:
     LDA $280
     INC $280
     LDA $280
+    BRK
 
 
 IRQ:

@@ -51,6 +51,7 @@ NMI:
     TXS
     TSX
     ADC #1
+    BRK
 
 
 IRQ:

@@ -52,6 +52,7 @@ NMI:
     ADC #32
     LDY #1
     SBC ($20), Y
+    BRK
 
 
 IRQ:

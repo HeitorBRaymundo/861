@@ -56,6 +56,7 @@ NMI:
   LSR $300, X
   LDA $305
   ADC #1
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

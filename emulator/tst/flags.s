@@ -59,6 +59,7 @@ NMI:
   CLD
   CLI
   PLA
+  BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

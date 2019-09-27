@@ -58,6 +58,7 @@ NMI:
     LDA $300, X
     DEC $300, X
     LDA $300, X
+    BRK
 
 
 IRQ:

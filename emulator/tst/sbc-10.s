@@ -49,6 +49,7 @@ NMI:
     ADC #32
     SEC
     SBC #16
+    BRK
 
 
 IRQ:

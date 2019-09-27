@@ -47,6 +47,7 @@ Reset:
 
 NMI:
   CLI
+  BRK
 
 IRQ:
 

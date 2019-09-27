@@ -57,6 +57,7 @@ NMI:
   LSR $300
   LDA $300
   LSR $300
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

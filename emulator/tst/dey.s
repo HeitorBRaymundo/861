@@ -52,6 +52,7 @@ NMI:
     DEY
     DEY
     DEY
+    BRK
 
 
 IRQ:

@@ -47,6 +47,7 @@ Reset:
 
 NMI:
   ADC #$EF
+  BRK
 
 
 IRQ:

@@ -74,6 +74,7 @@ NMI:
   ROL $300, X
   LDA $302
   ADC #1
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

@@ -53,6 +53,7 @@ NMI:
       ADC #1
       LDA $45
       ADC #1
+      BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

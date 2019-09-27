@@ -61,6 +61,7 @@ NMI:
   ROR $300
   ROR $300
   ROR $300
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

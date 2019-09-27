@@ -50,6 +50,7 @@ NMI:
     DEX
     DEX
     DEX
+    BRK
 
 
 IRQ:

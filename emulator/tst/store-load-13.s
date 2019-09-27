@@ -54,6 +54,7 @@ NMI:
    INY
    LDY $280
    DEY
+   BRK
 
 IRQ:
 

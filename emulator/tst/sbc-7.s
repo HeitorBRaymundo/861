@@ -52,6 +52,7 @@ NMI:
     ADC #32
     LDX #1
     SBC ($10, X)
+    BRK
 
 
 IRQ:

@@ -57,6 +57,7 @@ NMI:
    TSX
    TSX
    TSX
+   BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

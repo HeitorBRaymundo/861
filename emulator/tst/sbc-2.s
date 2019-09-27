@@ -50,6 +50,7 @@ NMI:
     STA $30, X
     ADC #22
     SBC $30, X
+    BRK
 
 
 IRQ:

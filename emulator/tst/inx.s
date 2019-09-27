@@ -50,7 +50,7 @@ NMI:
     INX
     INX
     INX
-
+    BRK
 
 IRQ:
 

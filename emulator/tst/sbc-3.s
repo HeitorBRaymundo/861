@@ -51,6 +51,7 @@ NMI:
     STA $10
     ADC #16
     SBC $10
+    BRK
 
 
 IRQ:

@@ -51,6 +51,7 @@ NMI:
     INY
     TYA
     SBC #22
+    BRK
 
 
 IRQ:
