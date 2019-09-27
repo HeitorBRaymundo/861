@@ -78,6 +78,7 @@ NMI:
    LDA ($44),Y
 
    STY $4400
+   BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

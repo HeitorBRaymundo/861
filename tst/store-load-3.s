@@ -53,6 +53,7 @@ NMI:
    ADC #3
    LDA $280
    ADC #1
+   BRK
 
 IRQ:
 

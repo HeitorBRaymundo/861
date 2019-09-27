@@ -23,7 +23,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
         break
-        continue
     elif opcode == '0x6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ASL_zero_page_0x06(systemCPU, pgr_bytes[systemCPU.program_counter - 1])

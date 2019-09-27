@@ -70,6 +70,7 @@ NMI:
     INC $40
     INC $40
     LDA $40
+    BRK
 
 
 

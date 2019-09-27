@@ -52,6 +52,7 @@ NMI:
     INY
     INY
     INY
+    BRK
 
 
 IRQ:

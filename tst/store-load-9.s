@@ -53,6 +53,7 @@ NMI:
       DEX
       LDX $45
       INX
+      BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

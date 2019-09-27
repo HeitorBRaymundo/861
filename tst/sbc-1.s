@@ -48,6 +48,7 @@ Reset:
 NMI:
     ADC #30
     SBC #10
+    BRK
 
 
 IRQ:

@@ -48,6 +48,7 @@ Reset:
 NMI:
   SEC
   CLC
+  BRK
   
 IRQ:
 

@@ -57,6 +57,7 @@ NMI:
   ROR A
   ROR A
   ROR A
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

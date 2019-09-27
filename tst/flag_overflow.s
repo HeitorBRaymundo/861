@@ -49,6 +49,7 @@ NMI:
   ADC #64
   ADC #64
   CLV
+  BRK
 
 
 IRQ:

@@ -59,6 +59,7 @@ NMI:
     SBC $10, X
     SBC ($10, X)
     SBC ($20), Y
+    BRK
 
 
 IRQ:

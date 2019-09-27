@@ -58,6 +58,8 @@ NMI:
   end2:
     NOP
 
+  brk
+
 IRQ:
 
    ;NOTE: IRQ code goes here

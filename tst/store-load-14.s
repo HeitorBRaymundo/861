@@ -55,6 +55,7 @@ NMI:
    LDY $45, X
    INY
    INY
+   BRK
 
 IRQ:
 

@@ -60,6 +60,7 @@ NMI:
   ROL $10
   ROL $10
   LDA $10
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

@@ -47,6 +47,7 @@ Reset:
 
 NMI:
     ADC ($20), Y
+    brk
 
 
 IRQ:

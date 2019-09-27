@@ -53,6 +53,7 @@ NMI:
       INY
       LDY $45
       DEY
+      BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

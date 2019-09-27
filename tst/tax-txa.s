@@ -51,6 +51,7 @@ NMI:
     DEX
     TXA
     SBC #1
+    BRK
 
 
 IRQ:

@@ -57,6 +57,7 @@ NMI:
       RTS
 
   end2:
+  BRK
 
 IRQ:
 

@@ -56,6 +56,7 @@ NMI:
   LSR A
   LSR A
   LSR A
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

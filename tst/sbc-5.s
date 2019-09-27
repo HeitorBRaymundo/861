@@ -53,6 +53,7 @@ NMI:
     LDX #1
     SBC $300, X
     LDA $300, X
+    BRK
 
 
 IRQ:

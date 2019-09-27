@@ -64,6 +64,7 @@ NMI:
     INC $40, X
     INC $40, X
     LDA $40, X
+    BRK
 
 
 IRQ:

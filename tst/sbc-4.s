@@ -50,6 +50,7 @@ NMI:
     STA $256
     ADC #32
     SBC $256
+    BRK
 
 
 IRQ:

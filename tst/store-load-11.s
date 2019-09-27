@@ -54,6 +54,7 @@ NMI:
    INX
    LDX $45, Y
    INX
+   BRK
 
 IRQ:
 

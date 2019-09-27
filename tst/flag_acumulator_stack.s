@@ -50,6 +50,7 @@ NMI:
    PHA
    ADC #192
    PLA
+   BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

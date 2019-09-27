@@ -56,6 +56,7 @@ IRQ:
    TSX
    TSX
    TSX
+   BRK
 
    ;NOTE: IRQ code goes here
 

@@ -57,6 +57,7 @@ NMI:
   ROL A
   ROL A
   ROL A
+  BRK
       ;NOTE: NMI code goes here
 
   IRQ:

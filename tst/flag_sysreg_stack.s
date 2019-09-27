@@ -52,6 +52,7 @@ NMI:
    CLC
    CLD
    PLP ;pull
+   BRK
 IRQ:
 
    ;NOTE: IRQ code goes here

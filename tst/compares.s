@@ -149,6 +149,8 @@ NMI:
   asl $130 ; Abort execution
   iny
 
+  brk
+
 
 IRQ:
 

@@ -48,6 +48,7 @@ Reset:
 NMI:
   SED
   CLD
+  BRK
 
 IRQ:
 
