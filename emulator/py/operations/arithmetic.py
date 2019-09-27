@@ -13,9 +13,9 @@ class ADC_Op():
 
         self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
 
-        if (self.system.getA() % 255 != self.system.getA()):
+        if (self.system.getA() % 256 != self.system.getA()):
             self.system.setFLAG("C", 1)
-            self.system.setA(self.system.getA() % 255)
+            self.system.setA(self.system.getA() % 256)
 
         if self.system.getA() == 0:
             self.system.setFLAG("Z", 1)
@@ -40,9 +40,9 @@ class SBC_Op():
         if self.system.getA() == 0:
             self.system.setFLAG("Z", 1)
 
-        if (self.system.getA() % 255 != self.system.getA()):
+        if (self.system.getA() % 256 != self.system.getA()):
             self.system.setFLAG("C", 1)
-            self.system.setA(self.system.getA() % 255)
+            self.system.setA(self.system.getA() % 256)
 
 class AddWithCarry0x61(ADC_Op):
     def __init__(self, SystemCPU: System, pos: int):
