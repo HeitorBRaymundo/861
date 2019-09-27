@@ -6,6 +6,7 @@ from py.system import *
 
 class BRK0x00():
     def __init__(self, system):
+        system.setFLAG("I", 1)
         pass
         # Force Break
         # interrupt,                       N Z C I D V
@@ -17,7 +18,8 @@ class BPL0x10():
         # branch on N = 0
         if (system.getFLAG("N") == 0):
             system.program_counter = mem_position
-
+# OK
+# tested
 class JSR0x20():
     def __init__(self, system, mem_position):
         pass
@@ -39,6 +41,8 @@ class BVC0x50():
         if (system.getFLAG("V") == 0):
             system.program_counter = mem_position
 
+# OK
+# tested
 class RTS0x60():
     def __init__(self, system):
         pass
@@ -73,6 +77,7 @@ class BNE0xD0():
         if (system.getFLAG("Z") == 0):
             system.program_counter = mem_position
 
+# OK
 class BEQ0xF0():
     def __init__(self, system, mem_position):
         # Branch on Result Zero
@@ -81,6 +86,8 @@ class BEQ0xF0():
         if (system.getFLAG("Z") == 1):
             system.program_counter = mem_position
 
+# OK
+# tested
 class JMP_abs0x4C():
     def __init__(self, system, mem_position):
         pass
@@ -88,6 +95,7 @@ class JMP_abs0x4C():
         # (PC+1) -> PCL
         # (PC+2) -> PCH
 
+# OK
 class JMP_ind0x6C():
     def __init__(self, system, mem_position):
         pass

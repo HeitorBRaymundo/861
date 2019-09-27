@@ -6,6 +6,7 @@ from py.system import *
 int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
 
 # OK
+# tested
 class PHP0x08():
     def __init__(self, system):
         # Push Processor Status on Stack
@@ -22,6 +23,7 @@ class PHP0x08():
         system.stack_push(systemRegister)
 
 # OK
+# tested
 class CLC0x18():
     def __init__(self, system):
         # Clear Carry Flag
@@ -29,6 +31,7 @@ class CLC0x18():
         system.setFLAG("C", 0)
 
 # OK
+# tested
 class PLP0x28():
     def __init__(self, system):
         # Pull Processor Status from Stack
@@ -45,6 +48,7 @@ class PLP0x28():
 
 
 # OK
+# tested
 class SEC0x38():
     def __init__(self, system):
         # Set Carry Flag
@@ -52,6 +56,7 @@ class SEC0x38():
         system.setFLAG("C", 1)
 
 # OK
+# tested
 class PHA0x48():
     def __init__(self, system):
         # Push Accumulator on Stack
@@ -59,6 +64,7 @@ class PHA0x48():
         system.stack_push(system.getA())
 
 # OK
+# tested
 class PLA0x68():
     def __init__(self, system):
         # Pull Accumulator from Stack
@@ -73,6 +79,7 @@ class PLA0x68():
         system.setA(acumulator)
 
 # OK
+# tested
 class CLV0xB8():
     def __init__(self, system):
         # Clear Overflow Flag
@@ -80,6 +87,7 @@ class CLV0xB8():
         system.setFLAG("V", 0)
 
 # OK
+# tested
 class CLD0xD8():
     def __init__(self, system):
         # Clear Decimal Mode
@@ -87,6 +95,7 @@ class CLD0xD8():
         system.setFLAG("D", 0)
 
 # OK
+# tested
 class SED0xF8():
     def __init__(self, system):
         # Set Decimal Flag
