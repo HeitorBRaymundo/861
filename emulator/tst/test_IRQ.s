@@ -44,13 +44,18 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   asl $130 ; Abort execution
-   iny
+   LDX #10
+   TXS
+   LDX #15
 NMI:
-
    ;NOTE: NMI code goes here
-
+   TXS
+   LDX #11
+   TXS
 IRQ:
+   TSX
+   TSX
+   TSX
 
    ;NOTE: IRQ code goes here
 

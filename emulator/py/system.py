@@ -2,17 +2,21 @@ class System():
     A = 0
     X = 0
     Y = 0
-    MEM = [0] * 255
+    mem = [0] * 2048
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
-    SP = 0
+    stack = []
+    rom = None
+    program_counter = 0
 
-    def ___init__ (self):
+    def __init__ (self, rom):
         self.A = 0
         self.X = 0
         self.Y = 0
-        self.MEM = [0] * 255
+        self.mem = [0] * 2048
         self.FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
-        self.SP = 0
+        self.stack = []
+        self.rom = rom
+        self.program_counter = self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] >> 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]
 
     def getA(self):
         return self.A
@@ -32,12 +36,6 @@ class System():
     def setY(self, newY):
         self.Y = newY
 
-    def getMEM(self, pos, index = 0):
-        return self.MEM[pos + index]
-
-    def setMEM(self, pos, newValue, index = 0):
-        self.MEM[pos + index] = newValue
-
     def getFLAG(self, flag = 0):
         if (flag):
             return self.FLAGS[flag]
@@ -47,8 +45,57 @@ class System():
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
 
-    def getSP(self):
-        return self.SP
+    def stack_push(self, value):
+        if len(self.stack) > 256:
+            raise Exception("Stack is already full!")
+        else:
+            self.stack.append(value)
+            return True
 
-    def setMEM(self, newValue):
-        self.SP = newValue
+    def stack_pop(self):
+        if len(self.stack) <= 0:
+            raise Exception("Stack is empty!")
+        else:
+            value = self.stack.pop()
+            return value
+
+    def getSP(self):
+        return hex(0x1ff - len(self.stack) * 8)
+
+    def setMem(self, address, value):
+        try:
+            # map the addres between 0 to 0x0800
+            if type(address) == str:
+                converted_address = int(address, 16) & int('0x7ff', 16)
+            else:
+                converted_address = int(address) & int('0x7ff', 16)
+        except:
+            raise Exception('Invalid type of address!')
+
+        try:
+            # save the value
+            self.mem[converted_address] = value
+        except:
+            raise Exception("Invalid address!")
+
+    def loadMem(self, address):
+        try:
+            # map the addres between 0 to 0x0800
+            if type(address) == str:
+                converted_address = int(address, 16) & int('0x7ff', 16)
+            else:
+                converted_address = int(address) & int('0x7ff', 16)
+        except:
+            raise Exception('Invalid type of address!')
+
+        try:
+            # save the value
+            return self.mem[converted_address]
+        except:
+            raise Exception("Invalid address!")
+            return False
+
+
+if __name__ == '__main__':
+    system = System()
+    import pdb; pdb.set_trace()

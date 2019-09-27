@@ -44,22 +44,31 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   asl $130 ; Abort execution
-   iny
-NMI:
-
-   ;NOTE: NMI code goes here
-
-IRQ:
-
-   ;NOTE: IRQ code goes here
-
-;----------------------------------------------------------------
-; interrupt vectors
-;----------------------------------------------------------------
-
-   .org $fffa
-
-   .dw NMI
-   .dw Reset
-   .dw IRQ
+  ADC #20
+  ROR A
+  STA $21
+  ROR A
+  LDX #2
+  STA $300, X
+  ROR A
+  ROR A
+  ROR A
+  ROR A
+  STA $20
+  ROR $20
+  ROR $20
+  ROR $20
+  LDA $20
+  ADC #1
+  STA $300
+  ROR $300
+  LDA $300
+  ADC #1
+  LDX #1
+  ROR $20, X
+  LDA $21
+  ADC #1
+  INX
+  ROR $300, X
+  LDA $302
+  ADC #1

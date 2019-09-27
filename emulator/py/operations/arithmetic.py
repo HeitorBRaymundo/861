@@ -1,104 +1,129 @@
+from py.system import *
+
 class ADC_Op():
-    is_carry_set = False
-    value_A = 0
     value_second = 0
-    operation = ''
-    def __init__(self, is_carry_set: Boolean, value_A: int, value_second: int, operation: str):
-        self.is_carry_set = is_carry_set
-        self.value_A = value_A
+    system = ""
+    def __init__(self, systemCPU: System, value_second: int):
+        self.system = systemCPU
         self.value_second = value_second
 
-    def execute():
-        # A + M + C -> A, C
-        # checar se teve overflow
-        # atualizar valor de A
-        print (self.operation)
+    def execute(self):
+        self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
+
+        if (self.system.getA() % 255 != self.system.getA()):
+            self.system.setFLAG("C", 1)
+            self.system.setA(self.system.getA() % 255)
+
+        if self.system.getA() == 0:
+            self.system.setFLAG("Z", 1)
+        else:
+            self.system.setFLAG("Z", 0)
+
+        if (self.system.getA() > 127):
+            self.system.setFLAG("N", 1)
 
 class SBC_Op():
-    is_carry_set = False
-    value_A = 0
     value_second = 0
-    operation = ''
-    def __init__(self, is_carry_set: Boolean, value_A: int, value_second: int, operation: str):
-        self.is_carry_set = is_carry_set
-        self.value_A = value_A
+    system = ""
+    def __init__(self, systemCPU: System, value_second: int):
+        self.system = systemCPU
         self.value_second = value_second
 
-    def execute():
-        # A - M - C -> A, C
-        # checar se teve overflow
-        # atualizar valor de A
-        print (self.operation)
+    def execute(self):
+        self.system.setA(self.system.getA() - (1 - self.system.getFLAG("C")) - self.value_second)
+        if (self.system.getA() < 0):
+            self.system.setFLAG("N", 1)
+
+        if self.system.getA() == 0:
+            self.system.setFLAG("Z", 1)
+
+        if (self.system.getA() % 255 != self.system.getA()):
+            self.system.setFLAG("C", 1)
+            self.system.setA(self.system.getA() % 255)
 
 class AddWithCarry0x61(ADC_Op):
-    def __init__(self, carry: Boolean, X: str, index: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, X[index], "Op 61")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(self, SystemCPU.loadMem(pos))
 
 
 class AddWithCarry0x65(ADC_Op):
-    def __init__(self, carry: Boolean, zpg_index: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, zpg_index, "Op 65")
+    def __init__(self, SystemCPU: System, zpg_pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos))
+        super().execute()
 
 
 class AddWithCarry0x69(ADC_Op):
-    def __init__(self, carry: Boolean, imm: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, imm, "Op 69")
+    def __init__(self, SystemCPU: System, imm: int):
+        super().__init__(SystemCPU, imm)
+        super().execute()
 
 
 class AddWithCarry0x6D(ADC_Op):
-    def __init__(self, carry: Boolean, abs: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs, "Op 6D")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte))
+        super().execute()
 
 class AddWithCarry0x71(ADC_Op):
-    def __init__(self, carry: Boolean, index: int, Y: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, Y[índex], "Op 71")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(self, SystemCPU.loadMem(pos))
 
 class AddWithCarry0x75(ADC_Op):
-    def __init__(self, carry: Boolean, zpg_index: int, X: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, zpg_index[X], "Op 75")
+    def __init__(self, SystemCPU: System, zpg_pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos + SystemCPU.getX()))
+        super().execute()
 
 class AddWithCarry0x79(ADC_Op):
-    def __init__(self, carry: Boolean, abs: int, Y: int value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs[Y], "Op 79")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getY()))
+        super().execute()
 
 class AddWithCarry0x7D(ADC_Op):
-    def __init__(self, carry: Boolean, abs: int, X: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs[X], "Op 7D")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getX()))
+        super().execute()
 
 
 
 
 class SubWithCarry0xE1(SBC_Op):
-    def __init__(self, carry: Boolean, X: str, index: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, X[index], "Op E1")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(pos))
+        super().execute()
 
 
 class SubWithCarry0xE5(SBC_Op):
-    def __init__(self, carry: Boolean, zpg_index: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, zpg_index, "Op E5")
+    def __init__(self, SystemCPU: System, zpg_pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos))
+        super().execute()
 
 
 class SubWithCarry0xE9(SBC_Op):
-    def __init__(self, carry: Boolean, imm: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, imm, "Op E9")
+    def __init__(self, SystemCPU: System, imm: int):
+            super().__init__(SystemCPU, imm)
+            super().execute()
 
 
 class SubWithCarry0xED(SBC_Op):
-    def __init__(self, carry: Boolean, abs: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs, "Op ED")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte))
+        super().execute()
 
 class SubWithCarry0xF1(SBC_Op):
-    def __init__(self, carry: Boolean, index: int, Y: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, Y[índex], "Op F1")
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(pos))
+        super().execute()
 
 class SubWithCarry0xF5(SBC_Op):
-    def __init__(self, carry: Boolean, zpg_index: int, X: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, zpg_index[X], "Op F5")
+    def __init__(self, SystemCPU: System, zpg_pos: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos + SystemCPU.getX()))
+        super().execute()
 
 class SubWithCarry0xF9(SBC_Op):
-    def __init__(self, carry: Boolean, abs: int, Y: int value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs[Y], "Op F9")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getY()))
+        super().execute()
 
 class SubWithCarry0xFD(SBC_Op):
-    def __init__(self, carry: Boolean, abs: int, X: int, value_A: int, operation: str):
-        super().__init__(self, carry, valueA, abs[X], "Op FD")
+    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte: int):
+        super().__init__(SystemCPU, SystemCPU.loadMem(absHighByte * 256 + absLowByte + SystemCPU.getX()))
+        super().execute()

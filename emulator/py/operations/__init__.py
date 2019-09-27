@@ -2,8 +2,10 @@
 This package is responsible for identify which opcode is and process it.
 """
 
-# from operations.arithmetic import *
-# from operations.compare import *
-# from operations.memory import *
-# from operations.register_instructions import *
-# from operations.shift import *
+from py.operations.arithmetic import *
+from py.operations.compare import *
+from py.operations.memory import *
+from py.operations.register_instructions import *
+from py.operations.shift import *
+from py.operations.store_load import *
+from py.operations.transfer_sp import *
