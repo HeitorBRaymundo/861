@@ -16,37 +16,56 @@ class CMP_Op():
             self.system.setA(res)
             if (not res):
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
             if (res < 0):
                 self.system.setFLAG("N", 1)
-            if (res >= 0):
+            else:
                 self.system.setFLAG("N", 0)
+
         elif (self.group == 'AND'):
             res = self.first_value & self.second_value
             self.system.setA(res)
             if (not res):
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
             if (res < 0):
                 self.system.setFLAG("N", 1)
-            if (res >= 0):
+            else:
                 self.system.setFLAG("N", 0)
+
         elif (self.group == 'EOR'):
             res = self.first_value ^ self.second_value
             self.system.setA(res)
             if (not res):
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
             if (res < 0):
                 self.system.setFLAG("N", 1)
-            if (res >= 0):
+            else:
                 self.system.setFLAG("N", 0)
+
         elif (self.group == 'CPY' or self.group == 'CMP' or self.group == 'CPX'):
             res = self.first_value - self.second_value
+            print(self.first_value, self.second_value, res, self.group)
             if (self.first_value >= self.second_value):
                 self.system.setFLAG("C", 1)
+            else:
+                self.system.setFLAG("C", 0)
+
             if (self.first_value == self.second_value):
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
             if (res < 0):
                 self.system.setFLAG("N", 1)
-            if (res >= 0):
+            else:
                 self.system.setFLAG("N", 0)
 
 class OrWithAcumulator0x01(CMP_Op):

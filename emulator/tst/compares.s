@@ -44,119 +44,116 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   ldy #0
-   lda #0
-   ora $400, Y ; ORA abs, Y
 
-   lda #10
-   sta $400, Y
-   ora $400, Y ; ORA abs, Y
+NMI:
+  ldy #0
+  lda #0
+  ora $400, Y ; ORA abs, Y
 
-   lda #20
-   sta $400, Y
+  lda #10
+  sta $400, Y
+  ora $400, Y ; ORA abs, Y
 
-   ora ($40, X) ; ORA X, ind
+  lda #20
+  sta $400, Y
 
-   ora $44 ; ORA zpg
+  ora ($40, X) ; ORA X, ind
 
-   ora #$44 ; ORA #
+  ora $44 ; ORA zpg
 
-   lda #30
-   sta $440, Y
-   ora $440 ; ORA abs
+  ora #44 ; ORA #
 
-   ora ($44), Y ; ORA ind, Y
+  lda #30
+  sta $440, Y
+  ora $440 ; ORA abs
 
-   ora $44, X ; ORA zpg, X
+  ora ($44), Y ; ORA ind, Y
 
-   ora $4400, X ; ORA abs, X
+  ora $44, X ; ORA zpg, X
 
-   lda #10
-   sta $400, Y
-   and $400, Y ; AND abs, Y
-   lda #0
-   sta $400, Y
+  ora $4400, X ; ORA abs, X
 
-   and ($44, X) ; AND X, ind
+  lda #10
+  sta $400, Y
+  and $400, Y ; AND abs, Y
+  lda #0
+  sta $400, Y
 
-   and $44 ; AND zpg
+  and ($44, X) ; AND X, ind
 
-   lda #1
-   and #$3 ; AND #
+  and $44 ; AND zpg
 
-   and $440 ; AND abs
+  lda #1
+  and #3 ; AND #
 
-   and ($44), Y ; AND ind, Y
+  and $440 ; AND abs
 
-   and $44, X ; AND zpg, X
+  and ($44), Y ; AND ind, Y
 
-   and $440, X ; AND abs, X
+  and $44, X ; AND zpg, X
 
-   eor ($44), Y ; EOR ind, Y
+  and $440, X ; AND abs, X
 
-   eor $44 ; EOR zpg
+  eor ($44), Y ; EOR ind, Y
 
-   lda #10
-   eor #$a ; EOR #
+  eor $44 ; EOR zpg
 
-   lda #10
-   eor #$5 ; EOR #
+  lda #10
+  eor #10 ; EOR #
 
-   lda #10
-   eor #$3 ; EOR #
+  lda #10
+  eor #5 ; EOR #
 
-   eor $440 ; EOR abs
+  lda #10
+  eor #3 ; EOR #
 
-   eor ($44, X) ; EOR ind, X
+  eor $440 ; EOR abs
 
-   eor $44, X ; EOR zpg, X
+  eor ($44, X) ; EOR ind, X
 
-   eor $440, Y ; EOR abs, Y
+  eor $44, X ; EOR zpg, X
 
-   eor $440, X ; EOR abs, X
+  eor $440, Y ; EOR abs, Y
 
-   cpy #$44 ; CPY #
+  eor $440, X ; EOR abs, X
 
-   cpy $44 ; CPY zpg
+  ldy #10
+  cpy #10 ; CPY #
 
-   cpy $440 ; CPY abs
+  cpy $44 ; CPY zpg
 
-   cmp ($44, X) ; CMP X, ind
+  cpy $300 ; CPY abs
 
-   cmp $44 ; CMP zpg
+  cmp ($44, X) ; CMP X, ind
 
-   cmp #$44 ; CMP #
+  cmp $44 ; CMP zpg
 
-   cmp $440 ; CMP abs
+  cmp #44 ; CMP #
 
-   cmp ($44), Y ; CMP ind, Y
+  cmp $440 ; CMP abs
 
-   cmp $44, X ; CMP zpg, X
+  cmp ($44), Y ; CMP ind, Y
 
-   cmp $440, Y ; CMP abs, Y
+  cmp $44, X ; CMP zpg, X
 
-   cmp $440, X ; CMP abs, X
+  cmp $440, Y ; CMP abs, Y
 
-   cpx #$44 ; CPX #
+  cmp $440, X ; CMP abs, X
 
-   cpx $44 ; CPX zpg
+  cpx #44 ; CPX #
 
-   cpx $440 ; CPX abs
+  cpx $44 ; CPX zpg
 
-   asl $130 ; Abort execution
-   iny
+  cpx $440 ; CPX abs
 
- NMI:
-    ;NOTE: NMI code goes here
- IRQ:
-    ;NOTE: IRQ code goes here
+  asl $130 ; Abort execution
+  iny
 
- ;----------------------------------------------------------------
- ; interrupt vectors
- ;----------------------------------------------------------------
 
-    .org $fffa
+IRQ:
 
-    .dw NMI
-    .dw Reset
-    .dw IRQ
+.org $fffa
+
+.dw NMI
+.dw Reset
+.dw IRQ
