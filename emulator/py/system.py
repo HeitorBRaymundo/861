@@ -42,6 +42,12 @@ class System():
 
         return "{}{}{}{}{}{}{}".format(self.FLAGS["N"], self.FLAGS["V"], self.FLAGS["B"], self.FLAGS["D"], self.FLAGS["I"], self.FLAGS["Z"], self.FLAGS["C"],)
 
+    def printFLAG(self, flag = 0):
+        if (flag):
+            return self.FLAGS[flag]
+
+        return "{}{}1{}{}{}{}{}".format(self.FLAGS["N"], self.FLAGS["V"], self.FLAGS["B"], self.FLAGS["D"], self.FLAGS["I"], self.FLAGS["Z"], self.FLAGS["C"],)
+
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
 

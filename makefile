@@ -3,10 +3,10 @@ EXECUTAR=python3 ./emulator/emulator.py
 CC=g++
 CCFLAGS=-std=gnu++11 -O3
 
-TST=./emulator/tst
+TST=./tst
 RES=./res
 BIN=./bin
-LOG=./emulator/log
+LOG=./log
 EXT=./emulator/ext
 NES=./emulator/bin/nesemu
 
