@@ -37,7 +37,7 @@ test: ${CROSS_AS} ${BIN} ${LOG} ${TESTS}
 		test_failed=0; \
 		test_passed=0; \
 		for test in ${TESTS}; do \
-			result="${RES}/$$(basename $$test).r"; \
+			result="${LOG}/$$(basename $$test).log"; \
 			expected="${RES}/$$(basename $$test).r"; \
 			printf "Running $$test: "; \
 			${EXECUTAR} $$test > $$result 2>&1; \

@@ -32,186 +32,145 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0xe':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ASL_absolute_0x0E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x16':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        ASL_zero_page_0x16(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
+        ASL_zero_page_index_0x16(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x1e':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        ASL_absolute_0x1E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
+        ASL_abs_X_0x01E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x26':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x2a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ROL_A_0x2A(systemCPU)
     elif opcode == '0x2e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROL_absolute_0x2E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x36':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_index_0x36(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x3e':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        ROL_abs_X_0x03E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
+        ROL_abs_X_0x3E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x46':
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x4a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         LSR_A_0x4A(systemCPU)
     elif opcode == '0x4e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_absolute_0x4E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x56':
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_index_0x56(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x5e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_abs_X_0x05E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x61':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
         AddWithCarry0x61(systemCPU, addr)
-
     elif opcode == '0x65':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x65(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x66':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_0x66(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x69':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x69(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x6a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ROR_A_0x6A(systemCPU)
-
     elif opcode == '0x6d':
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x6D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x6e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_absolute_0x6E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x71':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
         AddWithCarry0x71(systemCPU, addr)
-
     elif opcode == '0x75':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x75(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x76':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_index_0x76(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x79':
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x79(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x7d':
         systemCPU.program_counter = systemCPU.program_counter + 3
         AddWithCarry0x7D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x7e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0x88':
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
     elif opcode == '0xc6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         DEC_zero_page_0xC6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xC8(systemCPU)
-
     elif opcode == '0xca':
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0xCA(systemCPU)
     elif opcode == '0xce':
         systemCPU.program_counter = systemCPU.program_counter + 3
         DEC_absolute_0xCE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xd6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         DEC_zero_page_X_0xD6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xde':
         systemCPU.program_counter = systemCPU.program_counter + 3
         DEC_absolute_X_0xDE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xe1':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
         SubWithCarry0xE1(systemCPU, addr)
-
     elif opcode == '0xe5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xE5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xe6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         INC_zero_page_0xE6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xE8(systemCPU)
     elif opcode == '0xe9':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xE9(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xed':
         systemCPU.program_counter = systemCPU.program_counter + 3
         SubWithCarry0xED(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     elif opcode == '0xee':
         systemCPU.program_counter = systemCPU.program_counter + 3
         INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     elif opcode == '0xf1':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
         SubWithCarry0xF1(systemCPU, addr)
-
     elif opcode == '0xf5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xF5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
-
     elif opcode == '0xf6':
         systemCPU.program_counter = systemCPU.program_counter + 3
         INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     elif opcode == '0xf9':
         systemCPU.program_counter = systemCPU.program_counter + 3
         SubWithCarry0xF9(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     elif opcode == '0xfd':
         systemCPU.program_counter = systemCPU.program_counter + 3
         SubWithCarry0xFD(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     elif opcode == '0xfe':
         systemCPU.program_counter = systemCPU.program_counter + 3
         INC_absolute_X_0xFE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
-
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -801,6 +760,15 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         pass
 
     if addr is None:
-       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
+       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),\
+              " | a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), \
+              "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), \
+              "| p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
     else:
-       print ("|pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[0x%0.4X]" % addr, "= 0x%0.2X" % systemCPU.loadMem(addr),"|")
+       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),\
+              " | a = 0x%0.2X" % systemCPU.getA(), \
+              "| x = 0x%0.2X" %  systemCPU.getX(), \
+              "| y = 0x%0.2X" %  systemCPU.getY(), \
+              "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), \
+              "| p[NV-BDIZC] = ", systemCPU.getFLAG(),\
+              "| MEM[0x%0.4X]" % addr, " = 0x%0.2X" % systemCPU.loadMem(addr),"|")

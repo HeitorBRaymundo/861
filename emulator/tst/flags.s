@@ -49,16 +49,16 @@ NMI:
    ;NOTE: NMI code goes here
   SEC
   CLC
-  PHP
-  PLP
+  PHP ;push
+  PLP ;pull
   SED
   CLI
   SEI
-  PLA
+  PHA
   CLV
   CLD
   CLI
-  PHA
+  PLA
 IRQ:
 
    ;NOTE: IRQ code goes here

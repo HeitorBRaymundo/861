@@ -1,7 +1,6 @@
 ################################
 #        FLAGS / STACK         #
 ################################
-
 from py.system import *
 
 int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
@@ -68,7 +67,7 @@ class PLA0x68():
         if (acumulator == 0):
             system.setFLAG("Z", 1)
 
-        if (int_to_bit(value_to_load)[0] == 1):
+        if (int_to_bit(acumulator)[0] == 1):
             system.setFLAG("N", 1)
 
         system.setA(acumulator)
