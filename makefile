@@ -41,7 +41,6 @@ test: ${CROSS_AS} ${BIN} ${LOG} ${NES} ${TESTS}
 			expected="${RES}/$$(basename $$test).r"; \
 			printf "Running $$test: "; \
 			${EXECUTAR} $$test > $$result 2>&1; \
-			${NES} $$test > $$result 2>&1; \
 			errors=`diff -y --suppress-common-lines $$expected $$result | grep '^' | wc -l`; \
 			if [ "$$errors" -eq 0 ]; then \
 				printf "\033[0;32mPASSED\033[0m\n"; \
