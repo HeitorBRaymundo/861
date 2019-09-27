@@ -1,2 +1,1 @@
-ADC X,indirect
  |pc = 0xC002 | a = 0x00 | x = 0x00 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0000] = 0x00 |

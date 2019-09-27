@@ -11,8 +11,6 @@ class PHP0x08():
     def __init__(self, system):
         # Push Processor Status on Stack
         # push SR
-        # print("binary", system.getFLAG())
-        # print("decimal", int(system.getFLAG(), 2))
         systemRegister = [0, 0, 0, 0, 0, 0, 0]
         systemRegister[0] = system.getFLAG("C")
         systemRegister[1] = system.getFLAG("Z")
@@ -22,10 +20,7 @@ class PHP0x08():
         systemRegister[5] = system.getFLAG("V")
         systemRegister[6] = system.getFLAG("N")
 
-        # print(systemRegister)
-
         system.stack_push(systemRegister)
-        # print("PHP impl")
 
 # OK
 class CLC0x18():
@@ -33,7 +28,6 @@ class CLC0x18():
         # Clear Carry Flag
         # 0 -> C
         system.setFLAG("C", 0)
-        # print("CLC impl")
 
 # OK
 class PLP0x28():
@@ -50,7 +44,6 @@ class PLP0x28():
         system.setFLAG("V", systemRegister[5])
         system.setFLAG("N", systemRegister[6])
 
-        # print("PLP impl")
 
 # OK
 class SEC0x38():
@@ -58,7 +51,6 @@ class SEC0x38():
         # Set Carry Flag
         # 1 -> C
         system.setFLAG("C", 1)
-        # print("SEC impl")
 
 # OK
 class PHA0x48():
@@ -66,7 +58,6 @@ class PHA0x48():
         # Push Accumulator on Stack
         # push A
         system.stack_push(system.getA())
-        # print("PHA impl")
 
 # OK
 class PLA0x68():
@@ -81,7 +72,6 @@ class PLA0x68():
             system.setFLAG("N", 1)
 
         system.setA(acumulator)
-        # print("PLA impl")
 
 # OK
 class CLV0xB8():
@@ -89,7 +79,6 @@ class CLV0xB8():
         # Clear Overflow Flag
         # 0 -> V
         system.setFLAG("V", 0)
-        # print("CLV impl")
 
 # OK
 class CLD0xD8():
@@ -97,7 +86,6 @@ class CLD0xD8():
         # Clear Decimal Mode
         # 0 -> D
         system.setFLAG("D", 0)
-        # print("CLD impl")
 
 # OK
 class SED0xF8():
@@ -105,4 +93,3 @@ class SED0xF8():
         # Set Decimal Flag
         # 1 -> D
         system.setFLAG("D", 1)
-        # print("SED impl")

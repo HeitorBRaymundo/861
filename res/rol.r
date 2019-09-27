@@ -1,45 +1,29 @@
-ADC #
 | pc = 0xC002 | a = 0x14 | x = 0x00 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL A
 | pc = 0xC003 | a = 0x28 | x = 0x00 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC005 | a = 0x28 | x = 0x00 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0021] = 0x28 |
-ROL A
 | pc = 0xC006 | a = 0x50 | x = 0x00 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
 | pc = 0xC008 | a = 0x50 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC00B | a = 0x50 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0302] = 0x50 |
-ROL A
 | pc = 0xC00C | a = 0xA0 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL A
 | pc = 0xC00D | a = 0x41 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000001 |
-ROL A
 | pc = 0xC00E | a = 0x83 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL A
 | pc = 0xC00F | a = 0x07 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000001 |
  |pc = 0xC011 | a = 0x07 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000001  | MEM[0x0020] = 0x07 |
-ROL zpg
 | pc = 0xC013 | a = 0x07 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL zpg
 | pc = 0xC015 | a = 0x07 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL zpg
 | pc = 0xC017 | a = 0x07 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC019 | a = 0x3C | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0020] = 0x3C |
-ADC #
 | pc = 0xC01B | a = 0x3D | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC01E | a = 0x3D | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0300] = 0x3D |
-ROL abs
 | pc = 0xC021 | a = 0x3D | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC024 | a = 0x7A | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0300] = 0x7A |
-ADC #
 | pc = 0xC026 | a = 0x7B | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
 | pc = 0xC028 | a = 0x7B | x = 0x01 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-ROL zpg,X
 | pc = 0xC02A | a = 0x7B | x = 0x01 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
  |pc = 0xC02C | a = 0x50 | x = 0x01 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000  | MEM[0x0021] = 0x50 |
-ADC #
 | pc = 0xC02E | a = 0x51 | x = 0x01 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
-INX impl
 | pc = 0xC02F | a = 0x51 | x = 0x02 | y = 0x00 | sp = 0x01FF  | p[NV-BDIZC] =  0000000 |
 Traceback (most recent call last):
-  File "./emulator/emulator.py", line 73, in <module>
+  File "./emulator/emulator.py", line 61, in <module>
     ROL_abs_X_0x03E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
 NameError: name 'ROL_abs_X_0x03E' is not defined

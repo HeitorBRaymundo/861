@@ -13,7 +13,3 @@ from py.operations.register_instructions import *
 from py.operations.shift import *
 from py.operations.store_load import *
 from py.operations.transfer_sp import *
-from py.operations.flow_control import *
-from py.operations.interruption import *
-from py.operations.bit import *
-from py.operations.flags import *

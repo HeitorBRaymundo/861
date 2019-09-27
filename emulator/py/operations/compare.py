@@ -12,7 +12,6 @@ class CMP_Op():
 
     def execute(self):
         if (self.group == 'ORA'):
-            print (self.first_value, self.second_value, self.first_value | self.second_value)
             res = self.first_value | self.second_value
             self.system.setA(res)
             if (not res):
@@ -22,7 +21,6 @@ class CMP_Op():
             if (res >= 0):
                 self.system.setFLAG("N", 0)
         elif (self.group == 'AND'):
-            print (self.first_value, self.second_value, self.first_value & self.second_value)
             res = self.first_value & self.second_value
             self.system.setA(res)
             if (not res):
@@ -32,7 +30,6 @@ class CMP_Op():
             if (res >= 0):
                 self.system.setFLAG("N", 0)
         elif (self.group == 'EOR'):
-            print (self.first_value, self.second_value, self.first_value ^ self.second_value)
             res = self.first_value ^ self.second_value
             self.system.setA(res)
             if (not res):
@@ -42,7 +39,6 @@ class CMP_Op():
             if (res >= 0):
                 self.system.setFLAG("N", 0)
         elif (self.group == 'CPY' or self.group == 'CMP' or self.group == 'CPX'):
-            print (self.first_value, self.second_value, self.first_value - self.second_value)
             res = self.first_value - self.second_value
             if (self.first_value >= self.second_value):
                 self.system.setFLAG("C", 1)

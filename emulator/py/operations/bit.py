@@ -26,16 +26,13 @@ class BIT_zpg0x24():
             system.setFLAG("Z", 1)
         else:
             system.setFLAG("Z", 0)
-        # print("BIT zpg")
 
 # OK
 class BIT_abs0x2C():
     def __init__(self, system, address):
 
-        # print("address: ", address)
         a = system.getA()
         value_in_mem = system.loadMem(address)
-        # print("value_in_mem: ", value_in_mem)
 
         bin = '{0:08b}'.format(value_in_mem)
 
@@ -50,4 +47,3 @@ class BIT_abs0x2C():
             system.setFLAG("Z", 1)
         else:
             system.setFLAG("Z", 0)
-        # print("BIT abs")

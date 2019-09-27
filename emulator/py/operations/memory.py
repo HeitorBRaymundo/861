@@ -20,8 +20,6 @@ class DEC_Op():
         if (self.system.loadMem(position) > 127):
             self.system.setFLAG("N", 1)
 
-        print (self.operation)
-
 class DEC_zero_page_0xC6(DEC_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
         super().__init__(systemCPU, zpg_pos)
