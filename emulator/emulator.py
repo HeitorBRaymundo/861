@@ -70,8 +70,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LSR_abs_X_0x05E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x61':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
-        AddWithCarry0x61(systemCPU, addr)
+        address = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
+        AddWithCarry0x61(systemCPU, address)
     elif opcode == '0x65':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x65(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
@@ -92,8 +92,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         ROR_absolute_0x6E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x71':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
-        AddWithCarry0x71(systemCPU, addr)
+        address = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
+        AddWithCarry0x71(systemCPU, address)
     elif opcode == '0x75':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x75(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
@@ -132,8 +132,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         DEC_absolute_X_0xDE(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xe1':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
-        SubWithCarry0xE1(systemCPU, addr)
+        address = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
+        SubWithCarry0xE1(systemCPU, address)
     elif opcode == '0xe5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xE5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
@@ -154,8 +154,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         INC_absolute_0xEE(systemCPU, pgr_bytes[systemCPU.program_counter - 1], pgr_bytes[systemCPU.program_counter - 2])
     elif opcode == '0xf1':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
-        SubWithCarry0xF1(systemCPU, addr)
+        address = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
+        SubWithCarry0xF1(systemCPU, address)
     elif opcode == '0xf5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         SubWithCarry0xF5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
@@ -308,13 +308,13 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_indirect_addr_x(systemCPU, operand, offset)
-      OrWithAcumulator0x01(systemCPU, addr)
+      address = get_indirect_addr_x(systemCPU, operand, offset)
+      OrWithAcumulator0x01(systemCPU, address)
     elif opcode == '0x5':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      OrWithAcumulator0x05(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      OrWithAcumulator0x05(systemCPU, address)
     elif opcode == '0x9':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -323,43 +323,43 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      OrWithAcumulator0x0D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      OrWithAcumulator0x0D(systemCPU, address)
     elif opcode == '0x11':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
-      OrWithAcumulator0x11(systemCPU, addr)
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      OrWithAcumulator0x11(systemCPU, address)
     elif opcode == '0x15':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_zero_page_addr(operand, offset)
-      OrWithAcumulator0x15(systemCPU, addr)
+      address = get_zero_page_addr(operand, offset)
+      OrWithAcumulator0x15(systemCPU, address)
     elif opcode == '0x19':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.Y
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      OrWithAcumulator0x19(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      OrWithAcumulator0x19(systemCPU, address)
     elif opcode == '0x1d':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      OrWithAcumulator0x1D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      OrWithAcumulator0x1D(systemCPU, address)
     elif opcode == '0x21':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
-      AndWithAcumulator0x21(systemCPU, addr)
+      address = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
+      AndWithAcumulator0x21(systemCPU, address)
     elif opcode == '0x25':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      AndWithAcumulator0x25(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      AndWithAcumulator0x25(systemCPU, address)
     elif opcode == '0x29':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -368,43 +368,43 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      AndWithAcumulator0x2D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      AndWithAcumulator0x2D(systemCPU, address)
     elif opcode == '0x31':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
-      AndWithAcumulator0x31(systemCPU, addr)
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      AndWithAcumulator0x31(systemCPU, address)
     elif opcode == '0x35':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_zero_page_addr(operand, offset)
-      AndWithAcumulator0x35(systemCPU, addr)
+      address = get_zero_page_addr(operand, offset)
+      AndWithAcumulator0x35(systemCPU, address)
     elif opcode == '0x39':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.Y
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      AndWithAcumulator0x39(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      AndWithAcumulator0x39(systemCPU, address)
     elif opcode == '0x3d':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      AndWithAcumulator0x3D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      AndWithAcumulator0x3D(systemCPU, address)
     elif opcode == '0x41':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
-      ExclusiveOrWithAcumulator0x41(systemCPU, addr)
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      ExclusiveOrWithAcumulator0x41(systemCPU, address)
     elif opcode == '0x45':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      ExclusiveOrWithAcumulator0x45(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      ExclusiveOrWithAcumulator0x45(systemCPU, address)
     elif opcode == '0x49':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -413,33 +413,33 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      ExclusiveOrWithAcumulator0x4D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      ExclusiveOrWithAcumulator0x4D(systemCPU, address)
     elif opcode == '0x51':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
-      ExclusiveOrWithAcumulator0x51(systemCPU, addr)
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      ExclusiveOrWithAcumulator0x51(systemCPU, address)
     elif opcode == '0x55':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_zero_page_addr(operand, offset)
-      ExclusiveOrWithAcumulator0x55(systemCPU, addr)
+      address = get_zero_page_addr(operand, offset)
+      ExclusiveOrWithAcumulator0x55(systemCPU, address)
     elif opcode == '0x59':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.Y
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      ExclusiveOrWithAcumulator0x59(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      ExclusiveOrWithAcumulator0x59(systemCPU, address)
     elif opcode == '0x5d':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      ExclusiveOrWithAcumulator0x5D(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      ExclusiveOrWithAcumulator0x5D(systemCPU, address)
     elif opcode == '0xc0':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -447,18 +447,18 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0xc1':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
-      CompareWithAcumulator0xC1(systemCPU, addr)
+      address = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
+      CompareWithAcumulator0xC1(systemCPU, address)
     elif opcode == '0xc4':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      CompareWithY0xC4(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      CompareWithY0xC4(systemCPU, address)
     elif opcode == '0xc5':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      CompareWithAcumulator0xC5(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      CompareWithAcumulator0xC5(systemCPU, address)
     elif opcode == '0xc9':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -467,39 +467,39 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      CompareWithY0xCC(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithY0xCC(systemCPU, address)
     elif opcode == '0xcd':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      CompareWithAcumulator0xCD(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithAcumulator0xCD(systemCPU, address)
     elif opcode == '0xd1':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
-      CompareWithAcumulator0xD1(systemCPU, addr)
+      address = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
+      CompareWithAcumulator0xD1(systemCPU, address)
     elif opcode == '0xd5':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_zero_page_addr(operand, offset)
-      CompareWithAcumulator0xD5(systemCPU, addr)
+      address = get_zero_page_addr(operand, offset)
+      CompareWithAcumulator0xD5(systemCPU, address)
     elif opcode == '0xd9':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.Y
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      CompareWithAcumulator0xD9(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      CompareWithAcumulator0xD9(systemCPU, address)
     elif opcode == '0xdd':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
       offset = systemCPU.X
-      addr = get_absolute_addr(operand_low, operand_high, offset)
-      CompareWithAcumulator0xDD(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high, offset)
+      CompareWithAcumulator0xDD(systemCPU, address)
     elif opcode == '0xe0':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
@@ -507,14 +507,14 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0xe4':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_zero_page_addr(operand)
-      CompareWithX0xE4(systemCPU, addr)
+      address = get_zero_page_addr(operand)
+      CompareWithX0xE4(systemCPU, address)
     elif opcode == '0xec':
       systemCPU.program_counter = systemCPU.program_counter + 3
       operand_low = pgr_bytes[systemCPU.program_counter - 2]
       operand_high = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_absolute_addr(operand_low, operand_high)
-      CompareWithX0xEC(systemCPU, addr)
+      address = get_absolute_addr(operand_low, operand_high)
+      CompareWithX0xEC(systemCPU, address)
 
     # CARTS \/
     # STORES
