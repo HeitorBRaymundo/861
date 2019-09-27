@@ -44,6 +44,8 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
+
+NMI:
   ADC #20
   LSR A
   STA $21
@@ -72,3 +74,11 @@ Reset:
   LSR $300, X
   LDA $302
   ADC #1
+
+IRQ:
+
+.org $fffa
+
+.dw NMI
+.dw Reset
+.dw IRQ
