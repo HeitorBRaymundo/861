@@ -22,6 +22,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        break
         continue
     elif opcode == '0x6':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -232,9 +233,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         CLI0x58(systemCPU)
         # i = i + 0
     elif opcode == '0xea': # NOP
-        systemCPU.program_counter = systemCPU.program_counter + 1
-    elif opcode == '0x0': # Flow control HELP
-        # BRK0x00(systemCPU)
         systemCPU.program_counter = systemCPU.program_counter + 1
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
