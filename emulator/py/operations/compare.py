@@ -52,7 +52,6 @@ class CMP_Op():
 
         elif (self.group == 'CPY' or self.group == 'CMP' or self.group == 'CPX'):
             res = self.first_value - self.second_value
-            print(self.first_value, self.second_value, res, self.group)
             if (self.first_value >= self.second_value):
                 self.system.setFLAG("C", 1)
             else:
