@@ -131,13 +131,8 @@ Reset:
    iny
 
  NMI:
-     ;NOTE: NMI code goes here
-     label:
-         ADC #1
-         BEQ label
-
+    ;NOTE: NMI code goes here
  IRQ:
-
     ;NOTE: IRQ code goes here
 
  ;----------------------------------------------------------------
