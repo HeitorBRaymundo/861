@@ -7,7 +7,7 @@ from py.operations import flow_control
 from py.operations import interruption
 from py.operations import store_load
 from py.operations import transfer_sp
-# from py.operations import compare
+from py.operations import compare
 from rom import Rom
 from py.operations import *
 from memory_helper import *
