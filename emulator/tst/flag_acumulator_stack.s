@@ -46,19 +46,10 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
 
 NMI:
-    ;NOTE: NMI code goes here
-    ADC #1
-    JSR end
-    LDX #23
-    LDY #44
-    JMP (end2)
-
-    end:
-        LDA #10
-        RTS
-
-    end2:
-
+   ADC #64
+   PHA
+   ADC #192
+   PLA
 IRQ:
 
    ;NOTE: IRQ code goes here

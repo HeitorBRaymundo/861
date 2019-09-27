@@ -23,6 +23,7 @@ class RTI0x40():
         system.program_counter = system.stack_pop()
 
 # OK
+# tested
 class CLI0x58():
     def __init__(self, system):
         # Clear Interrupt Disable Bit
