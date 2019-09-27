@@ -3,7 +3,6 @@ nesasm
 **/*.fns
 **/*.nes
 
-**/bin/
 **/ext/
 **/log/
 
