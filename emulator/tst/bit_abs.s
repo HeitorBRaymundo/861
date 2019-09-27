@@ -53,6 +53,7 @@ NMI:
   ADC #$20
   CLC
   BIT #$010A
+  brk
 IRQ:
 
    ;NOTE: IRQ code goes here

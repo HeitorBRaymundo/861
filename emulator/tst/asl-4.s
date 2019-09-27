@@ -57,6 +57,7 @@ NMI:
   ASL $300
   LDA $300
   ASL $300
+  brk
       ;NOTE: NMI code goes here
 
   IRQ:

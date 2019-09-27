@@ -52,7 +52,6 @@ NMI:
     TSX
     ADC #1
 
-
 IRQ:
 
 .org $fffa
