@@ -46,25 +46,18 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
 
 NMI:
-   ;NOTE: NMI code goes here
-   LDX #10
-   LDY #25
+    ADC #30
+    STA $20
+    LDY $20
+    INY
+    INY
+    INY
 
-   TXA
-   TYA
-   TAX
-   LDA #33
-   TAY
+
 IRQ:
 
-   ;NOTE: IRQ code goes here
+.org $fffa
 
-;----------------------------------------------------------------
-; interrupt vectors
-;----------------------------------------------------------------
-
-   .org $fffa
-
-   .dw NMI
-   .dw Reset
-   .dw IRQ
+.dw NMI
+.dw Reset
+.dw IRQ
