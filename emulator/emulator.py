@@ -26,7 +26,6 @@ pgr_bytes = nesROM.prg_rom
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
-
     addr = None
 
     if opcode == '0x0':
@@ -342,9 +341,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 1
     elif opcode == '0x20':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        address = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-        JSR0x20(systemCPU, address)
-        # i = i + 2
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.stack_push(systemCPU.program_counter)
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+        # i = i + 1
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
@@ -352,21 +353,21 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 1
     elif opcode == '0x4c':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
     elif opcode == '0x50':
-        systemCPU.program_counter = systemCPU.program_counter + 2
-        setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
-        BVC0x50(systemCPU, setPCToAddress)
-        # i = i + 1
-    elif opcode == '0x60':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        RTS0x60(systemCPU)
+        BVC0x50(systemCPU)
         # i = i + 0
-    elif opcode == '0x6C':
+    elif opcode == '0x60':
+        systemCPU.program_counter = systemCPU.stack_pop()
+    elif opcode == '0x6c':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        JMP_ind0x6C(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-        # i = i + 3
+        low = pgr_bytes[systemCPU.program_counter - 2]
+        high = pgr_bytes[systemCPU.program_counter - 1]
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+
     elif opcode == '0x70':
         systemCPU.program_counter = systemCPU.program_counter + 2
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
@@ -895,6 +896,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         pass
 
     if addr is None:
-       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
+       print ("| pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG(),"|")
     else:
-       print (" |pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0x8000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[0x%0.4X]" % addr, "= 0x%0.2X" % systemCPU.loadMem(addr),"|")
+       print (" |pc = 0x%0.4X" % int(hex(systemCPU.program_counter + 0xC000), 16),"| a = 0x%0.2X" % systemCPU.getA(), "| x = 0x%0.2X" %  systemCPU.getX(), "| y = 0x%0.2X" %  systemCPU.getY(), "| sp = 0x%0.4X" %  int(systemCPU.getSP(), 16), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[0x%0.4X]" % addr, "= 0x%0.2X" % systemCPU.loadMem(addr),"|")

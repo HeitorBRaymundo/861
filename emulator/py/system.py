@@ -16,7 +16,7 @@ class System():
         self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 0, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
-        self.program_counter = self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] >> 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]
+        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
 
     def getA(self):
         return self.A
@@ -50,7 +50,7 @@ class System():
             raise Exception("Stack is already full!")
         else:
             self.stack.append(value)
-            return True
+
 
     def stack_pop(self):
         if len(self.stack) <= 0:
