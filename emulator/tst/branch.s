@@ -49,6 +49,7 @@ NMI:
     ;NOTE: NMI code goes herez
     label:
         ADC #1
+        ADC #1
         BEQ label
 
 IRQ:
