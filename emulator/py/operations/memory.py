@@ -10,9 +10,9 @@ class DEC_Op():
     def execute(self):
         value = self.system.loadMem(self.position)
         value = value - 1
-        if (value % 255 != value):
+        if (value % 256!= value):
             self.system.setFLAG("C", 1)
-        self.system.setMem(self.position, value % 255)
+        self.system.setMem(self.position, value % 256)
         if (self.system.loadMem(self.position) == 0):
             self.system.setFLAG("Z", 1)
         else:
@@ -50,9 +50,9 @@ class INC_Op():
     def execute(self):
         value = self.system.loadMem(self.position)
         value = value + 1
-        if (value % 255 != value):
+        if (value % 256 != value):
             self.system.setFLAG("C", 1)
-        self.system.setMem(self.position, value % 255)
+        self.system.setMem(self.position, value % 256)
         if (self.system.loadMem(self.position) == 0):
             self.system.setFLAG("Z", 1)
         else:
