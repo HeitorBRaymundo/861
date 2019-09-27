@@ -22,6 +22,8 @@ systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
+import pdb; pdb.set_trace()
+
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
 
@@ -785,6 +787,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
+        print ("Erro")
         pass
 
     if addr is None:
