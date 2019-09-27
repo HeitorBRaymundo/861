@@ -12,7 +12,6 @@ class CMP_Op():
 
     def execute(self):
         if (self.group == 'ORA'):
-            print (self.first_value, self.second_value, self.first_value | self.second_value)
             res = self.first_value | self.second_value
             self.system.setA(res)
             if (not res):
@@ -22,7 +21,6 @@ class CMP_Op():
             if (res >= 0):
                 self.system.setFLAG("N", 0)
         elif (self.group == 'AND'):
-            print(self.first_value, self.second_value, self.first_value & self.second_value)
             res = self.first_value & self.second_value
             self.system.setA(res)
             if (not res):
@@ -227,8 +225,8 @@ class CompareWithAcumulator0xDD(CMP_Op):
         super().execute()
 
 class CompareWithX0xE0(CMP_Op):
-    def __init__(self, systemCPU: System):
-        super().__init__(systemCPU, systemCPU.getX(), "CPX")
+    def __init__(self, systemCPU: System, imm: int):
+        super().__init__(systemCPU, systemCPU.getX(), imm, "CPX")
         super().execute()
 
 class CompareWithX0xE4(CMP_Op):
