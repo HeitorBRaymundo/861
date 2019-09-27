@@ -27,7 +27,6 @@ pgr_bytes = nesROM.prg_rom
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
 
-
     addr = None
 
     if opcode == '0x0':
@@ -267,32 +266,32 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
-        # print("PHP impl")
+        print("PHP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHP0x08(systemCPU)
         # i = i + 0
     elif opcode == '0x18':
-        # print("CLC impl")
+        print("CLC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLC0x18(systemCPU)
         # i = i + 0
     elif opcode == '0x28':
-        # print("PLP impl")
+        print("PLP impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLP0x28(systemCPU)
         # i = i + 0
     elif opcode == '0x38':
-        # print("SEC impl")
+        print("SEC impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         SEC0x38(systemCPU)
         # i = i + 0
     elif opcode == '0x48':
-        # print("PHA impl")
+        print("PHA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PHA0x48(systemCPU)
         # i = i + 0
     elif opcode == '0x68':
-        # print("PLA impl")
+        print("PLA impl")
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLA0x68(systemCPU)
         # i = i + 0
@@ -790,7 +789,10 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         print ("Erro")
         pass
 
-    # if addr is None:
-    #    print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
-    # else:
-    #    print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(),"| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))
+    if opcode == '0x0':
+        pass
+    else:
+        if addr is None:
+           print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(), "| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," |")
+        else:
+           print ("|pc = ", hex(systemCPU.program_counter + 0x8000),"|a = ",systemCPU.getA(),"| x = ", systemCPU.getX(), " | y = ", systemCPU.getY(), " | sp = ", systemCPU.getSP(), " | p[NV-BDIZC] = ", systemCPU.getFLAG()," | MEM[{}] = {}|".format(hex(addr), systemCPU.loadMem(addr)))

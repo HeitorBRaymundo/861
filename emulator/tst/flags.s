@@ -47,17 +47,18 @@ Reset:
 
 NMI:
    ;NOTE: NMI code goes here
-  PHP
-  CLC
-  PLP
   SEC
-  PHA
+  CLC
+  PHP
+  PLP
+  SED
   CLI
-  PLA
   SEI
+  PLA
   CLV
   CLD
-  SED
+  CLI
+  PHA
 IRQ:
 
    ;NOTE: IRQ code goes here
