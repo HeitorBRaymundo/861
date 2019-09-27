@@ -19,7 +19,7 @@ class CMP_Op():
             else:
                 self.system.setFLAG("Z", 0)
 
-            if (res < 0):
+            if (res >= 128):
                 self.system.setFLAG("N", 1)
             else:
                 self.system.setFLAG("N", 0)
@@ -32,7 +32,7 @@ class CMP_Op():
             else:
                 self.system.setFLAG("Z", 0)
 
-            if (res < 0):
+            if (res >= 128):
                 self.system.setFLAG("N", 1)
             else:
                 self.system.setFLAG("N", 0)
@@ -45,7 +45,7 @@ class CMP_Op():
             else:
                 self.system.setFLAG("Z", 0)
 
-            if (res < 0):
+            if (res >= 128):
                 self.system.setFLAG("N", 1)
             else:
                 self.system.setFLAG("N", 0)
