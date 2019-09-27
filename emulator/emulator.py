@@ -349,7 +349,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         BMI0x30(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
         # i = i + 1
     elif opcode == '0x4c':
-        systemCPU.program_counter = systemCPU.program_counter + 2
+        systemCPU.program_counter = systemCPU.program_counter + 3
         JMP_abs0x4C(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
         # i = i + 1
     elif opcode == '0x50':
