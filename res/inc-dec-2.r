@@ -1,9 +1,18 @@
 | pc = 0xc002  | a = 0x20 | x = 0x00 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
 | pc = 0xc003  | a = 0x20 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
 | pc = 0xc005  | a = 0x20 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 | MEM[0x0041]  = 0x20 |
-Traceback (most recent call last):
-  File "./emulator/emulator.py", line 164, in <module>
-    INC_zero_page_X_0xF6(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-  File "/Users/Heitor/Documents/Unicamp/861/emulator/py/operations/memory.py", line 75, in __init__
-    super().__init__(SystemCPU, zpg_index + X)
-NameError: name 'zpg_index' is not defined
+| pc = 0xc007  | a = 0x20 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc009  | a = 0x21 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 | MEM[0x0041]  = 0x21 |
+| pc = 0xc00b  | a = 0x21 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc00d  | a = 0x21 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc00f  | a = 0x21 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc011  | a = 0x21 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc013  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 | MEM[0x0041]  = 0x1d |
+| pc = 0xc015  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc017  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc019  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc01b  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc01d  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc01f  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc021  | a = 0x1d | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 |
+| pc = 0xc023  | a = 0x24 | x = 0x01 | y = 0x00 | sp = 0x01ff | p[NV-BDIZC] =  0000000 | MEM[0x0041]  = 0x24 |
