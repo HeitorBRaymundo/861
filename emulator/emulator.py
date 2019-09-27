@@ -390,156 +390,156 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     # HEITOR \/
     elif opcode == '0x1':
       print('ORA X, ind')
-      OrWithAcumulator0x01(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x01(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x5':
       print('ORA zpg')
-      OrWithAcumulator0x05(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x05(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x9':
       print('ORA #')
-      OrWithAcumulator0x09(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x09(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xd':
       print('ORA abs')
-      OrWithAcumulator0x0D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
-      systemCPU.program_counter = systemCPU.program_counter + 2
+      systemCPU.program_counter = systemCPU.program_counter + 3
+      OrWithAcumulator0x0D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x11':
       print('ORA ind, Y')
-      OrWithAcumulator0x11(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x11(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x15':
       print('ORA zpg, X')
-      OrWithAcumulator0x15(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x15(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x19':
       print('ORA abs, Y')
-      OrWithAcumulator0x19(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x19(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x1d':
       print('ORA abs, X')
-      OrWithAcumulator0x1D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      OrWithAcumulator0x1D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x21':
       print('AND X, ind')
-      AndWithAcumulator0x21(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x21(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x25':
       print('AND zpg')
-      AndWithAcumulator0x25(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x25(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x29':
       print('AND #')
-      AndWithAcumulator0x29(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x29(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x2d':
       print('AND abs')
-      AndWithAcumulator0x2D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x2D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x31':
       print('AND ind, Y')
-      AndWithAcumulator0x31(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x31(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x35':
       print('AND zpg, X')
-      AndWithAcumulator0x35(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x35(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x39':
       print('AND abs, Y')
-      AndWithAcumulator0x39(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x39(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x3d':
       print('AND abs, X')
-      AndWithAcumulator0x3D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      AndWithAcumulator0x3D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x41':
       print('EOR ind, X')
-      ExclusiveOrWithAcumulator0x41(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x41(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x45':
       print('EOR zpg')
-      ExclusiveOrWithAcumulator0x45(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x45(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x49':
       print('EOR #')
-      ExclusiveOrWithAcumulator0x49(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x49(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x4d':
       print('EOR abs')
-      ExclusiveOrWithAcumulator0x4D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x4D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x51':
       print('EOR ind, Y')
-      ExclusiveOrWithAcumulator0x51(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x51(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x55':
       print('EOR zpg, X')
-      ExclusiveOrWithAcumulator0x55(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x55(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x59':
       print('EOR abs, Y')
-      ExclusiveOrWithAcumulator0x59(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x59(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0x5d':
       print('EOR abs, X')
-      ExclusiveOrWithAcumulator0x5D(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      ExclusiveOrWithAcumulator0x5D(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc0':
       print('CPY #')
-      CompareWithY0xC0(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithY0xC0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc1':
       print('CMP X, ind')
-      CompareWithAcumulator0xC1(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xC1(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc4':
       print('CPY zpg')
-      CompareWithY0xC4(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithY0xC4(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc5':
       print('CMP zpg')
-      CompareWithAcumulator0xC5(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xC5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc9':
       print('CMP #')
-      CompareWithAcumulator0xC9(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xC9(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xcc':
       print('CPY abs')
-      CompareWithY0xCC(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithY0xCC(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xcd':
       print('CMP abs')
-      CompareWithAcumulator0xCD(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xCD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xd1':
       print('CMP ind, Y')
-      CompareWithAcumulator0xD1(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xD1(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xd5':
       print('CMP zpg, X')
-      CompareWithAcumulator0xD5(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xD5(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xd9':
       print('CMP abs, Y')
-      CompareWithAcumulator0xD9(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xD9(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xdd':
       print('CMP abs, X')
-      CompareWithAcumulator0xDD(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithAcumulator0xDD(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xe0':
       print('CPX #')
-      CompareWithX0xE0(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithX0xE0(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xe4':
       print('CPX zpg')
-      CompareWithX0xE4(systemCPU, pgr_bytes[systemCPU.program_counter + 1])
-      systemCPU.program_counter = systemCPU.program_counter + 1
+      systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithX0xE4(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xec':
       print('CPX abs')
-      CompareWithX0xEC(systemCPU, pgr_bytes[systemCPU.program_counter + 1], pgr_bytes[systemCPU.program_counter + 2])
       systemCPU.program_counter = systemCPU.program_counter + 2
+      CompareWithX0xEC(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
 
 
 
