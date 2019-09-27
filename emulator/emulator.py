@@ -339,7 +339,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 1
     elif opcode == '0x20':
         systemCPU.program_counter = systemCPU.program_counter + 3
-        JSR0x20(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        address = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        JSR0x20(systemCPU, address)
         # i = i + 2
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
