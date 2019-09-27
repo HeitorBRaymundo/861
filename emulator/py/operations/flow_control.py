@@ -16,7 +16,7 @@ class BPL0x10():
         # Branch on Result Plus
         # branch on N = 0
         if (system.getFLAG("N") == 0):
-            branch()
+            system.program_counter = mem_position
         print("BPL rel")
 
 class JSR0x20():
@@ -32,7 +32,7 @@ class BMI0x30():
         # Branch on Result Minus
         # branch on N = 1
         if (system.getFLAG("N") == 1):
-            branch()
+            system.program_counter = mem_position
         print("BMI rel")
 
 class BVC0x50():
@@ -40,7 +40,7 @@ class BVC0x50():
         # Branch on Overflow Clear
         # branch on V = 0
         if (system.getFLAG("V") == 0):
-            branch()
+            system.program_counter = mem_position
         print("BVC rel")
 
 class RTS0x60():
@@ -54,7 +54,7 @@ class BVS0x70():
         # Branch on Overflow Set
         # branch on V = 1
         if (system.getFLAG("V") == 1):
-            branch()
+            system.program_counter = mem_position
         print("BVS rel")
 
 class BCC0x90():
@@ -62,7 +62,7 @@ class BCC0x90():
         # Branch on Carry Clear
         # branch on C = 0
         if (system.getFLAG("C") == 0):
-            branch()
+            system.program_counter = mem_position
         print("BCC rel")
 
 class BCS0xB0():
@@ -70,7 +70,7 @@ class BCS0xB0():
         # Branch on Carry Set
         # branch on C = 1
         if (system.getFLAG("C") == 1):
-            branch()
+            system.program_counter = mem_position
         print("BCS rel")
 
 class BNE0xD0():
@@ -78,19 +78,16 @@ class BNE0xD0():
         # Branch on Result not Zero
         # branch on Z = 0
         if (system.getFLAG("Z") == 0):
-            branch()
+            system.program_counter = mem_position
         print("BNE rel")
 
 class BEQ0xF0():
     def __init__(self, system, mem_position):
         # Branch on Result Zero
         # branch on Z = 1
-        print("mem_position: ", mem_position)
-        print("mem_position bin: ", '{0:08b}'.format(mem_position))
-        comp_2 = (~mem_position)
-        print("comp_2: ", '{0:08b}'.format(comp_2))
+
         if (system.getFLAG("Z") == 1):
-            branch()
+            system.program_counter = mem_position
         print("BEQ rel")
 
 class JMP_abs0x4C():
