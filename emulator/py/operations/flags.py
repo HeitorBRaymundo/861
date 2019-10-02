@@ -37,15 +37,23 @@ class PLP0x28():
         # Pull Processor Status from Stack
         # pull SR
         systemRegister = system.stack_pop()
-
-        system.setFLAG("C", systemRegister[0])
-        system.setFLAG("Z", systemRegister[1])
-        system.setFLAG("I", systemRegister[2])
-        system.setFLAG("D", systemRegister[3])
-        system.setFLAG("B", systemRegister[4])
-        system.setFLAG("V", systemRegister[5])
-        system.setFLAG("N", systemRegister[6])
-
+        try:
+            system.setFLAG("C", systemRegister[0])
+            system.setFLAG("Z", systemRegister[1])
+            system.setFLAG("I", systemRegister[2])
+            system.setFLAG("D", systemRegister[3])
+            system.setFLAG("B", systemRegister[4])
+            system.setFLAG("V", systemRegister[5])
+            system.setFLAG("N", systemRegister[6])
+        except:
+            vector = int_to_bit(systemRegister)
+            system.setFLAG("C", vector[0])
+            system.setFLAG("Z", vector[1])
+            system.setFLAG("I", vector[2])
+            system.setFLAG("D", vector[3])
+            system.setFLAG("B", vector[4])
+            system.setFLAG("V", vector[5])
+            system.setFLAG("N", vector[6])
 
 # OK
 # tested

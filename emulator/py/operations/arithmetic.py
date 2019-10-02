@@ -9,9 +9,13 @@ class ADC_Op():
         self.system = systemCPU
         self.value_second = value_second
 
+
+
     def execute(self):
-        if (self.system.getA() < 127 and self.value_second < 127 and (self.system.getA() + self.value_second) >= 128):
-            self.system.setFLAG("V", 1)
+        value_a = int_to_bit(self.system.getA())
+        second = int_to_bit(self.value_second)
+        print (second)
+        self.system.setFLAG("V", second[1])
 
         self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
 

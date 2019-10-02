@@ -6,6 +6,24 @@ PRG_COUNT = 1 ;1 = 16KB, 2 = 32KB
 MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 ;################################################################
+; Variables
+;################################################################
+
+	.enum $0000
+
+	.ende
+
+	.enum $0100
+
+var1: .dsb 1
+
+	.ende
+
+	.enum $07ff
+var2: .dsb 1
+	.ende
+
+;################################################################
 ; iNES header
 ;################################################################
 
@@ -25,7 +43,25 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 ; RESET
 ;################################################################
 reset:
-   brk ; Abort execution
+	lda #$fa
+	sta var1
+	lda #$1b
+	sta var2
+	lda #$0
+
+	lda var1
+	lda var2
+	lda #$0
+
+	ldx var1
+	ldx var2
+	ldx #$0
+
+	ldy var1
+	ldy var2
+	ldy #$0
+
+	brk
 
 ;################################################################
 ; interrupt vectors
@@ -38,3 +74,4 @@ reset:
 	.dw 0
 
 	.dsb $2000
+	

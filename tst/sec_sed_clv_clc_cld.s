@@ -25,7 +25,17 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 ; RESET
 ;################################################################
 reset:
-   brk ; Abort execution
+	sec
+	clc
+
+	lda #$7f
+	adc #$7f
+	clv
+
+	sed
+	cld
+
+	brk
 
 ;################################################################
 ; interrupt vectors
