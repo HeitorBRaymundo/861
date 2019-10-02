@@ -13,7 +13,7 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 0, "Z": 0, "C": 0}
+        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 0, "Z": 1, "C": 0}
         self.stack = []
         self.rom = rom
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
