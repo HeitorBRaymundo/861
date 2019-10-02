@@ -1,5 +1,7 @@
 from py.system import *
 
+int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
+
 class ADC_Op():
     value_second = 0
     system = ""
