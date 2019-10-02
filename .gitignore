@@ -5,6 +5,7 @@ nesasm
 
 **/ext/
 **/log/
+**/bin/**
 
 
 emulator/bin/nesemu
