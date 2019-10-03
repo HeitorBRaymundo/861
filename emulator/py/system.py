@@ -6,6 +6,7 @@ class System():
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
     stack = []
     rom = None
+    PC_OFFSET = 0
     program_counter = 0
 
     def __init__ (self, rom):
@@ -16,7 +17,8 @@ class System():
         self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
-        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
+        self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
+        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - self.PC_OFFSET
 
     def getA(self):
         return self.A

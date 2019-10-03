@@ -20,20 +20,12 @@ class Rom():
 
         self.prg_rom_size = self.header[4]
 
-        if self.prg_rom_size == 1:
-            self.interrupt_handlers = {
-                'NMI_HANDLER': 0xBFFA,
-                'RESET_HANDLER': 0xBFFC,
-                'IRQ_HANDLER': 0xBFFE,
-                'BRK_HANDLER': 0xBFFE,
-                }
-        elif self.prg_rom_size == 2:
-            self.interrupt_handlers = {
-                'NMI_HANDLER': 0xFFFA,
-                'RESET_HANDLER': 0xFFFC,
-                'IRQ_HANDLER': 0xFFFE,
-                'BRK_HANDLER': 0xFFFE,
-            }
+        self.interrupt_handlers = {
+            'NMI_HANDLER': 0xFFFA,
+            'RESET_HANDLER': 0xFFFC,
+            'IRQ_HANDLER': 0xFFFE,
+            'BRK_HANDLER': 0xFFFE,
+        }
 
         self.chr_rom_size = self.header[5]
         self.prg_rom = self.file.read(self.prg_rom_size * 1024 * 16)

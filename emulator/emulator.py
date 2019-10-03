@@ -781,12 +781,12 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     if addr is None:
        # print("PC: ", systemCPU.program_counter)
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + 0xC000), 16),\
+       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
               "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
               "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
               "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
     else:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + 0xC000), 16),\
+       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
               "| a = 0x%0.2x" % systemCPU.getA(), \
               "| x = 0x%0.2x" %  systemCPU.getX(), \
               "| y = 0x%0.2x" %  systemCPU.getY(), \
