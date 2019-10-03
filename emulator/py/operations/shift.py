@@ -1,4 +1,5 @@
 from py.system import *
+int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
 
 class ASL_Op():
     position = 0
@@ -9,6 +10,7 @@ class ASL_Op():
 
     def execute(self):
         #  C <- [76543210] <- 0
+        
         if (self.position == -1):
             if (self.system.getA() >= 128):
                 self.system.setFLAG("C", 1)
