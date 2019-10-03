@@ -280,7 +280,10 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         BVC0x50(systemCPU, setPCToAddress)
         # i = i + 0
     elif opcode == '0x60':
-        systemCPU.program_counter = systemCPU.stack_pop()
+        lo = systemCPU.stack_pop()
+        hi = systemCPU.stack_pop()
+        hi = hi << 8
+        systemCPU.program_counter = hi | lo
     elif opcode == '0x6c':
         systemCPU.program_counter = systemCPU.program_counter + 3
         low = pgr_bytes[systemCPU.program_counter - 2]

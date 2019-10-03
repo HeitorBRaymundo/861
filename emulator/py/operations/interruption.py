@@ -11,6 +11,7 @@ class RTI0x40():
         # pull SR
         systemRegister = system.stack_pop()
 
+        # TODO mudar para logica nova do SR
         system.setFLAG("C", systemRegister[0])
         system.setFLAG("Z", systemRegister[1])
         system.setFLAG("I", systemRegister[2])
@@ -20,7 +21,10 @@ class RTI0x40():
         system.setFLAG("N", systemRegister[6])
 
         # restore PC from stack
-        system.program_counter = system.stack_pop()
+        lo = systemCPU.stack_pop()
+        hi = systemCPU.stack_pop()
+        hi = hi << 8
+        systemCPU.program_counter = hi | lo
 
 # OK
 # tested
