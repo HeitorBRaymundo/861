@@ -51,55 +51,55 @@ debug: .dsb 1
 reset:
     ; ADC immediate without carry
     lda #0
-    pha 
+    pha
     plp
-    lda #1 
+    lda #1
     adc #1
     lda #0
-    pha 
+    pha
     plp
     lda #127
     adc #1
     lda #0
-    pha 
-    plp 
+    pha
+    plp
     lda #-128
     adc #-1
     lda #0
-    pha 
+    pha
     plp
     lda #255
     adc #1
     lda #0
-    pha 
+    pha
     plp
     ; ADC immediate with carry
     lda #0
-    pha 
+    pha
     plp
     sec
-    lda #1 
+    lda #1
     adc #1
     lda #0
-    pha 
+    pha
     plp
     sec
     lda #127
     adc #1
     lda #0
-    pha 
-    plp 
+    pha
+    plp
     sec
     lda #-128
     adc #-1
     lda #0
-    pha 
+    pha
     plp
     sec
     lda #255
     adc #1
     lda #0
-    pha 
+    pha
     plp
 
 ;################################################################
@@ -113,5 +113,3 @@ reset:
 	.dw 0
 
 	.dsb $2000
-
-    

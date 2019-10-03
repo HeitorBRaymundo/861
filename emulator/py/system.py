@@ -13,7 +13,7 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
+        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
@@ -66,7 +66,7 @@ class System():
             return value
 
     def getSP(self):
-        return hex(0x1ff - len(self.stack) * 8)
+        return hex(0x1fd - len(self.stack) * 2) # NOTE: changed from 8 to 2
 
     def setMem(self, address, value):
         try:
