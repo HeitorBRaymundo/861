@@ -261,7 +261,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 3
         low = pgr_bytes[systemCPU.program_counter - 2]
         high = pgr_bytes[systemCPU.program_counter - 1]
-        systemCPU.stack_push(systemCPU.program_counter)
+        systemCPU.stack_push(systemCPU.program_counter, 2)
         systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
         # i = i + 1
     elif opcode == '0x30':

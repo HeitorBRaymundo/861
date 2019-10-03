@@ -45,7 +45,7 @@ class PHP0x08():
         # print("vai pushar SR as number: ", systemRegisterNumber)
         # print("unpadded number ", systemRegisterNumber)
 
-        system.stack_push(systemRegisterNumber)
+        system.stack_push(systemRegisterNumber, 1)
 
 # OK
 # tested
@@ -105,7 +105,7 @@ class PHA0x48():
     def __init__(self, system):
         # Push Accumulator on Stack
         # push A
-        system.stack_push(system.getA())
+        system.stack_push(system.getA(), 1)
 
 # OK
 # tested
