@@ -20,6 +20,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
     addr = None
 
+    print("\nopcode: ", opcode)
+
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
         break
@@ -214,14 +216,14 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x24': # Bit test HELP
 
         systemCPU.program_counter = systemCPU.program_counter + 2
-        address = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
-        BIT_zpg0x24(systemCPU, address)
+        addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
+        BIT_zpg0x24(systemCPU, addr)
         # i = i + 1
     elif opcode == '0x2c':
 
         systemCPU.program_counter = systemCPU.program_counter + 3
-        address = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-        BIT_abs0x2C(systemCPU, address)
+        addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        BIT_abs0x2C(systemCPU, addr)
         # i = i + 2
     elif opcode == '0x40': # interrupt
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -758,6 +760,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         pass
 
     if addr is None:
+       # print("PC: ", systemCPU.program_counter)
        print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + 0xC000), 16),\
               "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
               "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \

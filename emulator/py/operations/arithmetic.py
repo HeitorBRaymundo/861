@@ -1,6 +1,7 @@
 from py.system import *
 
 int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
+int_to_bit_with_carry = lambda n : [n >> i & 1 for i in range(8,-1,-1)]
 
 class ADC_Op():
     value_second = 0
@@ -10,22 +11,30 @@ class ADC_Op():
         self.value_second = value_second
 
     def execute(self):
-        if (self.system.getA() < 127 and self.value_second < 127 and (self.system.getA() + self.value_second) >= 128):
+        a_vector = int_to_bit(self.system.getA())
+        second_vector = int_to_bit(self.value_second)
+        result = self.system.getA() + self.value_second + self.system.getFLAG("C")
+        result_vector = int_to_bit(result)
+
+        if ((a_vector[0] and second_vector[0] and not result_vector[0]) or (not a_vector[0] and not second_vector[0] and result_vector[0])):
             self.system.setFLAG("V", 1)
+        else:
+            self.system.setFLAG("V", 0)
 
-        self.system.setA(self.system.getA() + self.system.getFLAG("C") + self.value_second)
-
-        if (self.system.getA() % 256 != self.system.getA()):
-            self.system.setFLAG("C", 1)
-            self.system.setA(self.system.getA() % 256)
-
-        if self.system.getA() == 0:
+        self.system.setFLAG("N", result_vector[0])
+        if (all(value == 0 for value in result_vector)):
             self.system.setFLAG("Z", 1)
         else:
             self.system.setFLAG("Z", 0)
 
-        if (self.system.getA() > 127):
-            self.system.setFLAG("N", 1)
+
+        self.system.setA(result)
+
+        if (self.system.getA() % 256 != self.system.getA()):
+            self.system.setFLAG("C", 1)
+            self.system.setA(self.system.getA() % 256)
+        else:
+            self.system.setFLAG("C", 0)
 
 class SBC_Op():
     value_second = 0
@@ -35,16 +44,31 @@ class SBC_Op():
         self.value_second = value_second
 
     def execute(self):
-        self.system.setA(self.system.getA() - (1 - self.system.getFLAG("C")) - self.value_second)
-        if (self.system.getA() < 0):
-            self.system.setFLAG("N", 1)
 
-        if self.system.getA() == 0:
+        a_vector = int_to_bit(self.system.getA())
+        second_vector = int_to_bit(self.value_second)
+        result = self.system.getA() - self.value_second - (1 - self.system.getFLAG("C"))
+        result_vector = int_to_bit(result)
+
+        if ((a_vector[0] and second_vector[0] and not result_vector[0]) or (not a_vector[0] and not second_vector[0] and result_vector[0])):
+            self.system.setFLAG("V", 1)
+        else:
+            self.system.setFLAG("V", 0)
+
+        self.system.setFLAG("N", result_vector[0])
+        if (all(value == 0 for value in result_vector)):
             self.system.setFLAG("Z", 1)
+        else:
+            self.system.setFLAG("Z", 0)
+
+
+        self.system.setA(result)
 
         if (self.system.getA() % 256 != self.system.getA()):
             self.system.setFLAG("C", 1)
             self.system.setA(self.system.getA() % 256)
+        else:
+            self.system.setFLAG("C", 0)
 
 class AddWithCarry0x61(ADC_Op):
     def __init__(self, SystemCPU: System, pos: int):
