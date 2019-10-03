@@ -74,7 +74,7 @@ class System():
     # Ideia de refactor: mudar a push para quebrar o valor que será guardado em bytes e salvar byte a byte na pilha
     # pop continua desempilhando 1 byte só e se precisarmos de mais, chamamos a pop mais de uma vez
     def getSP(self):
-        return hex(0x1ff - len(self.stack)) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
+        return hex(0xfd - len(self.stack)) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
 
     def setMem(self, address, value):
         try:
