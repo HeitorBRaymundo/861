@@ -16,7 +16,7 @@ class Transfer_X_to_SP_Op_0x9A():
         # set negative flag
         # self.system.FLAGS["N"] = int_to_bit(value)[0]
         # push the value in the stack
-        self.system.stack_push(value)
+        self.system.stack_push(value, 1)
 
         return True
 

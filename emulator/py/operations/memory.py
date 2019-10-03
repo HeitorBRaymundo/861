@@ -21,23 +21,23 @@ class DEC_Op():
             self.system.setFLAG("N", 1)
 
 class DEC_zero_page_0xC6(DEC_Op):
-    def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, zpg_pos)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class DEC_absolute_0xCE(DEC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, absHighByte * 256 + absLowByte)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class DEC_zero_page_X_0xD6(DEC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int):
-        super().__init__(SystemCPU, absLowByte + SystemCPU.X)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class DEC_absolute_X_0xDE(DEC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU,  absHighByte * 256 + absLowByte)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class INC_Op():
@@ -61,21 +61,21 @@ class INC_Op():
             self.system.setFLAG("N", 1)
 
 class INC_zero_page_0xE6(INC_Op):
-    def __init__(self, SystemCPU: System, zpg_pos: int):
-        super().__init__(SystemCPU, zpg_pos)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class INC_absolute_0xEE(INC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU, absHighByte * 256 + absLowByte)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class INC_zero_page_X_0xF6(INC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int):
-        super().__init__(SystemCPU, absLowByte + SystemCPU.X)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()
 
 class INC_absolute_X_0xFE(INC_Op):
-    def __init__(self, SystemCPU: System, absLowByte: int, absHighByte):
-        super().__init__(SystemCPU,  absHighByte * 256 + absLowByte)
+    def __init__(self, SystemCPU: System, pos: int):
+        super().__init__(SystemCPU, pos)
         super().execute()

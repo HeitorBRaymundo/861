@@ -13,7 +13,7 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 0, "Z": 0, "C": 0}
+        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - 0x8000] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - 0x8000]) - 0xC000
@@ -51,12 +51,16 @@ class System():
     def setFLAG(self, flag, newValue):
         self.FLAGS[flag] = newValue
 
-    def stack_push(self, value):
+    def stack_push(self, value, numBytes):
         if len(self.stack) > 256:
             raise Exception("Stack is already full!")
         else:
-            self.stack.append(value)
-
+            if numBytes == 2:
+                hi, lo = (value).to_bytes(2, 'big')
+                self.stack.append(hi)
+                self.stack.append(lo)
+            else:
+                self.stack.append(value)
 
     def stack_pop(self):
         if len(self.stack) <= 0:
@@ -65,8 +69,12 @@ class System():
             value = self.stack.pop()
             return value
 
+    # Problema com a stack:
+    # Valor que o SP anda depende do número de bytes lido ou salvo na pilha
+    # Ideia de refactor: mudar a push para quebrar o valor que será guardado em bytes e salvar byte a byte na pilha
+    # pop continua desempilhando 1 byte só e se precisarmos de mais, chamamos a pop mais de uma vez
     def getSP(self):
-        return hex(0x1ff - len(self.stack) * 8)
+        return hex(0x1ff - len(self.stack)) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
 
     def setMem(self, address, value):
         try:
