@@ -51,8 +51,9 @@ class INC_Op():
         value = self.system.loadMem(self.position)
         value = value + 1
 
-        if (value % 256 != value):
-            self.system.setFLAG("C", 1)
+        # if (value % 256 != value):
+        #     self.system.setFLAG("C", 1)
+
         self.system.setMem(self.position, value % 256)
 
         if (self.system.loadMem(self.position) == 0):
