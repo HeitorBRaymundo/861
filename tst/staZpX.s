@@ -45,14 +45,8 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 
 Reset:
    LDA #08
-   JSR Test
-   LDX #04
-   JMP End
-Test:
-   LDY #04
-   RTS
-End:
-   LDY #22
+   LDX #$02
+   STA $22, x
 
 NMI:
 

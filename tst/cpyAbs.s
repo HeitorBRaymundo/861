@@ -44,15 +44,12 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
    .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-   LDA #08
-   JSR Test
-   LDX #04
-   JMP End
-Test:
-   LDY #04
-   RTS
-End:
-   LDY #22
+   ldy #1
+   sty $4400
+   cpy $4400
+   ldy #0
+   cpy $4400
+   brk
 
 NMI:
 

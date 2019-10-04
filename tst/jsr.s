@@ -47,13 +47,8 @@ Reset:
    LDA #08
    JSR Test
    LDX #04
-   JMP End
 Test:
    LDY #04
-   RTS
-End:
-   LDY #22
-
 NMI:
 
    ;NOTE: NMI code goes here
