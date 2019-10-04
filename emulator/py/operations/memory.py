@@ -53,12 +53,16 @@ class INC_Op():
         if (value % 256 != value):
             self.system.setFLAG("C", 1)
         self.system.setMem(self.position, value % 256)
+
         if (self.system.loadMem(self.position) == 0):
             self.system.setFLAG("Z", 1)
         else:
             self.system.setFLAG("Z", 0)
-        if (self.system.loadMem(self.position) > 127):
+
+        if (self.system.loadMem(self.position) >= 128):
             self.system.setFLAG("N", 1)
+        else:
+            self.system.setFLAG("N", 0)
 
 class INC_zero_page_0xE6(INC_Op):
     def __init__(self, SystemCPU: System, pos: int):
