@@ -14,7 +14,7 @@ class System():
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 1, "Z": 0, "C": 0}
+        self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = []
         self.rom = rom
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000

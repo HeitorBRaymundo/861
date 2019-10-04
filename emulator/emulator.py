@@ -26,7 +26,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         break
     elif opcode == '0x6':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        ASL_zero_page_0x06(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
+        ASL_zero_page_0x06(systemCPU, addr)
     elif opcode == '0xa':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ASL_A_0x0A(systemCPU)
