@@ -15,7 +15,6 @@ class ADC_Op():
         second_vector = int_to_bit(self.value_second)
         result = self.system.getA() + self.value_second + self.system.getFLAG("C")
         result_vector = int_to_bit(result)
-
         if ((a_vector[0] and second_vector[0] and not result_vector[0]) or (not a_vector[0] and not second_vector[0] and result_vector[0])):
             self.system.setFLAG("V", 1)
         else:
@@ -27,7 +26,6 @@ class ADC_Op():
         else:
             self.system.setFLAG("Z", 0)
 
-
         self.system.setA(result)
 
         if (self.system.getA() % 256 != self.system.getA()):
@@ -35,6 +33,7 @@ class ADC_Op():
             self.system.setA(self.system.getA() % 256)
         else:
             self.system.setFLAG("C", 0)
+
 
 class SBC_Op():
     value_second = 0
@@ -47,8 +46,9 @@ class SBC_Op():
 
         a_vector = int_to_bit(self.system.getA())
         second_vector = int_to_bit(self.value_second)
-        result = self.system.getA() + (256 - self.value_second) - (1 - self.system.getFLAG("C"))
+        result = self.system.getA() + (256 - self.value_second) + (self.system.getFLAG("C") - 1)
         result_vector = int_to_bit(result)
+
         if ((a_vector[0] and not second_vector[0] and not result_vector[0]) or (not a_vector[0] and second_vector[0] and result_vector[0])):
             self.system.setFLAG("V", 1)
         else:
