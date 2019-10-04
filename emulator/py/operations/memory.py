@@ -50,6 +50,7 @@ class INC_Op():
     def execute(self):
         value = self.system.loadMem(self.position)
         value = value + 1
+
         if (value % 256 != value):
             self.system.setFLAG("C", 1)
         self.system.setMem(self.position, value % 256)
