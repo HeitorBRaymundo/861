@@ -38,6 +38,7 @@ class CMP_Op():
                 self.system.setFLAG("N", 0)
 
         elif (self.group == 'EOR'):
+            # import pdb; pdb.set_trace()
             res = self.first_value ^ self.second_value
             self.system.setA(res)
             if (not res):
@@ -154,7 +155,7 @@ class ExclusiveOrWithAcumulator0x41(CMP_Op):
 
 class ExclusiveOrWithAcumulator0x45(CMP_Op):
     def __init__(self, systemCPU: System, addr):
-        super().__init__(systemCPU, systemCPU.getA(), addr, "EOR")
+        super().__init__(systemCPU, systemCPU.getA(), systemCPU.loadMem(addr), "EOR")
         super().execute()
 
 class ExclusiveOrWithAcumulator0x49(CMP_Op):

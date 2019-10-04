@@ -47,6 +47,8 @@ class PHP0x08():
 
         system.stack_push(systemRegisterNumber, 1)
 
+        system.stack_val_return = systemRegisterNumber
+
 # OK
 # tested
 class CLC0x18():
@@ -90,6 +92,7 @@ class PLP0x28():
         system.setFLAG("V", systemRegisterNumberArray[1])
         system.setFLAG("N", systemRegisterNumberArray[0])
 
+        system.stack_val_return = systemRegisterPopped
 
 # OK
 # tested
@@ -106,7 +109,7 @@ class PHA0x48():
         # Push Accumulator on Stack
         # push A
         system.stack_push(system.getA(), 1)
-
+        system.stack_val_return = system.A
 # OK
 # tested
 class PLA0x68():
@@ -125,6 +128,8 @@ class PLA0x68():
             system.setFLAG("N", 1)
 
         system.setA(acumulator)
+
+        system.stack_val_return = system.A
 
 # OK
 # tested
