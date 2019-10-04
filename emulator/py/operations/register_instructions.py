@@ -113,9 +113,8 @@ class Transfer_Op():
         else:
             self.system.FLAGS["Z"] = 0
 
-        if self.first_register == 'A':
-            # set negative flag
-            self.system.FLAGS["N"] = int_to_bit(value)[0]
+        # set negative flag
+        self.system.FLAGS["N"] = int_to_bit(value)[0]
 
         try:
             # transfer the value
