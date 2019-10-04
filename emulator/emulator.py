@@ -21,7 +21,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     addr = None
     stack = None
     # import pdb; pdb.set_trace()
-    # print("\nopcode: ", opcode)
 
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
