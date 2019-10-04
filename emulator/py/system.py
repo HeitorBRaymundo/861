@@ -21,7 +21,7 @@ class System():
         self.rom = rom
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - self.PC_OFFSET
-        self.stack_pointer = 0xfd
+        self.stack_pointer = 0x01fd
         self.stack_val_return = 0
 
     def getA(self):
