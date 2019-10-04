@@ -1,3 +1,5 @@
+; Author: tokumaru
+; http://forums.nesdev.com/viewtopic.php?%20p=58138#58138
 ;----------------------------------------------------------------
 ; constants
 ;----------------------------------------------------------------
@@ -8,59 +10,65 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 ; variables
 ;----------------------------------------------------------------
 
-    .enum $0000
+   .enum $0000
 
-    carLeft                 .dsw 1
-    carRight                .dsw 1
-    carTop                  .dsw 1
-    carBottom               .dsw 1
+   ;NOTE: declare variables using the DSB and DSW directives, like this:
 
-    .ende
+   ;MyVariable0 .dsb 1
+   ;MyVariable1 .dsb 3
 
- ;----------------------------------------------------------------
- ; iNES header
- ;----------------------------------------------------------------
+   .ende
 
-    .db "NES", $1a ;identification of the iNES header
-    .db PRG_COUNT ;number of 16KB PRG-ROM pages
-    .db $01 ;number of 8KB CHR-ROM pages
-    .db $00|MIRRORING ;mapper 0 and mirroring
-    .dsb 9, $00 ;clear the remaining bytes
+   ;NOTE: you can also split the variable declarations into individual pages, like this:
 
- ;----------------------------------------------------------------
- ; program bank(s)
- ;----------------------------------------------------------------
+   ;.enum $0100
+   ;.ende
 
-    .base $10000-(PRG_COUNT*$4000)
+   ;.enum $0200
+   ;.ende
+
+;----------------------------------------------------------------
+; iNES header
+;----------------------------------------------------------------
+
+   .db "NES", $1a ;identification of the iNES header
+   .db PRG_COUNT ;number of 16KB PRG-ROM pages
+   .db $01 ;number of 8KB CHR-ROM pages
+   .db $00|MIRRORING ;mapper 0 and mirroring
+   .dsb 9, $00 ;clear the remaining bytes
+
+;----------------------------------------------------------------
+; program bank(s)
+;----------------------------------------------------------------
+
+   .base $10000-(PRG_COUNT*$4000)
 
 Reset:
-  LDA  #$05
-  STA  $21
-  LDA  #$11
-  STA  $20
-  CMP  $21
-  BCS  Done
-  LDX  $20
-  STA  $20
-  STX  $21
-Done:
-  BRK
 
 NMI:
+  SEC
+  BCS foo
+  LDY #44
 
-   ;NOTE: NMI code goes here
+  foo:
+    LDA #10
+
+
+  end2:
+    NOP
+
+  brk
 
 IRQ:
 
    ;NOTE: IRQ code goes here
 
-
 ;----------------------------------------------------------------
 ; interrupt vectors
 ;----------------------------------------------------------------
 
-.org $fffa
+   .org $fffa
 
-.dw NMI
-.dw Reset
-.dw IRQ
+   .dw NMI
+   .dw Reset
+   .dw IRQ

@@ -19,7 +19,6 @@ def get_relative_addr(PC, address_in):
 
 
 def get_indirect_addr(system, address_in, reg_offset=0):
-    # import pdb; pdb.set_trace()
     addr = system.loadMem(address_in) + (system.loadMem(address_in + 1) << 8)
     return addr + reg_offset
 

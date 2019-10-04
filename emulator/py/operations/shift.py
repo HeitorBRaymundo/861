@@ -1,5 +1,4 @@
 from py.system import *
-int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
 
 class ASL_Op():
     position = 0
@@ -10,35 +9,14 @@ class ASL_Op():
 
     def execute(self):
         #  C <- [76543210] <- 0
-
         if (self.position == -1):
             if (self.system.getA() >= 128):
                 self.system.setFLAG("C", 1)
-            else:
-                self.system.setFLAG("C", 0)
-
-            shifted = (self.system.getA() << 1) % 256
-
-            if (shifted >= 128):
-                self.system.setFLAG("N", 1)
-            else:
-                self.system.setFLAG("N", 0)
-
-            self.system.setA(shifted)
+            self.system.setA((self.system.getA() << 1) % 255)
         else:
             if (self.system.loadMem(self.position) >= 128):
                 self.system.setFLAG("C", 1)
-            else:
-                self.system.setFLAG("C", 0)
-
-            shifted = (self.system.loadMem(self.position) << 1) % 256
-
-            if (shifted >= 128):
-                self.system.setFLAG("N", 1)
-            else:
-                self.system.setFLAG("N", 0)
-
-            self.system.setMem(self.position, shifted)
+            self.system.setMem(self.position, (self.system.loadMem(self.position) << 1) % 255)
 
 class ASL_zero_page_0x06(ASL_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):

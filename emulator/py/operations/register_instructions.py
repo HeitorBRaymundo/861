@@ -15,26 +15,20 @@ class Increase_Op():
 
             if self.system.getY() == 0:
                 self.system.setFLAG("Z", 1)
-            else:
-                self.system.setFLAG("Z", 0)
 
-            if (self.system.getY() >= 128):
-                self.system.setFLAG("N", 1)
-            else:
-                self.system.setFLAG("N", 0)
+            if (self.system.getY() % 255 != self.system.getY()):
+                self.system.setY(self.system.getY() % 255)
+                self.system.setFLAG("C", 1)
 
         elif (self.register == 'X'):
             self.system.setX(self.system.getX() + 1)
 
             if self.system.getX() == 0:
                 self.system.setFLAG("Z", 1)
-            else:
-                self.system.setFLAG("Z", 0)
 
-            if (self.system.getX() >= 128):
-                self.system.setFLAG("N", 1)
-            else:
-                self.system.setFLAG("N", 0)
+            if (self.system.getX() % 255 != self.system.getX()):
+                self.system.setX(self.system.getX() % 255)
+                self.system.setFLAG("C", 1)
 
 
 class IncreaseReg0xC8(Increase_Op):
@@ -113,8 +107,9 @@ class Transfer_Op():
         else:
             self.system.FLAGS["Z"] = 0
 
-        # set negative flag
-        self.system.FLAGS["N"] = int_to_bit(value)[0]
+        if self.first_register == 'A':
+            # set negative flag
+            self.system.FLAGS["N"] = int_to_bit(value)[0]
 
         try:
             # transfer the value

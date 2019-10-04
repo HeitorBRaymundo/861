@@ -7,22 +7,18 @@ class System():
     stack = []
     rom = None
     PC_OFFSET = 0
-    SP_OFFSET = 0
     program_counter = 0
-    stack_val_return = 0
 
     def __init__ (self, rom):
         self.A = 0
         self.X = 0
         self.Y = 0
         self.mem = [0] * 2048
-        self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
-        self.stack = [0] * 512
+        self.FLAGS = {"N": 0, "V": 0, "B": 0, "D": 0, "I": 1, "Z": 0, "C": 0}
+        self.stack = []
         self.rom = rom
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - self.PC_OFFSET
-        self.stack_pointer = 0xfd
-        self.stack_val_return = 0
 
     def getA(self):
         return self.A
@@ -58,28 +54,29 @@ class System():
         self.FLAGS[flag] = newValue
 
     def stack_push(self, value, numBytes):
-        if numBytes == 2:
-            hi, lo = (value).to_bytes(2, 'big')
-            self.stack[self.stack_pointer] = hi
-            self.stack[self.stack_pointer - 1] = lo
-            self.stack_pointer = self.stack_pointer - 2
+        if len(self.stack) > 256:
+            raise Exception("Stack is already full!")
         else:
-            self.stack[self.stack_pointer] = value
-            self.stack_pointer = self.stack_pointer - 1
+            if numBytes == 2:
+                hi, lo = (value).to_bytes(2, 'big')
+                self.stack.append(hi)
+                self.stack.append(lo)
+            else:
+                self.stack.append(value)
 
     def stack_pop(self):
         if len(self.stack) <= 0:
             raise Exception("Stack is empty!")
         else:
-            self.stack_pointer = self.stack_pointer + 1
-            return self.stack[self.stack_pointer]
+            value = self.stack.pop()
+            return value
 
     # Problema com a stack:
     # Valor que o SP anda depende do número de bytes lido ou salvo na pilha
     # Ideia de refactor: mudar a push para quebrar o valor que será guardado em bytes e salvar byte a byte na pilha
     # pop continua desempilhando 1 byte só e se precisarmos de mais, chamamos a pop mais de uma vez
     def getSP(self):
-        return hex(self.stack_pointer) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
+        return hex(0xfd - len(self.stack)) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
 
     def setMem(self, address, value):
         try:

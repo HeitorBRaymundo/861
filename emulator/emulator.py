@@ -19,16 +19,15 @@ pgr_bytes = nesROM.prg_rom
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
     addr = None
-    stack = None
-    # import pdb; pdb.set_trace()
+
+    # print("\nopcode: ", opcode)
 
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
         break
     elif opcode == '0x6':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
-        ASL_zero_page_0x06(systemCPU, addr)
+        ASL_zero_page_0x06(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xa':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ASL_A_0x0A(systemCPU)
@@ -122,8 +121,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         DecreaseReg0x88(systemCPU)
     elif opcode == '0xc6':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
-        DEC_zero_page_0xC6(systemCPU, addr)
+        DEC_zero_page_0xC6(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xC8(systemCPU)
@@ -195,9 +193,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     # FUSCA \/
     elif opcode == '0x8': # Flags / stack
         systemCPU.program_counter = systemCPU.program_counter + 1
-        stack = systemCPU.stack_pointer
         PHP0x08(systemCPU)
-        stack_val = systemCPU.stack_val_return
         # i = i + 0
     elif opcode == '0x18':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -206,8 +202,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x28':
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLP0x28(systemCPU)
-        stack_val = systemCPU.stack_val_return
-        stack = systemCPU.stack_pointer
         # i = i + 0
     elif opcode == '0x38':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -215,15 +209,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 0
     elif opcode == '0x48':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        stack = systemCPU.stack_pointer
         PHA0x48(systemCPU)
-        stack_val = systemCPU.stack_val_return
         # i = i + 0
     elif opcode == '0x68':
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLA0x68(systemCPU)
-        stack_val = systemCPU.stack_val_return
-        stack = systemCPU.stack_pointer
         # i = i + 0
     elif opcode == '0xb8':
 
@@ -428,7 +418,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x41':
       systemCPU.program_counter = systemCPU.program_counter + 2
       operand = pgr_bytes[systemCPU.program_counter - 1]
-      addr = get_indirect_addr_x(systemCPU, operand, systemCPU.X)
+      addr = get_indirect_addr_y(systemCPU, operand, systemCPU.Y)
       ExclusiveOrWithAcumulator0x41(systemCPU, addr)
     elif opcode == '0x45':
       systemCPU.program_counter = systemCPU.program_counter + 2
@@ -581,7 +571,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
 
     elif opcode == '0x8d':
-        # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
@@ -647,7 +636,6 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LoadFromY0xA0(register='Y', position=-1, system=systemCPU, value=operand)
 
     elif opcode == '0xa1':
-        # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.X
@@ -791,13 +779,13 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         print ("Erro")
         pass
 
-    if addr is None and stack is None:
+    if addr is None:
        # print("PC: ", systemCPU.program_counter)
        print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
               "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
               "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
               "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
-    elif addr is not None and stack is None:
+    else:
        print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
               "| a = 0x%0.2x" % systemCPU.getA(), \
               "| x = 0x%0.2x" %  systemCPU.getX(), \
@@ -805,11 +793,3 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
               "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
               "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
               "| MEM[0x%0.4x]" % addr, "= 0x%0.2x" % systemCPU.loadMem(addr),"|")
-    elif addr is None and stack is not None:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), \
-              "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), \
-              "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
-              "| MEM[0x%0.4x]" % stack, "= 0x%0.2x" % stack_val,"|")
