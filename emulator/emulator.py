@@ -3,6 +3,22 @@ from py import system
 from py.operations import *
 from rom import Rom
 from memory_helper import *
+from threading import Timer,Thread,Event
+
+
+
+cycle_counter = 0
+stop_threads = False
+
+class MyThread(Thread):
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+        print("My Thread")
+
+    def run(self):
+        while not self.stopped.wait(60):
+            print("my thread")
 
 try:
     file = sys.argv[1]
@@ -14,7 +30,10 @@ systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
-# import pdb; pdb.set_trace()
+stopFlag = Event()
+thread = MyThread(stopFlag)
+thread.start()
+
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
@@ -24,7 +43,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        stop_threads = True
+        # this will stop the timer
+        stopFlag.set()
         break
+
     elif opcode == '0x6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
