@@ -113,48 +113,61 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
         AddWithCarry0x61(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x65':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         AddWithCarry0x65(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x66':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_0x66(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x69':
         systemCPU.program_counter = systemCPU.program_counter + 2
         AddWithCarry0x69(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x6a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ROR_A_0x6A(systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 1
     elif opcode == '0x6d':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         AddWithCarry0x6D(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x6e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_absolute_0x6E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x71':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_y(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
         AddWithCarry0x71(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x75':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
         AddWithCarry0x75(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x76':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROR_zero_page_index_0x76(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x79':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1], systemCPU.getY())
         AddWithCarry0x79(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x7d':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
         AddWithCarry0x7D(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x7e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x88':
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
