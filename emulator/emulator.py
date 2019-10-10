@@ -92,18 +92,23 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x46':
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x4a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         LSR_A_0x4A(systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 1
     elif opcode == '0x4e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_absolute_0x4E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x56':
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_index_0x56(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x5e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         LSR_abs_X_0x05E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x61':
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_indirect_addr_x(systemCPU, pgr_bytes[systemCPU.program_counter - 1], systemCPU.getX())
