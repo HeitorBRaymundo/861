@@ -72,18 +72,23 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x26':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x2a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ROL_A_0x2A(systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 1
     elif opcode == '0x2e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROL_absolute_0x2E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x36':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_index_0x36(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x3e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ROL_abs_X_0x3E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x46':
         systemCPU.program_counter = systemCPU.program_counter + 2
         LSR_zero_page_0x46(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
