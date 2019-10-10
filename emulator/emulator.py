@@ -5,8 +5,6 @@ from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
 
-
-
 cycle_counter = 0
 stop_threads = False
 
@@ -14,11 +12,14 @@ class MyThread(Thread):
     def __init__(self, event):
         Thread.__init__(self)
         self.stopped = event
-        print("My Thread")
+
+        self.cycle_counter = 0
+        print("Cycles: ", self.cycle_counter)
 
     def run(self):
         while not self.stopped.wait(60):
-            print("my thread")
+            print("Cycles: ", self.cycle_counter)
+            self.cycle_counter = 0
 
 try:
     file = sys.argv[1]
@@ -33,7 +34,6 @@ pgr_bytes = nesROM.prg_rom
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
-
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
@@ -52,18 +52,23 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         ASL_zero_page_0x06(systemCPU, addr)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0xa':
         systemCPU.program_counter = systemCPU.program_counter + 1
         ASL_A_0x0A(systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 1
     elif opcode == '0xe':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ASL_absolute_0x0E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x16':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ASL_zero_page_index_0x16(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x1e':
         systemCPU.program_counter = systemCPU.program_counter + 3
         ASL_abs_X_0x01E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x26':
         systemCPU.program_counter = systemCPU.program_counter + 2
         ROL_zero_page_0x26(systemCPU, pgr_bytes[systemCPU.program_counter - 1])
