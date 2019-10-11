@@ -10,6 +10,7 @@ class System():
     SP_OFFSET = 0
     program_counter = 0
     stack_val_return = 0
+    branch_hit = False
 
     def __init__ (self, rom):
         self.A = 0
@@ -23,7 +24,8 @@ class System():
         self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - self.PC_OFFSET
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
-
+        self.branch_hit = False
+        
     def getA(self):
         return self.A
 

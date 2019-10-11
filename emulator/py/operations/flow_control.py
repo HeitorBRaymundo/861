@@ -17,7 +17,10 @@ class BPL0x10():
         # Branch on Result Plus
         # branch on N = 0
         if (system.getFLAG("N") == 0):
+            system.branch_hit = True
             system.program_counter = mem_position
+        else:
+            system.branch_hit = False
 # OK
 # tested
 class JSR0x20():
@@ -42,6 +45,9 @@ class BVC0x50():
         # branch on V = 0
         if (system.getFLAG("V") == 0):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
 
 # OK
 # tested
@@ -57,6 +63,10 @@ class BVS0x70():
         # branch on V = 1
         if (system.getFLAG("V") == 1):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
+
 # tested
 class BCC0x90():
     def __init__(self, system, mem_position):
@@ -64,6 +74,10 @@ class BCC0x90():
         # branch on C = 0
         if (system.getFLAG("C") == 0):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
+
 # tested
 class BCS0xB0():
     def __init__(self, system, mem_position):
@@ -71,6 +85,9 @@ class BCS0xB0():
         # branch on C = 1
         if (system.getFLAG("C") == 1):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
 
 # tested
 class BNE0xD0():
@@ -79,6 +96,9 @@ class BNE0xD0():
         # branch on Z = 0
         if (system.getFLAG("Z") == 0):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
 
 # OK
 class BEQ0xF0():
@@ -88,6 +108,9 @@ class BEQ0xF0():
 
         if (system.getFLAG("Z") == 1):
             system.program_counter = mem_position
+            system.branch_hit = True
+        else:
+            system.branch_hit = False
 
 # OK
 # tested
