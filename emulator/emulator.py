@@ -269,37 +269,37 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 1
         stack = systemCPU.stack_pointer
         PHP0x08(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 3
         stack_val = systemCPU.stack_val_return
         # i = i + 0
     elif opcode == '0x18':
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLC0x18(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0x28':
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLP0x28(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 4
         stack_val = systemCPU.stack_val_return
         stack = systemCPU.stack_pointer
         # i = i + 0
     elif opcode == '0x38':
         systemCPU.program_counter = systemCPU.program_counter + 1
         SEC0x38(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0x48':
         systemCPU.program_counter = systemCPU.program_counter + 1
         stack = systemCPU.stack_pointer
         PHA0x48(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 3
         stack_val = systemCPU.stack_val_return
         # i = i + 0
     elif opcode == '0x68':
         systemCPU.program_counter = systemCPU.program_counter + 1
         PLA0x68(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 4
         stack_val = systemCPU.stack_val_return
         stack = systemCPU.stack_pointer
         # i = i + 0
@@ -307,47 +307,46 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLV0xB8(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0xd8':
 
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLD0xD8(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0xf8':
 
         systemCPU.program_counter = systemCPU.program_counter + 1
         SED0xF8(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0x24': # Bit test HELP
 
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         BIT_zpg0x24(systemCPU, addr)
-        thread.cycle_counter = thread.cycle_counter + 2
+        thread.cycle_counter = thread.cycle_counter + 3
         # i = i + 1
     elif opcode == '0x2c':
-
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         BIT_abs0x2C(systemCPU, addr)
-        thread.cycle_counter = thread.cycle_counter + 3
+        thread.cycle_counter = thread.cycle_counter + 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
         systemCPU.program_counter = systemCPU.program_counter + 1
         RTI0x40(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 6
         # i = i + 0
     elif opcode == '0x58':
         systemCPU.program_counter = systemCPU.program_counter + 1
         CLI0x58(systemCPU)
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
         # i = i + 0
     elif opcode == '0xea': # NOP
         systemCPU.program_counter = systemCPU.program_counter + 1
-        thread.cycle_counter = thread.cycle_counter + 1
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
@@ -360,7 +359,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         high = pgr_bytes[systemCPU.program_counter - 1]
         systemCPU.stack_push(systemCPU.program_counter, 2)
         systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
-        thread.cycle_counter = thread.cycle_counter + 3
+        thread.cycle_counter = thread.cycle_counter + 6
         # i = i + 1
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
