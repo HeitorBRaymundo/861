@@ -4,6 +4,7 @@ from py.operations import *
 from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
+import time
 
 cycle_counter = 0
 stop_threads = False
@@ -14,12 +15,19 @@ class MyThread(Thread):
         self.stopped = event
 
         self.cycle_counter = 0
+        self.last_timestamp = time.time()
         print("Cycles: ", self.cycle_counter)
+        print("Time Elapsed: ", time.time() - self.last_timestamp)
 
     def run(self):
-        while not self.stopped.wait(60):
-            print("Cycles: ", self.cycle_counter)
-            self.cycle_counter = 0
+        while not self.stopped.wait(0.000000000001):
+            if self.cycle_counter >= 60:
+                print("Cycles: ", self.cycle_counter)
+                print("Time Elapsed: ", time.time() - self.last_timestamp)
+                self.cycle_counter = 0
+                self.last_timestamp = time.time()
+            else:
+                pass
 
 try:
     file = sys.argv[1]
