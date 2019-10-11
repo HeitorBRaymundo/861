@@ -687,24 +687,28 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_indirect_addr_x(systemCPU, operand, offset)
         StoreInA0x81(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 6
 
     elif opcode == '0x84':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         StoreInY0x84(register='Y', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0x85':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         StoreInY0x84(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0x86':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         StoreInX0x86(register='X', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0x8c':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -712,6 +716,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x8d':
         # import pdb; pdb.set_trace()
@@ -720,6 +725,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInA0x8D(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x8e':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -727,6 +733,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         StoreInX0x8E(register='X', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x91':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -734,6 +741,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_indirect_addr_y(systemCPU, operand, offset)
         StoreInA0x91(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 6
 
     elif opcode == '0x94':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -741,6 +749,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x94(register='Y', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x95':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -748,6 +757,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         StoreInA0x95(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x96':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -755,6 +765,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         StoreInX0x96(register='X', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0x99':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -763,6 +774,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         StoreInA0x99(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 5
 
     elif opcode == '0x9d':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -771,6 +783,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
         StoreInA0x9D(register='A', address=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 5
 
 
     # LOADS
@@ -778,6 +791,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         LoadFromY0xA0(register='Y', position=-1, system=systemCPU, value=operand)
+        thread.cycle_counter = thread.cycle_counter + 2
 
     elif opcode == '0xa1':
         # import pdb; pdb.set_trace()
@@ -786,34 +800,40 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_indirect_addr_x(systemCPU, operand, offset)
         LoadFromA0xA1(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 6
 
     elif opcode == '0xa2':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         LoadFromX0xA2(register='X', position=-1, system=systemCPU, value=operand)
+        thread.cycle_counter = thread.cycle_counter + 2
 
     elif opcode == '0xa4':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         LoadFromY0xA4(register='Y', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0xa5':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         LoadFromA0xA5(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0xa6':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_zero_page_addr(operand)
         LoadFromX0xA6(register='X', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 3
 
     elif opcode == '0xa9':
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         LoadFromA0xA9(register='A', position=-1, system=systemCPU, value=operand)
+        thread.cycle_counter = thread.cycle_counter + 2
 
     elif opcode == '0xac':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -821,6 +841,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadFromY0xAC(register='Y', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xad':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -828,6 +849,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadInA0xAD(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xae':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -835,6 +857,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         LoadFromX0xAE(register='X', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb1':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -842,6 +865,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_indirect_addr_y(systemCPU, operand, offset)
         LoadFromA0xB1(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 5
 
     elif opcode == '0xb4':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -849,6 +873,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromY0xB4(register='Y', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb5':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -856,6 +881,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_zero_page_addr(operand, offset)
         LoadFromA0xB5(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb6':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -863,6 +889,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_zero_page_addr(operand, offset)
         LoadFromX0xB6(register='X', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb9':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -871,6 +898,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadFromA0xB9(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xbc':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -879,6 +907,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = system.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadFromY0xBC(register='Y', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xbd':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -887,6 +916,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadInA0xBD(register='A', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xbe':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -895,29 +925,36 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
         LoadFromX0xBE(register='X', position=addr, system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 4
 
 
     # TRANSFERS BETWEEN REGISTERS
     elif opcode == '0x8a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_TXA_0x8A(first_register='X', second_register='A', system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x98':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_TYA_0x98(first_register='Y', second_register='A', system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0xaa':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_TAX_0xAA(first_register='A', second_register='X', system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0xa8':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_TAY_0xA8(first_register='A', second_register='Y', system=systemCPU)
+        thread.cycle_counter = thread.cycle_counter + 2
 
     # TRANSFERS TO THE STACK POINTER
     elif opcode == '0x9a':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_X_to_SP_Op_0x9A(system=systemCPU).execute()
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0xba':
         systemCPU.program_counter = systemCPU.program_counter + 1
         Transfer_SP_to_X_Op_0xBA(system=systemCPU).execute()
+        thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
