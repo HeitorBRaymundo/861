@@ -358,10 +358,14 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
+        old_pc = systemCPU.program_counter
         BPL0x10(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
+
     elif opcode == '0x20':
         systemCPU.program_counter = systemCPU.program_counter + 3
         low = pgr_bytes[systemCPU.program_counter - 2]
@@ -372,12 +376,14 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         # i = i + 1
     elif opcode == '0x30':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BMI0x30(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
-        # i = i + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x4c':
         systemCPU.program_counter = systemCPU.program_counter + 3
         low = pgr_bytes[systemCPU.program_counter - 2]
@@ -386,12 +392,14 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x50':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BVC0x50(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
-        # i = i + 0
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x60':
         lo = systemCPU.stack_pop()
         hi = systemCPU.stack_pop()
@@ -407,46 +415,61 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
     elif opcode == '0x70':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BVS0x70(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
-        # i = i + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x78':
         systemCPU.program_counter = systemCPU.program_counter + 1
         SEI0x78(systemCPU)
         thread.cycle_counter = thread.cycle_counter + 2
-        # i = i + 0
     elif opcode == '0x90':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BCC0x90(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
+
     elif opcode == '0xb0':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BCS0xB0(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
+
     elif opcode == '0xd0':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BNE0xD0(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
+
     elif opcode == '0xf0':
         systemCPU.program_counter = systemCPU.program_counter + 2
+        old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BEQ0xF0(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
-
+        if page_diff(old_pc, systemCPU.program_counter):
+            thread.cycle_counter = thread.cycle_counter + 2
     # HEITOR \/
     elif opcode == '0x1':
       systemCPU.program_counter = systemCPU.program_counter + 2

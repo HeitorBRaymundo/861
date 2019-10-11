@@ -25,7 +25,7 @@ class System():
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
         self.branch_hit = False
-        
+
     def getA(self):
         return self.A
 
@@ -86,9 +86,9 @@ class System():
     def setMem(self, address, value):
         try:
             # map the addres between 0 to 0x0800
-            if type(address) == str:
+            if type(address) == str and int(address, 16) < 0x2000:
                 converted_address = int(address, 16) & int('0x7ff', 16)
-            else:
+            elif int(address) < 0x2000:
                 converted_address = int(address) & int('0x7ff', 16)
         except:
             raise Exception('Invalid type of address!')
@@ -102,9 +102,9 @@ class System():
     def loadMem(self, address):
         try:
             # map the addres between 0 to 0x0800
-            if type(address) == str:
+            if type(address) == str and int(address, 16) < 0x2000:
                 converted_address = int(address, 16) & int('0x7ff', 16)
-            else:
+            elif int(address) < 0x2000:
                 converted_address = int(address) & int('0x7ff', 16)
         except:
             raise Exception('Invalid type of address!')

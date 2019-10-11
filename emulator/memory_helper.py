@@ -12,6 +12,7 @@ def convert_8bit_twos(num):
        else:
            return num
 
+
 def get_relative_addr(PC, address_in):
     offset = convert_8bit_twos(address_in)
     addr = PC + offset
@@ -26,6 +27,10 @@ def get_indirect_addr(system, address_in, reg_offset=0):
 
 def get_indirect_addr_x(system, address_in, register_x):
     return get_indirect_addr(system, address_in+register_x)
+
+
+def page_diff(addr1, addr2):
+    return (addr1 & 0xFF00) != (addr2 & 0xFF00)
 
 
 def get_indirect_addr_y(system, address_in, register_y):
