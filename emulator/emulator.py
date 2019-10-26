@@ -5,6 +5,7 @@ from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
 import time
+import ppu
 
 cycle_counter = 0
 stop_threads = False
@@ -53,6 +54,7 @@ print ("-------------")
 # print (hex(chr_rom[1]))
 
 spriteList = []
+posSprite = []
 
 while i < chr_size:
 
@@ -119,7 +121,9 @@ while i < maxSprite:
         newList = []
         print(spriteList[pgr_bytes[i]])
         for j in spriteList[pgr_bytes[i]]:
-            newList.append(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])
+            newList.append(bin(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])[2:].zfill(8))
+        posSprite.append([pgr_bytes[i - 1], pgr_bytes[i + 2]])
+        print (posSprite)
         print (newList)
     i = i + 1
     k = k + 1
