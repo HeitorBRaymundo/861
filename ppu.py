@@ -30,7 +30,7 @@ ballrect3 = ball.get_rect()
 i = 0
 while i < 2000:
     ballrect.top = ballrect.top - 1
-    # print (ballrect.top)
+    print (ballrect.top)
     ballrect.left = ballrect.left - 1
     screen.fill(black)
     screen.blit(ball, ballrect)
