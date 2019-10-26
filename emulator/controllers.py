@@ -38,7 +38,7 @@ def get_key(keys, read_time, player):
     else:
         raise Exception("Invalid player!")
 
-def latch_controlers():
+def latch_controllers():
     pygame.event.poll()
     keys = pygame.key.get_pressed()
 

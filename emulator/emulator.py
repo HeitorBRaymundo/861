@@ -6,6 +6,7 @@ from memory_helper import *
 from threading import Timer,Thread,Event
 import time
 from controllers import *
+import pygame
 
 cycle_counter = 0
 stop_threads = False
@@ -17,14 +18,14 @@ class MyThread(Thread):
 
         self.cycle_counter = 0
         self.last_timestamp = time.time()
-        print("Cycles: ", self.cycle_counter)
-        print("Time Elapsed: ", time.time() - self.last_timestamp)
+        # print("Cycles: ", self.cycle_counter)
+        # print("Time Elapsed: ", time.time() - self.last_timestamp)
 
     def run(self):
         while not self.stopped.wait(0.00000000000000001):
             if self.cycle_counter >= 60:
-                print("Cycles: ", self.cycle_counter)
-                print("Time Elapsed: ", time.time() - self.last_timestamp)
+                # print("Cycles: ", self.cycle_counter)
+                # print("Time Elapsed: ", time.time() - self.last_timestamp)
                 self.cycle_counter = 0
                 self.last_timestamp = time.time()
             else:
@@ -38,6 +39,9 @@ except:
 print ("A")
 nesROM = Rom(file)
 systemCPU = system.System(nesROM)
+
+pygame.init()
+pygame.display.set_mode((100, 100))
 
 pgr_bytes = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
@@ -1008,6 +1012,13 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
                 player1_key_index += 1
             else:
                 player1_key_index = 0
+
+            # print("LDA ctrl 1")
+            if (systemCPU.A != 0):
+                print(all_keys)
+                print(systemCPU.A)
+            # break
+            # print(player1_key_index)
         elif (addr == 16407):
             systemCPU.A = get_key(all_keys, player2_key_index, 2)
             if player2_key_index != 7:
@@ -1139,25 +1150,25 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         print ("Erro")
         pass
 
-    if addr is None and stack is None:
-       # print("PC: ", systemCPU.program_counter)
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
-    elif addr is not None and stack is None:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), \
-              "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), \
-              "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
-              "| MEM[0x%0.4x]" % addr, "= 0x%0.2x" % systemCPU.loadMem(addr),"|")
-    elif addr is None and stack is not None:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), \
-              "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), \
-              "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
-              "| MEM[0x%0.4x]" % stack, "= 0x%0.2x" % stack_val,"|")
+    # if addr is None and stack is None:
+    #    # print("PC: ", systemCPU.program_counter)
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
+    # elif addr is not None and stack is None:
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), \
+    #           "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), \
+    #           "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
+    #           "| MEM[0x%0.4x]" % addr, "= 0x%0.2x" % systemCPU.loadMem(addr),"|")
+    # elif addr is None and stack is not None:
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), \
+    #           "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), \
+    #           "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
+    #           "| MEM[0x%0.4x]" % stack, "= 0x%0.2x" % stack_val,"|")
