@@ -20,11 +20,11 @@ class PPU():
         self.x_limit_position = size[0]
         self.y_limit_position = size[1]
 
-    def build_full_sprite(self, sprites, all_sprites_list, initial_position):
-        pacman_0 = Sprite(42, 42, sprites[0])
-        pacman_1 = Sprite(42, 42, sprites[1])
-        pacman_2 = Sprite(42, 42, sprites[2])
-        pacman_3 = Sprite(42, 42, sprites[3])
+    def build_full_sprite(self, sprites, all_sprites_list, initial_position, array_flags):
+        pacman_0 = Sprite(42, 42, sprites[0], array_flags[0])
+        pacman_1 = Sprite(42, 42, sprites[1], array_flags[1])
+        pacman_2 = Sprite(42, 42, sprites[2], array_flags[2])
+        pacman_3 = Sprite(42, 42, sprites[3], array_flags[3])
 
         pacman_0.rect.x = initial_position[0]
         pacman_0.rect.y = initial_position[1]
@@ -46,8 +46,8 @@ class PPU():
         return [pacman_0, pacman_1, pacman_2, pacman_3]
 
     # initial_position = [x, y]
-    def build_sprite(self, sprite, initial_position):
-        return self.build_full_sprite(sprite, self.all_sprites_list, initial_position)
+    def build_sprite(self, sprite, initial_position, array_flags):
+        return self.build_full_sprite(sprite, self.all_sprites_list, initial_position, array_flags)
 
     def update_sprite(self, sprite, new_position):
         [x, y] = new_position
@@ -70,21 +70,21 @@ class PPU():
         #Number of frames per secong e.g. 60
         self.clock.tick(24)
 
-if not pygame.font: print('Warning, fonts disabled')
-if not pygame.mixer: print('Warning, sound disabled')
+# if not pygame.font: print('Warning, fonts disabled')
+# if not pygame.mixer: print('Warning, sound disabled')
 
-pixels = [
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-    "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-]
+# pixels = [
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
+# ]
 
-pixels_2 = [
+apixels_2 = [
     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
@@ -95,7 +95,7 @@ pixels_2 = [
     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
 ]
 
-pixels_3 = [
+apixels_3 = [
     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
@@ -106,7 +106,7 @@ pixels_3 = [
     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
 ]
 
-pixels_4 = [
+apixels_4 = [
     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
@@ -117,31 +117,32 @@ pixels_4 = [
     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
 ]
 
-sprites = [pixels, pixels_2, pixels_3, pixels_4]
+def teste(pixels, pixels_2, pixels_3, pixels_4, array_flags):
+    sprites = [pixels, pixels_2, pixels_3, pixels_4]
 
-ppu = PPU([500, 500])
+    ppu = PPU([500, 500])
 
-first_sprite = ppu.build_sprite(sprites, [200,300])
-second_sprite = ppu.build_sprite(sprites, [200,100])
+    first_sprite = ppu.build_sprite(sprites, [200,300], array_flags)
+    second_sprite = ppu.build_sprite(sprites, [200,100], array_flags)
 
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            carryOn=False
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                carryOn=False
 
-    if (first_sprite[0].rect.x >= 500):
-        ppu.update_sprite(first_sprite[0], [0, 300])
-        ppu.update_sprite(first_sprite[1], [21, 300])
-        ppu.update_sprite(first_sprite[2], [0, 321])
-        ppu.update_sprite(first_sprite[3], [21, 321])
-        
-    else:
-        ppu.update_sprite(first_sprite[0], [first_sprite[0].rect.x + 10, 300])
-        ppu.update_sprite(first_sprite[1], [first_sprite[1].rect.x + 10, 300])
-        ppu.update_sprite(first_sprite[2], [first_sprite[2].rect.x + 10, 321])
-        ppu.update_sprite(first_sprite[3], [first_sprite[3].rect.x + 10, 321])
+        if (first_sprite[0].rect.x >= 500):
+            ppu.update_sprite(first_sprite[0], [0, 300])
+            ppu.update_sprite(first_sprite[1], [21, 300])
+            ppu.update_sprite(first_sprite[2], [0, 321])
+            ppu.update_sprite(first_sprite[3], [21, 321])
+            
+        else:
+            ppu.update_sprite(first_sprite[0], [first_sprite[0].rect.x + 10, 300])
+            ppu.update_sprite(first_sprite[1], [first_sprite[1].rect.x + 10, 300])
+            ppu.update_sprite(first_sprite[2], [first_sprite[2].rect.x + 10, 321])
+            ppu.update_sprite(first_sprite[3], [first_sprite[3].rect.x + 10, 321])
 
-    ppu.render()
+        ppu.render()
 
 
 # size = width, height = 400, 500

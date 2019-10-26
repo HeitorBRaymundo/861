@@ -48,9 +48,9 @@ stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
 
+
 i = 0
 m = 0
-print ("-------------")
 # print (hex(chr_rom[1]))
 
 spriteList = []
@@ -73,8 +73,10 @@ while i < chr_size:
         lowList.append(temporary2)
         if (temporary != '0xff'):
             flag = True
+        # print (i + j, " ", temporary2)
         j = j + 1
-        i = i + 1
+
+    i = i + 8
     
     if (flag):
         j = 0
@@ -86,21 +88,25 @@ while i < chr_size:
                 flag = False
                 break
             temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
+            # print (temporary2)
             highList.append(temporary2)
             if (temporary != '0xff'):
                 flag = True
             j = j + 1
-            i = i + 1
         if (flag):
+            i = i + 8
             colorList = []
             for k in range(8):
                 for l in range(8):
                     colorList.append(int(lowList[k][l]) + 2 * int(highList[k][l]))
             spriteList.append(colorList)
             m = m + 1
-    i = i + 1
+    # i = i + 1
 
-print (spriteList)
+for i in range(len(spriteList)):
+    print (i)
+    print (spriteList[i])
+    
 
 print ("Num sprite: ", m)
 
@@ -110,23 +116,56 @@ positionConfigSprite = 0xe000
 i = positionConfigSprite - systemCPU.PC_OFFSET
 begin = positionConfigSprite - systemCPU.PC_OFFSET
 maxSprite = i + 256
+
 k = 0
 
+while i < maxSprite:
+    print(hex(pgr_bytes[i]), " i = ", i , " k = ", k)
+    i = i + 1
+    k = k + 1
+
+i = begin
+k = 0
+
+spriteList = spriteList[1:]
 
 # pulo de 32 pois eh o upload dos pallets
-
+a = []
+b = 64
+array_flag = []
 while i < maxSprite:
     # print (hex(pgr_bytes[i]), " ", k)   
-    if (k == 33):
+    if (k == 33 + b or k == 37 + b or k == 41 + b or k == 45 + b):
         newList = []
-        print(spriteList[pgr_bytes[i]])
+        # print ("-------------")
+        # print (i)
+        # print (pgr_bytes[i])
+        # print(spriteList[pgr_bytes[i]])
+        # print ("-------------")
         for j in spriteList[pgr_bytes[i]]:
+            # newList.append(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])
+            # print (bin(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j]))
+            # print (" - --------- - ")
             newList.append(bin(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])[2:].zfill(8))
+        
+        if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
+            array_flag.append(True)
+        else:
+            array_flag.append(False)
         posSprite.append([pgr_bytes[i - 1], pgr_bytes[i + 2]])
-        print (posSprite)
+        a.append(newList)
+        # print (posSprite)
         print (newList)
     i = i + 1
     k = k + 1
+
+print (array_flag)
+
+print (a[0])
+print (len(a[0]))
+# ppu_teste = ppu.PPU()
+array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
+ppu.teste(a[1], a[0], a[2], a[2], array_flag)
 
 sys.exit()
 

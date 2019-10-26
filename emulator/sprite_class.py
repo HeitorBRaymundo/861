@@ -65,13 +65,15 @@ colors = {
 "00111100": (0,252,252),
 "00111101": (248,216,248),
 "00111110": (0,0,0),
-"00111111": (0,0,0)
+"00111111": (0,0,0),
+"11111110": (0,0,0),
+"11111111": (0,0,0)
 }
 
 class Sprite(pygame.sprite.Sprite):
     #This class represents a car. It derives from the "Sprite" class in Pygame.
 
-    def __init__(self, width, height, drawing):
+    def __init__(self, width, height, drawing, flag):
         # Call the parent class (Sprite) constructor
         super().__init__()
 
@@ -80,6 +82,7 @@ class Sprite(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
+        self.flag = flag
 
         self.build_image(drawing)
 
@@ -94,17 +97,27 @@ class Sprite(pygame.sprite.Sprite):
 
     def build_image(self, pixels):
         default_size = 3
-        x_offset = 0
+        x_offset = 0 if not self.flag else 21
         y_offset = 0
         cur_pixel = 0
+        if (self.flag):
+            print (" TO AQUI ", x_offset)
+            for y in range(0, 8):
+                for x in range(0, 8):
+                    pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    x_offset = x_offset - default_size
+                    cur_pixel = cur_pixel + 1
+                x_offset = 21
+                y_offset = y_offset + default_size
+        else:
+            for y in range(0, 8):
+                for x in range(0, 8):
+                    pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    x_offset = x_offset + default_size
+                    cur_pixel = cur_pixel + 1
+                x_offset = 0
+                y_offset = y_offset + default_size
 
-        for y in range(0, 7):
-            for x in range(0, 7):
-                pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
-                x_offset = x_offset + default_size
-                cur_pixel = cur_pixel + 1
-            x_offset = 0
-            y_offset = y_offset + default_size
 
 def build_sprite(sprites, all_sprites_list):
     pacman_0 = Sprite(48, 48, sprites[0])
