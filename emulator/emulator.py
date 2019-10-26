@@ -34,19 +34,29 @@ try:
 except:
     pass
 
+print ("A")
 nesROM = Rom(file)
 systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
 
+
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
+
+
+# while systemCPU.program_counter < len(pgr_bytes) - 6:
+#     opcode = hex(pgr_bytes[systemCPU.program_counter])
+#     if (opcode != '0xff'):
+#         print (opcode, " ", systemCPU.program_counter)
+#     systemCPU.program_counter = systemCPU.program_counter + 1
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
     addr = None
     stack = None
+    # print (opcode)
     # import pdb; pdb.set_trace()
 
     if opcode == '0x0':
