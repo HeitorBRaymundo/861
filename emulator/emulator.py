@@ -42,18 +42,24 @@ pgr_bytes = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
 chr_size = nesROM.chr_rom_size * 8 * 1024
 
+
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
 
 i = 0
-k = 0
+m = 0
 print ("-------------")
 # print (hex(chr_rom[1]))
+
+spriteList = []
+
 while i < chr_size:
 
     flag = False
-    lista = []
+    lowList = []
+    highList = []
+    
     j = 0
     while j < 8:
         try:
@@ -62,21 +68,63 @@ while i < chr_size:
             flag = False
             break
         temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
-        lista.append(temporary2)
+        lowList.append(temporary2)
         if (temporary != '0xff'):
             flag = True
         j = j + 1
         i = i + 1
     
     if (flag):
-        print (lista)
-        k = k + 1
+        j = 0
+        flag = False
+        while j < 8:
+            try:
+                temporary = hex(chr_rom[i + j])
+            except:
+                flag = False
+                break
+            temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
+            highList.append(temporary2)
+            if (temporary != '0xff'):
+                flag = True
+            j = j + 1
+            i = i + 1
+        if (flag):
+            colorList = []
+            for k in range(8):
+                for l in range(8):
+                    colorList.append(int(lowList[k][l]) + 2 * int(highList[k][l]))
+            spriteList.append(colorList)
+            m = m + 1
     i = i + 1
 
-print (k)
+print (spriteList)
+
+print ("Num sprite: ", m)
+
+positionConfigSprite = 0xe000
+
+# 32 por conta do upload das cores do pallet
+i = positionConfigSprite - systemCPU.PC_OFFSET
+begin = positionConfigSprite - systemCPU.PC_OFFSET
+maxSprite = i + 256
+k = 0
+
+
+# pulo de 32 pois eh o upload dos pallets
+
+while i < maxSprite:
+    # print (hex(pgr_bytes[i]), " ", k)   
+    if (k == 33):
+        newList = []
+        print(spriteList[pgr_bytes[i]])
+        for j in spriteList[pgr_bytes[i]]:
+            newList.append(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])
+        print (newList)
+    i = i + 1
+    k = k + 1
+
 sys.exit()
-print ("A")
-thread.kill
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
