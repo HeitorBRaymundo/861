@@ -46,22 +46,37 @@ MIRRORING = %0001 ;%0000 = horizontal, %0001 = vertical, %1000 = four-screen
 Reset:
 
 NMI:
-   ;NOTE: NMI code goes here
+    LDA #$01
+    STA $4016
+    LDA #00
+    STA $4016
+    CLC
+    LDA $4016 ;A
+    LDA $4016 ;B
+    LDA $4016 ;Select
+    LDA $4016 ;Start
+    ;AND #1
+    ;BNE Reset2
+    LDA $4016 ; Cima
+    ;AND #1
+    ;BNE PacUp1
+    LDA $4016 ; Baixo
+    ;AND #1
+    ;BNE PacDown1
+    LDA $4016 ; Esquerda
+    ;AND #1
+    ;BNE PacLeft1
+    LDA $4016 ; Direita
+    ;AND #1
+    ;BNE PacRight1
+    JMP NMI
+    brk
 
-   LDA #$19
-   STA $4016
-   BRK
 
 IRQ:
 
-   ;NOTE: IRQ code goes here
+.org $fffa
 
-;----------------------------------------------------------------
-; interrupt vectors
-;----------------------------------------------------------------
-
-   .org $fffa
-
-   .dw NMI
-   .dw Reset
-   .dw IRQ
+.dw NMI
+.dw Reset
+.dw IRQ
