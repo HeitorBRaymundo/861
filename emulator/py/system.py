@@ -11,6 +11,7 @@ class System():
     program_counter = 0
     stack_val_return = 0
     branch_hit = False
+    stack_neg = False
 
     def __init__ (self, rom):
         self.A = 0
@@ -25,6 +26,7 @@ class System():
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
         self.branch_hit = False
+        self.stack_neg = False
 
     def getA(self):
         return self.A
@@ -60,15 +62,17 @@ class System():
         self.FLAGS[flag] = newValue
 
     def stack_push(self, value, numBytes):
-        pass
-        # if numBytes == 2:
-        #     hi, lo = (value).to_bytes(2, 'big')
-        #     self.stack[self.stack_pointer] = hi
-        #     self.stack[self.stack_pointer - 1] = lo
-        #     self.stack_pointer = self.stack_pointer - 2
-        # else:
-        #     self.stack[self.stack_pointer] = value
-        #     self.stack_pointer = self.stack_pointer - 1
+        if numBytes == 2:
+            if value < 0:
+                self.stack_neg = True
+
+            hi, lo = (value & 0xffff).to_bytes(2, 'big')
+            self.stack[self.stack_pointer] = hi
+            self.stack[self.stack_pointer - 1] = lo
+            self.stack_pointer = self.stack_pointer - 2
+        else:
+            self.stack[self.stack_pointer] = value
+            self.stack_pointer = self.stack_pointer - 1
 
     def stack_pop(self):
         if len(self.stack) <= 0:

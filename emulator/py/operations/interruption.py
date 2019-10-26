@@ -43,7 +43,11 @@ class RTI0x40():
         lo = systemCPU.stack_pop()
         hi = systemCPU.stack_pop()
         hi = hi << 8
-        systemCPU.program_counter = hi | lo
+
+        if systemCPU.stack_neg:
+            systemCPU.program_counter = - (((hi | lo) ^ 0xfff) + 1)
+        else:
+            systemCPU.program_counter = hi | lo
 
 # OK
 # tested
