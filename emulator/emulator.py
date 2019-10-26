@@ -433,7 +433,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         lo = systemCPU.stack_pop()
         hi = systemCPU.stack_pop()
         hi = hi << 8
-        systemCPU.program_counter = hi | lo
+
+        if systemCPU.stack_neg:
+            systemCPU.program_counter = - (((hi | lo) ^ 0xfff) + 1)
+        else:
+            systemCPU.program_counter = hi | lo
         thread.cycle_counter = thread.cycle_counter + 6
     elif opcode == '0x6c':
         systemCPU.program_counter = systemCPU.program_counter + 3
