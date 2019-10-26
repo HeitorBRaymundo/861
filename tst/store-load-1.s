@@ -49,10 +49,7 @@ NMI:
    ;NOTE: NMI code goes here
 
    LDA #$19
-   STA ($44),Y
-   ADC #1
-   LDA ($44),Y
-   ADC #1
+   STA $4016
    BRK
 
 IRQ:

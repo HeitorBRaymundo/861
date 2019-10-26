@@ -5,6 +5,7 @@ from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
 import time
+from controllers import *
 
 cycle_counter = 0
 stop_threads = False
@@ -41,42 +42,46 @@ systemCPU = system.System(nesROM)
 pgr_bytes = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
 chr_size = nesROM.chr_rom_size * 8 * 1024
+controler_read_state = 0
+all_keys = []
+player1_key_index = 0
+player2_key_index = 0
 
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
 
-i = 0
-k = 0
-print ("-------------")
+# i = 0
+# k = 0
+# print ("-------------")
 # print (hex(chr_rom[1]))
-while i < chr_size:
+# while i < chr_size:
+#
+#     flag = False
+#     lista = []
+#     j = 0
+#     while j < 8:
+#         try:
+#             temporary = hex(chr_rom[i + j])
+#         except:
+#             flag = False
+#             break
+#         temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
+#         lista.append(temporary2)
+#         if (temporary != '0xff'):
+#             flag = True
+#         j = j + 1
+#         i = i + 1
+#
+#     if (flag):
+#         print (lista)
+#         k = k + 1
+#     i = i + 1
 
-    flag = False
-    lista = []
-    j = 0
-    while j < 8:
-        try:
-            temporary = hex(chr_rom[i + j])
-        except:
-            flag = False
-            break
-        temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
-        lista.append(temporary2)
-        if (temporary != '0xff'):
-            flag = True
-        j = j + 1
-        i = i + 1
-    
-    if (flag):
-        print (lista)
-        k = k + 1
-    i = i + 1
-
-print (k)
-sys.exit()
-print ("A")
-thread.kill
+# print (k)
+# sys.exit()
+# print ("A")
+# thread.kill
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
@@ -855,12 +860,22 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
-    elif opcode == '0x8d':
+    elif opcode == '0x8d': # STA abs (para controle)
         # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
+
+        if (addr == 16406 or addr == 16407):
+            if (controler_read_state == 0 and systemCPU.A == 1):
+                controler_read_state = 1
+            elif (controler_read_state == 1 and systemCPU.A == 0):
+                controler_read_state = 0
+                all_keys = latch_controllers()
+            elif (controler_read_state == 1 and systemCPU.A != 0):
+                controler_read_state = 0
+
         StoreInA0x8D(register='A', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
@@ -981,12 +996,27 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LoadFromY0xAC(register='Y', position=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
-    elif opcode == '0xad':
+    elif opcode == '0xad': # LDA abs
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-        LoadInA0xAD(register='A', position=addr, system=systemCPU)
+
+        if (addr == 16406):
+            systemCPU.A = get_key(all_keys, player1_key_index, 1)
+            if player1_key_index != 7:
+                player1_key_index += 1
+            else:
+                player1_key_index = 0
+        elif (addr == 16407):
+            systemCPU.A = get_key(all_keys, player2_key_index, 2)
+            if player2_key_index != 7:
+                player2_key_index += 1
+            else:
+                player2_key_index = 0
+        else:
+            LoadInA0xAD(register='A', position=addr, system=systemCPU)
+
         thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xae':
