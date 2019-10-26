@@ -39,18 +39,44 @@ nesROM = Rom(file)
 systemCPU = system.System(nesROM)
 
 pgr_bytes = nesROM.prg_rom
-
+chr_rom = nesROM.chr_rom
+chr_size = nesROM.chr_rom_size * 8 * 1024
 
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
 
+i = 0
+k = 0
+print ("-------------")
+# print (hex(chr_rom[1]))
+while i < chr_size:
 
-# while systemCPU.program_counter < len(pgr_bytes) - 6:
-#     opcode = hex(pgr_bytes[systemCPU.program_counter])
-#     if (opcode != '0xff'):
-#         print (opcode, " ", systemCPU.program_counter)
-#     systemCPU.program_counter = systemCPU.program_counter + 1
+    flag = False
+    lista = []
+    j = 0
+    while j < 8:
+        try:
+            temporary = hex(chr_rom[i + j])
+        except:
+            flag = False
+            break
+        temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
+        lista.append(temporary2)
+        if (temporary != '0xff'):
+            flag = True
+        j = j + 1
+        i = i + 1
+    
+    if (flag):
+        print (lista)
+        k = k + 1
+    i = i + 1
+
+print (k)
+sys.exit()
+print ("A")
+thread.kill
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])

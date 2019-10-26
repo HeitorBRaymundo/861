@@ -60,14 +60,15 @@ class System():
         self.FLAGS[flag] = newValue
 
     def stack_push(self, value, numBytes):
-        if numBytes == 2:
-            hi, lo = (value).to_bytes(2, 'big')
-            self.stack[self.stack_pointer] = hi
-            self.stack[self.stack_pointer - 1] = lo
-            self.stack_pointer = self.stack_pointer - 2
-        else:
-            self.stack[self.stack_pointer] = value
-            self.stack_pointer = self.stack_pointer - 1
+        pass
+        # if numBytes == 2:
+        #     hi, lo = (value).to_bytes(2, 'big')
+        #     self.stack[self.stack_pointer] = hi
+        #     self.stack[self.stack_pointer - 1] = lo
+        #     self.stack_pointer = self.stack_pointer - 2
+        # else:
+        #     self.stack[self.stack_pointer] = value
+        #     self.stack_pointer = self.stack_pointer - 1
 
     def stack_pop(self):
         if len(self.stack) <= 0:
