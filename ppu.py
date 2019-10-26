@@ -21,7 +21,6 @@ ballrect2 = ball.get_rect()
 ball3 = pygame.image.load("logo-ic-unicamp.png")
 ballrect3 = ball.get_rect()
 
-
 # print (ballrect)
 # print (type(ball))
 # ballrect.top = ballrect.top + 100
@@ -59,7 +58,7 @@ while i < 2000:
         ballrect2.left = ballrect.left + 320
         screen.blit(ball2, ballrect2)
         pygame.display.flip()
-    
+
 
     pygame.display.flip()
 
