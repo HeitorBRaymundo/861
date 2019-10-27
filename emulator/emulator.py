@@ -37,7 +37,6 @@ try:
 except:
     pass
 
-print ("A")
 nesROM = Rom(file)
 systemCPU = system.System(nesROM)
 
@@ -59,14 +58,17 @@ thread.start()
 
 
 i = 0
-m = 0
-# print (hex(chr_rom[1]))
 
 spriteList = []
 posSprite = []
 
+# percorre todos os CHR para separa os sprites
+# input: chr_pgr e chr_size
+# output: spriteList (cada entrada da lsita é uma lista com a cor já mapeada (mas ainda não é o valor da cor hexa exata)
+# isso será tratado em seguida (podemos migrar para ca)
 while i < chr_size:
 
+    # A principio, supomos que nao eh um sprite, se encontrar um valor diferente de '0xff', eh um sprite
     flag = False
     lowList = []
     highList = []
@@ -74,107 +76,96 @@ while i < chr_size:
     j = 0
     while j < 8:
         try:
-            temporary = hex(chr_rom[i + j])
+            temporary = bin(chr_rom[i + j])[2:].zfill(8)
         except:
             flag = False
             break
-        temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
-        lowList.append(temporary2)
-        if (temporary != '0xff'):
+        lowList.append(temporary)
+        if (temporary != '11111111'):
             flag = True
-        # print (i + j, " ", temporary2)
+        # print (i + j, " ", temporary)
         j = j + 1
 
+    # Andamos de 8 em 8 posicoes (tamanho do sprite)
     i = i + 8
     
+    # Se encontrou um potencial sprite, verificar se o proximo byte eh o High
     if (flag):
         j = 0
         flag = False
         while j < 8:
             try:
-                temporary = hex(chr_rom[i + j])
+                temporary = bin(chr_rom[i + j])[2:].zfill(8)
             except:
                 flag = False
                 break
-            temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
-            # print (temporary2)
-            highList.append(temporary2)
-            if (temporary != '0xff'):
+            # print (temporary)
+            highList.append(temporary)
+            if (temporary != '11111111'):
                 flag = True
             j = j + 1
+        
+        # se encontrou o High do sprite, talvez nao precisemos disso, supoe que semrpe tem low e high
         if (flag):
             i = i + 8
             colorList = []
-            for k in range(8):
-                for l in range(8):
-                    colorList.append(int(lowList[k][l]) + 2 * int(highList[k][l]))
+            # une o low e high bit para mapear qual sera a cor em cada posicao do sprite
+            for j in range(8):
+                for k in range(8):
+                    colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
             spriteList.append(colorList)
-            m = m + 1
-    # i = i + 1
-
-for i in range(len(spriteList)):
-    print (i)
-    print (spriteList[i])
-    
-
-print ("Num sprite: ", m)
 
 positionConfigSprite = 0xe000
 
-# 32 por conta do upload das cores do pallet
+# Inicializa i e begin com a posicao inicial das informacoes do sprite (onde ele esta, qual a cor, se reflete, etc.)
 i = positionConfigSprite - systemCPU.PC_OFFSET
 begin = positionConfigSprite - systemCPU.PC_OFFSET
+# existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)
 maxSprite = i + 256
 
-k = 0
 
-while i < maxSprite:
-    print(hex(pgr_bytes[i]), " i = ", i , " k = ", k)
-    i = i + 1
-    k = k + 1
-
-i = begin
-k = 0
-
+# retirar o primeiro sprite que eh o bg
 spriteList = spriteList[1:]
 
 # pulo de 32 pois eh o upload dos pallets
-a = []
-b = 64
+spriteWithHexColor = []
+offsetzinho = 64
+deslocInicial = 0
 array_flag = []
 while i < maxSprite:
-    # print (hex(pgr_bytes[i]), " ", k)   
-    if (k == 33 + b or k == 37 + b or k == 41 + b or k == 45 + b):
+    # print (hex(pgr_bytes[i]), " ", deslocInicial)   
+    if (deslocInicial == 33 + offsetzinho or deslocInicial == 37 + offsetzinho or deslocInicial == 41 + offsetzinho or deslocInicial == 45 + offsetzinho):
         newList = []
-        # print ("-------------")
-        # print (i)
-        # print (pgr_bytes[i])
-        # print(spriteList[pgr_bytes[i]])
-        # print ("-------------")
         for j in spriteList[pgr_bytes[i]]:
-            # newList.append(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])
-            # print (bin(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j]))
-            # print (" - --------- - ")
-            newList.append(bin(pgr_bytes[begin + 16 + 4 * pgr_bytes[i + 1] + j])[2:].zfill(8))
+            # + 16 para ir para o pallete das cores do sprite
+            # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+            # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+            newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
         
+        # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
         if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
             array_flag.append(True)
         else:
             array_flag.append(False)
+        # Posicao que ira criar o sprite em questao
         posSprite.append([pgr_bytes[i - 1], pgr_bytes[i + 2]])
-        a.append(newList)
-        # print (posSprite)
-        print (newList)
+        spriteWithHexColor.append(newList)
     i = i + 1
-    k = k + 1
+    deslocInicial = deslocInicial + 1
 
-print (array_flag)
 
-print (a[0])
-print (len(a[0]))
-# ppu_teste = ppu.PPU()
+
+# Inverte para seguir o padrao da ppu heitor, mas com a posInicial, sera desnecessario
+
+# Print para validar se esta guardando tudo como esperado
+# for i in range(4):
+#     print (i)
+#     print (array_flag[i])
+#     print (posSprite[i])
+#     print (spriteWithHexColor[i])
+
 array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-ppu.teste(a[1], a[0], a[2], a[2], array_flag)
+ppu.teste(spriteWithHexColor[1], spriteWithHexColor[0], spriteWithHexColor[3], spriteWithHexColor[2], array_flag)
 
 sys.exit()
 

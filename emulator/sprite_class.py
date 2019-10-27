@@ -101,7 +101,6 @@ class Sprite(pygame.sprite.Sprite):
         y_offset = 0
         cur_pixel = 0
         if (self.flag):
-            print (" TO AQUI ", x_offset)
             for y in range(0, 8):
                 for x in range(0, 8):
                     pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
