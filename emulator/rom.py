@@ -13,7 +13,7 @@ class Rom():
         self.file = open(filename, "rb")
 
         self.header = self.file.read(16)
-
+        print (self.header)
         if not self.header[:3] == b'NES':
             import pdb; pdb.set_trace()
             raise Exception("Invalid ROM for NES!")

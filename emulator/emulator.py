@@ -117,6 +117,9 @@ while i < chr_size:
 
 positionConfigSprite = 0xe000
 
+
+# ESSA PARTE IRA QUANDO O CLOCK BATER 60. COMO O PROPRIO JOGO IRA ALTERAR O VALOR DO X E Y DO PACMAN, IRA FUNCIONAR AS EXPECTED
+
 # Inicializa i e begin com a posicao inicial das informacoes do sprite (onde ele esta, qual a cor, se reflete, etc.)
 i = positionConfigSprite - systemCPU.PC_OFFSET
 begin = positionConfigSprite - systemCPU.PC_OFFSET
@@ -176,10 +179,14 @@ local_ppu = ppu.PPU([500, 500])
 
 for i in range(int(len(spriteWithHexColor)/ 4)):
     local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
-local_ppu.render()
 # ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
+local_ppu.render()
 
-sys.exit()
+pgr_bytes[0x2002] = '1000000'
+
+# sys.exit()
+
+
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])

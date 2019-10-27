@@ -31,7 +31,7 @@ colors = {
 "00011010": (0,168,0),
 "00011011": (0,168,68),
 "00011100": (0,136,136),
-"00011101": (0,0,0),
+"00011101": (60,60,60),
 "00011110": (0,0,0),
 "00011111": (0,0,0),
 "00100000": (248,248,248),
@@ -65,9 +65,7 @@ colors = {
 "00111100": (0,252,252),
 "00111101": (248,216,248),
 "00111110": (0,0,0),
-"00111111": (0,0,0),
-"11111110": (0,0,0),
-"11111111": (0,0,0)
+"00111111": (0,0,0)
 }
 
 class Sprite(pygame.sprite.Sprite):
@@ -103,7 +101,10 @@ class Sprite(pygame.sprite.Sprite):
         if (self.flag):
             for y in range(0, 8):
                 for x in range(0, 8):
-                    pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    try:
+                        pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    except:
+                        pass
                     x_offset = x_offset - default_size
                     cur_pixel = cur_pixel + 1
                 x_offset = 21
@@ -111,7 +112,10 @@ class Sprite(pygame.sprite.Sprite):
         else:
             for y in range(0, 8):
                 for x in range(0, 8):
-                    pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    try:
+                        pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    except:
+                        pass
                     x_offset = x_offset + default_size
                     cur_pixel = cur_pixel + 1
                 x_offset = 0
