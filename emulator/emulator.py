@@ -127,33 +127,37 @@ maxSprite = i + 256
 # retirar o primeiro sprite que eh o bg
 spriteList = spriteList[1:]
 
+local_ppu = ppu.PPU([500, 500])
+
 # pulo de 32 pois eh o upload dos pallets
 spriteWithHexColor = []
-offsetzinho = 64
+offsetzinho = 0
 deslocInicial = 0
 array_flag = []
 while i < maxSprite:
-    # print (hex(pgr_bytes[i]), " ", deslocInicial)   
-    if (deslocInicial == 33 + offsetzinho or deslocInicial == 37 + offsetzinho or deslocInicial == 41 + offsetzinho or deslocInicial == 45 + offsetzinho):
-        newList = []
-        for j in spriteList[pgr_bytes[i]]:
-            # + 16 para ir para o pallete das cores do sprite
-            # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
-            # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
-            newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
+    # print (hex(pgr_bytes[i]), " ", deslocInicial)
+    if (hex(pgr_bytes[i]) != '0xff'):
+        if (deslocInicial > 31 and deslocInicial % 4 == 1):
+            newList = []
+            for j in spriteList[pgr_bytes[i]]:
+                # + 16 para ir para o pallete das cores do sprite
+                # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+                # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+                newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
+            
+            # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
+            if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
+                array_flag.append(True)
+            else:
+                array_flag.append(False)
+            # Posicao que ira criar o sprite em questao
+            posSprite.append([pgr_bytes[i + 2], pgr_bytes[i - 1]])
+            spriteWithHexColor.append(newList)
+            i = i + 3
+            deslocInicial = deslocInicial + 3
         
-        # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
-        if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
-            array_flag.append(True)
-        else:
-            array_flag.append(False)
-        # Posicao que ira criar o sprite em questao
-        posSprite.append([pgr_bytes[i - 1], pgr_bytes[i + 2]])
-        spriteWithHexColor.append(newList)
     i = i + 1
     deslocInicial = deslocInicial + 1
-
-
 
 # Inverte para seguir o padrao da ppu heitor, mas com a posInicial, sera desnecessario
 
@@ -164,8 +168,16 @@ while i < maxSprite:
 #     print (posSprite[i])
 #     print (spriteWithHexColor[i])
 
-array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-ppu.teste(spriteWithHexColor[1], spriteWithHexColor[0], spriteWithHexColor[3], spriteWithHexColor[2], array_flag)
+# posSprite = [posSprite[1], posSprite[0], posSprite[3], posSprite[2]]
+# print (posSprite)
+
+# array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
+local_ppu = ppu.PPU([500, 500])
+
+for i in range(int(len(spriteWithHexColor)/ 4)):
+    local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
+local_ppu.render()
+# ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
 
 sys.exit()
 
