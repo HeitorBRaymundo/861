@@ -98,8 +98,8 @@ class Sprite(pygame.sprite.Sprite):
         y_offset = 0
         cur_pixel = 0
 
-        for y in range(0, 7):
-            for x in range(0, 7):
+        for y in range(0, 8):
+            for x in range(0, 8):
                 pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
                 x_offset = x_offset + default_size
                 cur_pixel = cur_pixel + 1
