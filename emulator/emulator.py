@@ -61,6 +61,7 @@ i = 0
 
 spriteList = []
 posSprite = []
+in_forever = True
 
 # percorre todos os CHR para separa os sprites
 # input: chr_pgr e chr_size
@@ -72,7 +73,7 @@ while i < chr_size:
     flag = False
     lowList = []
     highList = []
-    
+
     j = 0
     while j < 8:
         try:
@@ -88,7 +89,7 @@ while i < chr_size:
 
     # Andamos de 8 em 8 posicoes (tamanho do sprite)
     i = i + 8
-    
+
     # Se encontrou um potencial sprite, verificar se o proximo byte eh o High
     if (flag):
         j = 0
@@ -104,7 +105,7 @@ while i < chr_size:
             if (temporary != '11111111'):
                 flag = True
             j = j + 1
-        
+
         # se encontrou o High do sprite, talvez nao precisemos disso, supoe que semrpe tem low e high
         if (flag):
             i = i + 8
@@ -147,7 +148,7 @@ while i < maxSprite:
                 # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
                 # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
                 newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
-            
+
             # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
             if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
                 array_flag.append(True)
@@ -158,7 +159,7 @@ while i < maxSprite:
             spriteWithHexColor.append(newList)
             i = i + 3
             deslocInicial = deslocInicial + 3
-        
+
     i = i + 1
     deslocInicial = deslocInicial + 1
 
@@ -208,7 +209,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     addr = None
     stack = None
     print (opcode)
-    print(hex(pgr_bytes[systemCPU.program_counter+6]))
+
     # import pdb; pdb.set_trace()
 
     if opcode == '0x0':
@@ -523,12 +524,17 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         BIT_abs0x2C(systemCPU, addr)
-        
-            
+
+
         thread.cycle_counter = thread.cycle_counter + 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
         systemCPU.program_counter = systemCPU.program_counter + 1
+
+        # Renders screen
+        ppu.render()
+        in_forever = True
+
         RTI0x40(systemCPU)
         thread.cycle_counter = thread.cycle_counter + 6
         # i = i + 0
@@ -545,7 +551,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         old_pc = systemCPU.program_counter
-        
+
         BPL0x10(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
@@ -571,12 +577,15 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
             thread.cycle_counter = thread.cycle_counter + 1
         if page_diff(old_pc, systemCPU.program_counter):
             thread.cycle_counter = thread.cycle_counter + 2
-    elif opcode == '0x4c':
-        systemCPU.program_counter = systemCPU.program_counter + 3
-        low = pgr_bytes[systemCPU.program_counter - 2]
-        high = pgr_bytes[systemCPU.program_counter - 1]
-        systemCPU.program_counter = get_absolute_addr(low, high) - 0x8000
-        thread.cycle_counter = thread.cycle_counter + 3
+    elif opcode == '0x4c': # JMP abs
+        if (in_forever):
+            systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
+        else:
+            systemCPU.program_counter = systemCPU.program_counter + 3
+            low = pgr_bytes[systemCPU.program_counter - 2]
+            high = pgr_bytes[systemCPU.program_counter - 1]
+            systemCPU.program_counter = get_absolute_addr(low, high) - 0x8000
+            thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x50':
         systemCPU.program_counter = systemCPU.program_counter + 2
         old_pc = systemCPU.program_counter
@@ -1274,25 +1283,25 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
 
 
 
-    if addr is None and stack is None:
-       # print("PC: ", systemCPU.program_counter)
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
-    elif addr is not None and stack is None:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), \
-              "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), \
-              "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
-              "| MEM[0x%0.4x]" % addr, "= 0x%0.2x" % systemCPU.loadMem(addr),"|")
-    elif addr is None and stack is not None:
-       print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
-              "| a = 0x%0.2x" % systemCPU.getA(), \
-              "| x = 0x%0.2x" %  systemCPU.getX(), \
-              "| y = 0x%0.2x" %  systemCPU.getY(), \
-              "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
-              "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
-              "| MEM[0x%0.4x]" % stack, "= 0x%0.2x" % stack_val,"|")
+    # if addr is None and stack is None:
+    #    # print("PC: ", systemCPU.program_counter)
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),"|")
+    # elif addr is not None and stack is None:
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), \
+    #           "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), \
+    #           "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
+    #           "| MEM[0x%0.4x]" % addr, "= 0x%0.2x" % systemCPU.loadMem(addr),"|")
+    # elif addr is None and stack is not None:
+    #    print ("| pc = 0x%0.4x" % int(hex(systemCPU.program_counter + systemCPU.PC_OFFSET), 16),\
+    #           "| a = 0x%0.2x" % systemCPU.getA(), \
+    #           "| x = 0x%0.2x" %  systemCPU.getX(), \
+    #           "| y = 0x%0.2x" %  systemCPU.getY(), \
+    #           "| sp = 0x%0.4x" %  int(systemCPU.getSP(), 16), \
+    #           "| p[NV-BDIZC] =", systemCPU.printFLAG(),\
+    #           "| MEM[0x%0.4x]" % stack, "= 0x%0.2x" % stack_val,"|")
