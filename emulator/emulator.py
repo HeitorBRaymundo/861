@@ -5,6 +5,9 @@ from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
 import time
+import ppu
+from controllers import *
+import pygame
 
 cycle_counter = 0
 stop_threads = False
@@ -16,14 +19,14 @@ class MyThread(Thread):
 
         self.cycle_counter = 0
         self.last_timestamp = time.time()
-        print("Cycles: ", self.cycle_counter)
-        print("Time Elapsed: ", time.time() - self.last_timestamp)
+        # print("Cycles: ", self.cycle_counter)
+        # print("Time Elapsed: ", time.time() - self.last_timestamp)
 
     def run(self):
         while not self.stopped.wait(0.00000000000000001):
             if self.cycle_counter >= 60:
-                print("Cycles: ", self.cycle_counter)
-                print("Time Elapsed: ", time.time() - self.last_timestamp)
+                # print("Cycles: ", self.cycle_counter)
+                # print("Time Elapsed: ", time.time() - self.last_timestamp)
                 self.cycle_counter = 0
                 self.last_timestamp = time.time()
             else:
@@ -34,55 +37,178 @@ try:
 except:
     pass
 
-print ("A")
 nesROM = Rom(file)
 systemCPU = system.System(nesROM)
+
+pygame.init()
+pygame.display.set_mode((100, 100))
 
 pgr_bytes = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
 chr_size = nesROM.chr_rom_size * 8 * 1024
+controler_read_state = 0
+all_keys = []
+player1_key_index = 0
+player2_key_index = 0
+
 
 stopFlag = Event()
 thread = MyThread(stopFlag)
 thread.start()
 
+
 i = 0
-k = 0
-print ("-------------")
-# print (hex(chr_rom[1]))
+
+spriteList = []
+posSprite = []
+
+# percorre todos os CHR para separa os sprites
+# input: chr_pgr e chr_size
+# output: spriteList (cada entrada da lsita é uma lista com a cor já mapeada (mas ainda não é o valor da cor hexa exata)
+# isso será tratado em seguida (podemos migrar para ca)
 while i < chr_size:
 
+    # A principio, supomos que nao eh um sprite, se encontrar um valor diferente de '0xff', eh um sprite
     flag = False
-    lista = []
+    lowList = []
+    highList = []
+    
     j = 0
     while j < 8:
         try:
-            temporary = hex(chr_rom[i + j])
+            temporary = bin(chr_rom[i + j])[2:].zfill(8)
         except:
             flag = False
             break
-        temporary2 = bin(chr_rom[i + j])[2:].zfill(8)
-        lista.append(temporary2)
-        if (temporary != '0xff'):
+        lowList.append(temporary)
+        if (temporary != '11111111'):
             flag = True
+        # print (i + j, " ", temporary)
         j = j + 1
-        i = i + 1
-    
-    if (flag):
-        print (lista)
-        k = k + 1
-    i = i + 1
 
-print (k)
-sys.exit()
-print ("A")
-thread.kill
+    # Andamos de 8 em 8 posicoes (tamanho do sprite)
+    i = i + 8
+    
+    # Se encontrou um potencial sprite, verificar se o proximo byte eh o High
+    if (flag):
+        j = 0
+        flag = False
+        while j < 8:
+            try:
+                temporary = bin(chr_rom[i + j])[2:].zfill(8)
+            except:
+                flag = False
+                break
+            # print (temporary)
+            highList.append(temporary)
+            if (temporary != '11111111'):
+                flag = True
+            j = j + 1
+        
+        # se encontrou o High do sprite, talvez nao precisemos disso, supoe que semrpe tem low e high
+        if (flag):
+            i = i + 8
+            colorList = []
+            # une o low e high bit para mapear qual sera a cor em cada posicao do sprite
+            for j in range(8):
+                for k in range(8):
+                    colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
+            spriteList.append(colorList)
+
+positionConfigSprite = 0xe000
+
+
+# ESSA PARTE IRA QUANDO O CLOCK BATER 60. COMO O PROPRIO JOGO IRA ALTERAR O VALOR DO X E Y DO PACMAN, IRA FUNCIONAR AS EXPECTED
+
+# Inicializa i e begin com a posicao inicial das informacoes do sprite (onde ele esta, qual a cor, se reflete, etc.)
+i = positionConfigSprite - systemCPU.PC_OFFSET
+begin = positionConfigSprite - systemCPU.PC_OFFSET
+# existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)
+maxSprite = i + 256
+
+
+# retirar o primeiro sprite que eh o bg
+spriteList = spriteList[1:]
+
+local_ppu = ppu.PPU([500, 500])
+
+# pulo de 32 pois eh o upload dos pallets
+spriteWithHexColor = []
+offsetzinho = 0
+deslocInicial = 0
+array_flag = []
+while i < maxSprite:
+    # print (hex(pgr_bytes[i]), " ", deslocInicial)
+    if (hex(pgr_bytes[i]) != '0xff'):
+        if (deslocInicial > 31 and deslocInicial % 4 == 1):
+            newList = []
+            for j in spriteList[pgr_bytes[i]]:
+                # + 16 para ir para o pallete das cores do sprite
+                # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+                # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+                newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
+            
+            # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
+            if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
+                array_flag.append(True)
+            else:
+                array_flag.append(False)
+            # Posicao que ira criar o sprite em questao
+            posSprite.append([pgr_bytes[i + 2], pgr_bytes[i - 1]])
+            spriteWithHexColor.append(newList)
+            i = i + 3
+            deslocInicial = deslocInicial + 3
+        
+    i = i + 1
+    deslocInicial = deslocInicial + 1
+
+# Inverte para seguir o padrao da ppu heitor, mas com a posInicial, sera desnecessario
+
+# Print para validar se esta guardando tudo como esperado
+# for i in range(4):
+#     print (i)
+#     print (array_flag[i])
+#     print (posSprite[i])
+#     print (spriteWithHexColor[i])
+
+# posSprite = [posSprite[1], posSprite[0], posSprite[3], posSprite[2]]
+# print (posSprite)
+
+# array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
+local_ppu = ppu.PPU([500, 500])
+
+for i in range(int(len(spriteWithHexColor)/ 4)):
+    local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
+# ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
+local_ppu.render()
+
+# print ("0x"+hex(pgr_bytes[0x2002])[2:].zfill(8))
+print (pgr_bytes[0x2003])
+
+# print (dir(pgr_bytes))
+# print (len(pgr_bytes))
+# pgr_bytes = pgr_bytes
+# print (len(pgr_bytes))
+
+temp = pgr_bytes[0x2002] + 128
+exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
+print (pgr_bytes[0x2000:0x2010])
+pgr_bytes = pgr_bytes[:0x2002] + temp + pgr_bytes[0x2003:]
+systemCPU.rom.prg_rom = pgr_bytes
+systemCPU.ppu_set = 1
+print (pgr_bytes[0x2000:0x2010])
+
+# sys.exit()
+
+
 
 while systemCPU.program_counter < len(pgr_bytes) - 6:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
+
     addr = None
     stack = None
-    # print (opcode)
+    print (opcode)
+    print(hex(pgr_bytes[systemCPU.program_counter+6]))
     # import pdb; pdb.set_trace()
 
     if opcode == '0x0':
@@ -389,12 +515,16 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         BIT_zpg0x24(systemCPU, addr)
+        if (addr == 0x2002):
+            systemCPU
         thread.cycle_counter = thread.cycle_counter + 3
         # i = i + 1
     elif opcode == '0x2c':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         BIT_abs0x2C(systemCPU, addr)
+        
+            
         thread.cycle_counter = thread.cycle_counter + 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
@@ -412,8 +542,10 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x10':
         systemCPU.program_counter = systemCPU.program_counter + 2
+
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         old_pc = systemCPU.program_counter
+        
         BPL0x10(systemCPU, setPCToAddress)
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
@@ -426,7 +558,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         low = pgr_bytes[systemCPU.program_counter - 2]
         high = pgr_bytes[systemCPU.program_counter - 1]
         systemCPU.stack_push(systemCPU.program_counter, 2)
-        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0x8000
         thread.cycle_counter = thread.cycle_counter + 6
         # i = i + 1
     elif opcode == '0x30':
@@ -443,7 +575,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 3
         low = pgr_bytes[systemCPU.program_counter - 2]
         high = pgr_bytes[systemCPU.program_counter - 1]
-        systemCPU.program_counter = get_absolute_addr(low, high) - 0xC000
+        systemCPU.program_counter = get_absolute_addr(low, high) - 0x8000
         thread.cycle_counter = thread.cycle_counter + 3
     elif opcode == '0x50':
         systemCPU.program_counter = systemCPU.program_counter + 2
@@ -855,12 +987,22 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
-    elif opcode == '0x8d':
+    elif opcode == '0x8d': # STA abs (para controle)
         # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
+
+        if (addr == 16406 or addr == 16407):
+            if (controler_read_state == 0 and systemCPU.A == 1):
+                controler_read_state = 1
+            elif (controler_read_state == 1 and systemCPU.A == 0):
+                controler_read_state = 0
+                all_keys = latch_controllers()
+            elif (controler_read_state == 1 and systemCPU.A != 0):
+                controler_read_state = 0
+
         StoreInA0x8D(register='A', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
@@ -981,12 +1123,33 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         LoadFromY0xAC(register='Y', position=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
-    elif opcode == '0xad':
+    elif opcode == '0xad': # LDA abs
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-        LoadInA0xAD(register='A', position=addr, system=systemCPU)
+        if (addr == 16406):
+            systemCPU.A = get_key(all_keys, player1_key_index, 1)
+            if player1_key_index != 7:
+                player1_key_index += 1
+            else:
+                player1_key_index = 0
+
+            # print("LDA ctrl 1")
+            if (systemCPU.A != 0):
+                print(all_keys)
+                print(systemCPU.A)
+            # break
+            # print(player1_key_index)
+        elif (addr == 16407):
+            systemCPU.A = get_key(all_keys, player2_key_index, 2)
+            if player2_key_index != 7:
+                player2_key_index += 1
+            else:
+                player2_key_index = 0
+        else:
+            LoadInA0xAD(register='A', position=addr, system=systemCPU)
+
         thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xae':
@@ -1108,6 +1271,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     else:
         print ("Erro")
         pass
+
+
 
     if addr is None and stack is None:
        # print("PC: ", systemCPU.program_counter)

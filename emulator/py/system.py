@@ -22,11 +22,12 @@ class System():
         self.stack = [0] * 512
         self.rom = rom
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
-        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - self.PC_OFFSET
+        self.program_counter = (self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8 + self.rom.prg_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET]) - 0x8000
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
         self.branch_hit = False
         self.stack_neg = False
+        self.ppu_set = 0
 
     def getA(self):
         return self.A
@@ -108,19 +109,23 @@ class System():
 
     def loadMem(self, address):
         try:
-            # map the addres between 0 to 0x0800
-            if type(address) == str:
-                converted_address = int(address, 16) & int('0x7ff', 16)
+            if not address == 0x2002:
+                # map the addres between 0 to 0x0800
+                if type(address) == str:
+                    converted_address = int(address, 16) & int('0x7ff', 16)
+                else:
+                    converted_address = int(address) & int('0x7ff', 16)
             else:
-                converted_address = int(address) & int('0x7ff', 16)
-            # else:
-            #     converted_address = address
+                converted_address = address
         except:
             raise Exception('Invalid type of address!')
 
         try:
             # save the value
-            return self.mem[converted_address]
+            if converted_address == 0x2002:
+                return self.rom.prg_rom[converted_address]
+            else:
+                return self.mem[converted_address]
         except:
             raise Exception("Invalid address!")
             return False

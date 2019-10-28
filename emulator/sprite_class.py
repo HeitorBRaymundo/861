@@ -31,7 +31,7 @@ colors = {
 "00011010": (0,168,0),
 "00011011": (0,168,68),
 "00011100": (0,136,136),
-"00011101": (0,0,0),
+"00011101": (60,60,60),
 "00011110": (0,0,0),
 "00011111": (0,0,0),
 "00100000": (248,248,248),
@@ -71,7 +71,7 @@ colors = {
 class Sprite(pygame.sprite.Sprite):
     #This class represents a car. It derives from the "Sprite" class in Pygame.
 
-    def __init__(self, width, height, drawing):
+    def __init__(self, width, height, drawing, flag):
         # Call the parent class (Sprite) constructor
         super().__init__()
 
@@ -80,6 +80,7 @@ class Sprite(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
+        self.flag = flag
 
         self.build_image(drawing)
 
@@ -94,35 +95,50 @@ class Sprite(pygame.sprite.Sprite):
 
     def build_image(self, pixels):
         default_size = 3
-        x_offset = 0
+        x_offset = 0 if not self.flag else 21
         y_offset = 0
         cur_pixel = 0
+        if (self.flag):
+            for y in range(0, 8):
+                for x in range(0, 8):
+                    try:
+                        pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    except:
+                        pass
+                    x_offset = x_offset - default_size
+                    cur_pixel = cur_pixel + 1
+                x_offset = 21
+                y_offset = y_offset + default_size
+        else:
+            for y in range(0, 8):
+                for x in range(0, 8):
+                    try:
+                        pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
+                    except:
+                        pass
+                    x_offset = x_offset + default_size
+                    cur_pixel = cur_pixel + 1
+                x_offset = 0
+                y_offset = y_offset + default_size
 
-        for y in range(0, 8):
-            for x in range(0, 8):
-                pygame.draw.rect(self.image, colors[pixels[cur_pixel]], (x_offset, y_offset, default_size, default_size))
-                x_offset = x_offset + default_size
-                cur_pixel = cur_pixel + 1
-            x_offset = 0
-            y_offset = y_offset + default_size
 
-def build_sprite(sprites, all_sprites_list):
+def build_sprite(sprites, all_sprites_list, pos):
     pacman_0 = Sprite(48, 48, sprites[0])
     pacman_1 = Sprite(48, 48, sprites[1])
     pacman_2 = Sprite(48, 48, sprites[2])
     pacman_3 = Sprite(48, 48, sprites[3])
 
-    pacman_0.rect.x = 200
-    pacman_0.rect.y = 300
+    pacman_0.rect.x = pos[0].x
+    pacman_0.rect.y = pos[0].y
 
-    pacman_1.rect.x = 221
-    pacman_1.rect.y = 300
+    pacman_1.rect.x = pos[1].x
+    pacman_1.rect.y = pos[1].y
 
-    pacman_2.rect.x = 200
-    pacman_2.rect.y = 321
+    pacman_2.rect.x = pos[2].x
+    pacman_2.rect.y = pos[2].y
 
-    pacman_3.rect.x = 221
-    pacman_3.rect.y = 321
+    pacman_3.rect.x = pos[3].x
+    pacman_3.rect.y = pos[3].y
 
     all_sprites_list.add(pacman_0)
     all_sprites_list.add(pacman_1)
