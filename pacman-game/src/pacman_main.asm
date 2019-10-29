@@ -50,6 +50,7 @@ volta:
   BNE PacLeft1
   LDA $4016 ; Direita
   AND #1
+  LDX #37
   BNE PacRight1
   JMP PacMan_movement
 
