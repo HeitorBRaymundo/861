@@ -30,7 +30,7 @@ volta:
 
   LDA #$01
   STA $4016
-  LDA #00
+  LDA #$00
   STA $4016
   CLC
   LDA $4016 ;A
@@ -220,8 +220,8 @@ beep: ; emite um beep em C# (#$C9)
 End:
   LDA #$02
   STA $4014
-  LDA #$01
-  STA $4016
+  ;LDA #$01
+  ;STA $4016
   RTI				; return to Forever
 
 ;;;;;;;;;;;;;;;;;;
