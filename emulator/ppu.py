@@ -75,7 +75,7 @@ class PPU():
         pygame.display.flip()
 
         #Number of frames per secong e.g. 60
-        self.clock.tick(24)
+        # self.clock.tick(24)
 
 # if not pygame.font: print('Warning, fonts disabled')
 # if not pygame.mixer: print('Warning, sound disabled')

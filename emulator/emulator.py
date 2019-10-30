@@ -174,7 +174,6 @@ local_ppu = ppu.PPU([500, 500])
 for i in range(int(len(spriteWithHexColor)/ 4)):
     local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
 
-print ("kkkkkkkkk")
 # ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
 local_ppu.render()
 
@@ -393,8 +392,6 @@ while True:
     elif opcode == '0xee':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
-        if addr == 0x220:
-            import pdb; pdb.set_trace()
         INC_absolute_0xEE(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 6
     elif opcode == '0xf1':
@@ -500,7 +497,6 @@ while True:
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         BIT_zpg0x24(systemCPU, addr)
-        # print("TO NO BIT ZERO PAGE")
         thread.cycle_counter = thread.cycle_counter + 3
         # i = i + 1
     elif opcode == '0x2c':
@@ -553,7 +549,7 @@ while True:
                 local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
 
         local_ppu.render()
-
+        # import pdb; pdb.set_trace()
         RTI0x40(systemCPU)
         thread.cycle_counter = thread.cycle_counter + 6
         # i = i + 0
@@ -600,7 +596,8 @@ while True:
         if (in_forever):
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
             in_forever = False
-            # import pdb; pdb.set_trace()
+            systemCPU.stack_push(systemCPU.program_counter,2)
+            systemCPU.stack_push(0,1)
         else:
             systemCPU.program_counter = systemCPU.program_counter + 3
             low = pgr_bytes[systemCPU.program_counter - 2]
@@ -675,7 +672,6 @@ while True:
         old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BNE0xD0(systemCPU, setPCToAddress)
-        # print(hex(pgr_bytes[systemCPU.program_counter]))
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
@@ -1085,6 +1081,8 @@ while True:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
+        # if addr == 0x220 and in_forever:
+        #     import pdb;pdb.set_trace()
         # if addr >= 0x0200:
         #     pass
         #     # import pdb; pdb.set_trace()
@@ -1122,11 +1120,6 @@ while True:
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         LoadFromX0xA2(register='X', position=-1, system=systemCPU, value=operand)
-        if systemCPU.X == 37:
-            pass
-            # print("ACHEI")
-            # import pdb; pdb.set_trace()
-
         thread.cycle_counter = thread.cycle_counter + 2
 
     elif opcode == '0xa4':
@@ -1176,10 +1169,6 @@ while True:
             else:
                 player1_key_index = 0
 
-            if (systemCPU.A != 0):
-                print(systemCPU.A)
-            # break
-            # print(player1_key_index)
         elif (addr == 16407):
             systemCPU.A = get_key(all_keys, player2_key_index, 2)
             if player2_key_index != 7:
@@ -1244,7 +1233,6 @@ while True:
 
         if addr >= 0xe000:
             value_to_load = pgr_bytes[addr - systemCPU.PC_OFFSET]
-            # print(bin(value_to_load), hex(value_to_load))
             systemCPU.A = value_to_load
         else:
             LoadFromA0xB9(register='A', position=addr, system=systemCPU)

@@ -94,17 +94,15 @@ class System():
             # map the addres between 0 to 0x0800
             if type(address) == str:
                 converted_address = int(address, 16) & int('0x7ff', 16)
-                int(0x200, 16) & int('0x7ff', 16)
             else:
                 converted_address = int(address) & int('0x7ff', 16)
-            # else:
-            #     converted_address = address
         except:
             raise Exception('Invalid type of address!')
 
         try:
             # save the value
             self.mem[converted_address] = value
+            
         except:
             raise Exception("Invalid address!")
 
