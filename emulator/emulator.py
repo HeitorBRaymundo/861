@@ -8,6 +8,7 @@ import time
 import ppu
 from controllers import *
 import pygame
+# from teste_carts import igu
 
 cycle_counter = 0
 stop_threads = False
@@ -54,7 +55,7 @@ player2_key_index = 0
 
 stopFlag = Event()
 thread = MyThread(stopFlag)
-thread.start()
+# thread.start()
 
 
 i = 0
@@ -149,6 +150,7 @@ while i < maxSprite:
                 # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
                 newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
 
+            # import pdb; pdb.set_trace()
             # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
             if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
                 array_flag.append(True)
@@ -163,18 +165,6 @@ while i < maxSprite:
     i = i + 1
     deslocInicial = deslocInicial + 1
 
-# Inverte para seguir o padrao da ppu heitor, mas com a posInicial, sera desnecessario
-
-# Print para validar se esta guardando tudo como esperado
-# for i in range(4):
-#     print (i)
-#     print (array_flag[i])
-#     print (posSprite[i])
-#     print (spriteWithHexColor[i])
-
-# posSprite = [posSprite[1], posSprite[0], posSprite[3], posSprite[2]]
-# print (posSprite)
-
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
 local_ppu = ppu.PPU([500, 500])
 
@@ -183,32 +173,18 @@ for i in range(int(len(spriteWithHexColor)/ 4)):
 # ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
 local_ppu.render()
 
-# print ("0x"+hex(pgr_bytes[0x2002])[2:].zfill(8))
-print (pgr_bytes[0x2003])
-
-# print (dir(pgr_bytes))
-# print (len(pgr_bytes))
-# pgr_bytes = pgr_bytes
-# print (len(pgr_bytes))
-
 temp = pgr_bytes[0x2002] + 128
 exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
-print (pgr_bytes[0x2000:0x2010])
 pgr_bytes = pgr_bytes[:0x2002] + temp + pgr_bytes[0x2003:]
 systemCPU.rom.prg_rom = pgr_bytes
 systemCPU.ppu_set = 1
-print (pgr_bytes[0x2000:0x2010])
 
-# sys.exit()
-
-
-
-while systemCPU.program_counter < len(pgr_bytes) - 6:
+while True:
     opcode = hex(pgr_bytes[systemCPU.program_counter])
 
     addr = None
     stack = None
-    print (opcode)
+    # print (opcode + " " +  hex(pgr_bytes[systemCPU.program_counter + 1]))
 
     # import pdb; pdb.set_trace()
 
@@ -216,7 +192,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 1
         stop_threads = True
         # this will stop the timer
-        stopFlag.set()
+        # stopFlag.set()
         break
 
     elif opcode == '0x6':
@@ -358,6 +334,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         DEC_zero_page_0xC6(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 5
     elif opcode == '0xc8':
+        # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 1
         IncreaseReg0xC8(systemCPU)
         thread.cycle_counter = thread.cycle_counter + 2
@@ -516,8 +493,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         addr = get_zero_page_addr(pgr_bytes[systemCPU.program_counter - 1])
         BIT_zpg0x24(systemCPU, addr)
-        if (addr == 0x2002):
-            systemCPU
+        # print("TO NO BIT ZERO PAGE")
         thread.cycle_counter = thread.cycle_counter + 3
         # i = i + 1
     elif opcode == '0x2c':
@@ -531,8 +507,9 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x40': # interrupt
         systemCPU.program_counter = systemCPU.program_counter + 1
 
+        # print("PIROCA")
         # Renders screen
-        ppu.render()
+        local_ppu.render()
         in_forever = True
 
         RTI0x40(systemCPU)
@@ -580,6 +557,8 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
     elif opcode == '0x4c': # JMP abs
         if (in_forever):
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
+            in_forever = False
+            # import pdb; pdb.set_trace()
         else:
             systemCPU.program_counter = systemCPU.program_counter + 3
             low = pgr_bytes[systemCPU.program_counter - 2]
@@ -654,6 +633,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BNE0xD0(systemCPU, setPCToAddress)
+        # print(hex(pgr_bytes[systemCPU.program_counter]))
         thread.cycle_counter = thread.cycle_counter + 2
         if systemCPU.branch_hit:
             thread.cycle_counter = thread.cycle_counter + 1
@@ -1011,7 +991,9 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
                 all_keys = latch_controllers()
             elif (controler_read_state == 1 and systemCPU.A != 0):
                 controler_read_state = 0
-
+        elif addr == 0x4014:
+            pass
+            # import pdb; pdb.set_trace()
         StoreInA0x8D(register='A', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
 
@@ -1061,6 +1043,9 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
+        # if addr >= 0x0200:
+        #     pass
+        #     # import pdb; pdb.set_trace()
         StoreInA0x99(register='A', address=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 5
 
@@ -1095,6 +1080,11 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         LoadFromX0xA2(register='X', position=-1, system=systemCPU, value=operand)
+        if systemCPU.X == 37:
+            pass
+            # print("ACHEI")
+            # import pdb; pdb.set_trace()
+
         thread.cycle_counter = thread.cycle_counter + 2
 
     elif opcode == '0xa4':
@@ -1144,9 +1134,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
             else:
                 player1_key_index = 0
 
-            # print("LDA ctrl 1")
             if (systemCPU.A != 0):
-                print(all_keys)
                 print(systemCPU.A)
             # break
             # print(player1_key_index)
@@ -1170,6 +1158,7 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb1':
+        # import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 2
         operand = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.Y
@@ -1204,12 +1193,19 @@ while systemCPU.program_counter < len(pgr_bytes) - 6:
         thread.cycle_counter = thread.cycle_counter + 4
 
     elif opcode == '0xb9':
+        # TA AQUI A PORRA DO BUG TOMA NU CU CARALHO PORRA SI FUDE
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.Y
         addr = get_absolute_addr(operand_low, operand_high, offset)
-        LoadFromA0xB9(register='A', position=addr, system=systemCPU)
+
+        if addr >= 0xe000:
+            value_to_load = pgr_bytes[addr - systemCPU.PC_OFFSET]
+            print(bin(value_to_load), hex(value_to_load))
+            systemCPU.A = value_to_load
+        else:
+            LoadFromA0xB9(register='A', position=addr, system=systemCPU)
         thread.cycle_counter = thread.cycle_counter + 4
         if page_diff(addr, addr - systemCPU.getY()):
             thread.cycle_counter = thread.cycle_counter + 1

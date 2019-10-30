@@ -20,6 +20,7 @@ class PPU():
         self.x_limit_position = size[0]
         self.y_limit_position = size[1]
 
+
     def build_full_sprite(self, sprites, all_sprites_list, initial_position, array_flags):
         pacman_0 = Sprite(42, 42, sprites[0], array_flags[0])
         pacman_1 = Sprite(42, 42, sprites[1], array_flags[1])
@@ -49,14 +50,16 @@ class PPU():
 
         return [pacman_0, pacman_1, pacman_2, pacman_3]
 
-    # initial_position = [x, y]
+
     def build_sprite(self, sprite, initial_position, array_flags):
         return self.build_full_sprite(sprite, self.all_sprites_list, initial_position, array_flags)
+
 
     def update_sprite(self, sprite, speed, screen_size):
         [x, y] = speed
         sprite.rect.x = (sprite.rect.x + x) % screen_size[0]
         sprite.rect.y = (sprite.rect.y + y) % screen_size[1]
+
 
     def render(self):
         #Game Logic

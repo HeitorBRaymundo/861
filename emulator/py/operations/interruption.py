@@ -4,6 +4,14 @@
 
 from py.system import *
 
+int_to_bit = lambda n : [n >> i & 1 for i in range(7,-1,-1)]
+
+def int_to_string(n):
+    return str(n)
+
+def string_to_int(n):
+    return int(n)
+
 # OK
 class RTI0x40():
     def __init__(self, system):
@@ -40,14 +48,14 @@ class RTI0x40():
         system.setFLAG("N", systemRegisterNumberArray[0])
 
         # restore PC from stack
-        lo = systemCPU.stack_pop()
-        hi = systemCPU.stack_pop()
+        lo = system.stack_pop()
+        hi = system.stack_pop()
         hi = hi << 8
 
-        if systemCPU.stack_neg:
-            systemCPU.program_counter = - (((hi | lo) ^ 0xfff) + 1)
+        if system.stack_neg:
+            system.program_counter = - (((hi | lo) ^ 0xfff) + 1)
         else:
-            systemCPU.program_counter = hi | lo
+            system.program_counter = hi | lo
 
 # OK
 # tested
