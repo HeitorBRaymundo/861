@@ -139,6 +139,7 @@ spriteWithHexColor = []
 offsetzinho = 0
 deslocInicial = 0
 array_flag = []
+bin_flag = []
 while i < maxSprite:
     # print (hex(pgr_bytes[i]), " ", deslocInicial)
     if (hex(pgr_bytes[i]) != '0xff'):
@@ -152,6 +153,7 @@ while i < maxSprite:
 
             # import pdb; pdb.set_trace()
             # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
+            bin_flag.append(pgr_bytes[i + 1])
             if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
                 array_flag.append(True)
             else:
@@ -168,8 +170,11 @@ while i < maxSprite:
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
 local_ppu = ppu.PPU([500, 500])
 
+
 for i in range(int(len(spriteWithHexColor)/ 4)):
     local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
+
+print ("kkkkkkkkk")
 # ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
 local_ppu.render()
 
@@ -388,6 +393,8 @@ while True:
     elif opcode == '0xee':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        if addr == 0x220:
+            import pdb; pdb.set_trace()
         INC_absolute_0xEE(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 6
     elif opcode == '0xf1':
@@ -509,8 +516,43 @@ while True:
 
         # print("PIROCA")
         # Renders screen
-        local_ppu.render()
         in_forever = True
+
+
+        for i in range (0x200,0x250, 16):
+            if (systemCPU.loadMem(i) != -1):
+                pos = []
+                spritesToPrint = []
+                array_flags_to_print = []
+                pos.append([systemCPU.loadMem(i + 3), systemCPU.loadMem(i)])
+                pos.append([systemCPU.loadMem(i + 7), systemCPU.loadMem(i + 4)])
+                pos.append([systemCPU.loadMem(i + 11), systemCPU.loadMem(i + 8)])
+                pos.append([systemCPU.loadMem(i + 15), systemCPU.loadMem(i + 12)])
+                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)])
+                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 5) + 4 * (systemCPU.loadMem(i + 6) % 4)])
+                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 9) + 4 * (systemCPU.loadMem(i + 10) % 4)])
+                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 13) + 4 * (systemCPU.loadMem(i + 14) % 4)])
+                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 1)])
+                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 5)])
+                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 9)])
+                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 13)])
+                # print ("--------------------")
+                # print (systemCPU.loadMem(i + 1))
+                # print (systemCPU.loadMem(i + 5))
+                # print (systemCPU.loadMem(i + 9))
+                # print (systemCPU.loadMem(i + 13))
+                # print ("spritesToPrint", spritesToPrint)
+                # print (spriteWithHexColor[systemCPU.loadMem(i + 1)])
+                # print (spriteWithHexColor[systemCPU.loadMem(i + 5)])
+                # print (spriteWithHexColor[systemCPU.loadMem(i + 9)])
+                # print (spriteWithHexColor[systemCPU.loadMem(i + 13)])
+                # print ("pos", pos)
+                # print ("array_flags_to_print", array_flags_to_print)
+                # print (array_flag)
+                # print ("--------------------")
+                local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
+
+        local_ppu.render()
 
         RTI0x40(systemCPU)
         thread.cycle_counter = thread.cycle_counter + 6
@@ -1202,7 +1244,7 @@ while True:
 
         if addr >= 0xe000:
             value_to_load = pgr_bytes[addr - systemCPU.PC_OFFSET]
-            print(bin(value_to_load), hex(value_to_load))
+            # print(bin(value_to_load), hex(value_to_load))
             systemCPU.A = value_to_load
         else:
             LoadFromA0xB9(register='A', position=addr, system=systemCPU)

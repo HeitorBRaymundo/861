@@ -17,7 +17,7 @@ class System():
         self.A = 0
         self.X = 0
         self.Y = 0
-        self.mem = [0] * 2048
+        self.mem = [-1] * 2048
         self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = [0] * 512
         self.rom = rom
