@@ -42,7 +42,6 @@ class PPU():
         # Posicao 4 (deslocado 3 * a diferenca entre a posicao 1)
         pacman_3.rect.x = initial_position[0][0] + (initial_position[3][0] - initial_position[0][0]) * 3
         pacman_3.rect.y = initial_position[0][1] + (initial_position[3][1] - initial_position[0][1]) * 3
-
         self.all_sprites_list.add(pacman_0)
         self.all_sprites_list.add(pacman_1)
         self.all_sprites_list.add(pacman_2)
@@ -64,12 +63,13 @@ class PPU():
     def render(self):
         #Game Logic
         self.all_sprites_list.update()
+        # print (self.all_sprites_list)
 
         #Drawing on Screen
         self.screen.fill((0, 0, 0))
-
         #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
         self.all_sprites_list.draw(self.screen)
+
 
         #Refresh Screen
         pygame.display.flip()

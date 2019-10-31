@@ -392,6 +392,8 @@ while True:
     elif opcode == '0xee':
         systemCPU.program_counter = systemCPU.program_counter + 3
         addr = get_absolute_addr(pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
+        if addr == 0x200:
+            print("OI IGU")
         INC_absolute_0xEE(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 6
     elif opcode == '0xf1':
@@ -514,7 +516,10 @@ while True:
         # Renders screen
         in_forever = True
 
+        print("MEMORIA DO PACMAN: ")
+        print(systemCPU.loadMem(0x200), systemCPU.loadMem(0x203))
 
+        local_ppu.all_sprites_list = pygame.sprite.Group()
         for i in range (0x200,0x250, 16):
             if (systemCPU.loadMem(i) != -1):
                 pos = []
@@ -764,9 +769,9 @@ while True:
         addr = get_zero_page_addr(operand)
         AndWithAcumulator0x25(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 3
-    elif opcode == '0x29':
+    elif opcode == '0x29':        
         systemCPU.program_counter = systemCPU.program_counter + 2
-        operand = pgr_bytes[systemCPU.program_counter - 1]
+        operand = pgr_bytes[systemCPU.program_counter - 1]    
         AndWithAcumulator0x29(systemCPU, operand)
         thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x2d':
@@ -1163,11 +1168,14 @@ while True:
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
         if (addr == 16406):
+            print(systemCPU.A)
             systemCPU.A = get_key(all_keys, player1_key_index, 1)
             if player1_key_index != 7:
                 player1_key_index += 1
             else:
                 player1_key_index = 0
+            if systemCPU.A != 0:
+                print(systemCPU.A, player1_key_index)
 
         elif (addr == 16407):
             systemCPU.A = get_key(all_keys, player2_key_index, 2)
@@ -1175,6 +1183,7 @@ while True:
                 player2_key_index += 1
             else:
                 player2_key_index = 0
+        
         else:
             LoadInA0xAD(register='A', position=addr, system=systemCPU)
 
