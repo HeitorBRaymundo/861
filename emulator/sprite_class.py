@@ -1,4 +1,5 @@
 import pygame
+
 WHITE = (255, 255, 255)
 
 colors = {
@@ -65,7 +66,7 @@ colors = {
 "00111100": (0,252,252),
 "00111101": (248,216,248),
 "00111110": (0,0,0),
-"00111111": (0,0,0)
+"00111111": (0,0,0),
 }
 
 class Sprite(pygame.sprite.Sprite):
@@ -98,6 +99,7 @@ class Sprite(pygame.sprite.Sprite):
         x_offset = 0 if not self.flag else 7
         y_offset = 0
         cur_pixel = 0
+
         if (self.flag):
             for y in range(0, 8):
                 for x in range(0, 8):
@@ -120,7 +122,6 @@ class Sprite(pygame.sprite.Sprite):
                     cur_pixel = cur_pixel + 1
                 x_offset = 0
                 y_offset = y_offset + default_size
-
 
 def build_sprite(sprites, all_sprites_list, pos):
     pacman_0 = Sprite(48, 48, sprites[0])
@@ -146,55 +147,3 @@ def build_sprite(sprites, all_sprites_list, pos):
     all_sprites_list.add(pacman_3)
 
     return [pacman_0, pacman_1, pacman_2, pacman_3]
-
-# SCREENWIDTH=400
-# SCREENHEIGHT=500
-#
-# size = (SCREENWIDTH, SCREENHEIGHT)
-# screen = pygame.display.set_mode(size)
-# pygame.display.set_caption("Pacman da Vitoria")
-
-# all_sprites_list = pygame.sprite.Group()
-#
-# pacman = (build_sprite(sprites, all_sprites_list), [200, 400])
-
-#Allowing the user to close the window...
-# carryOn = True
-# clock = pygame.time.Clock()
-#
-# limit_position = 400
-#
-# while carryOn:
-#     for event in pygame.event.get():
-#         if event.type==pygame.QUIT:
-#             carryOn=False
-#
-#     if (pacman[1][0] >= limit_position):
-#         pacman[1][0] = 0
-#         pacman[0][0].rect.x = 0
-#         pacman[0][1].rect.x = 21
-#         pacman[0][2].rect.x = 0
-#         pacman[0][3].rect.x = 21
-#     else:
-#         pacman[1][0] = pacman[1][0] + 10
-#         pacman[0][0].rect.x = pacman[0][0].rect.x + 10
-#         pacman[0][1].rect.x = pacman[0][1].rect.x + 10
-#         pacman[0][2].rect.x = pacman[0][2].rect.x + 10
-#         pacman[0][3].rect.x = pacman[0][3].rect.x + 10
-#
-#     #Game Logic
-#     all_sprites_list.update()
-#
-#     #Drawing on Screen
-#     screen.fill((0, 0, 0))
-#
-#     #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
-#     all_sprites_list.draw(screen)
-#
-#     #Refresh Screen
-#     pygame.display.flip()
-#
-#     #Number of frames per secong e.g. 60
-#     clock.tick(60)
-#
-# pygame.quit()

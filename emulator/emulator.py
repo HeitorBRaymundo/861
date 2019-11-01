@@ -130,6 +130,8 @@ maxSprite = i + 256
 
 
 # retirar o primeiro sprite que eh o bg
+# bg = [spriteList[0], spriteList[0], spriteList[0], spriteList[0]]
+bg = spriteList[0]
 spriteList = spriteList[1:]
 
 # local_ppu = ppu.PPU([500, 500])
@@ -170,10 +172,21 @@ while i < maxSprite:
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
 local_ppu = ppu.PPU([256, 240])
 
+bg_list = []
+for j in bg:
+    # + 16 para ir para o pallete das cores do sprite
+    # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+    # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+    bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
+
+print(bg_list)
+local_ppu.build_bg(bg_list)
 
 for i in range(int(len(spriteWithHexColor)/ 4)):
+    # print(spriteWithHexColor[4*i:4*(i + 1)])
     local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
 
+# time.sleep(10)
 # ppu.teste(spriteWithHexColor[0], spriteWithHexColor[1], spriteWithHexColor[2], spriteWithHexColor[3], array_flag, posSprite)
 local_ppu.render()
 

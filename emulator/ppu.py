@@ -10,7 +10,10 @@ class PPU():
     speed = [2, 2]
     black = 0, 0, 0
 
+    nth_render = 0
+
     all_sprites_list = pygame.sprite.Group()
+    bg = pygame.sprite.Group()
 
     clock = pygame.time.Clock()
 
@@ -19,6 +22,20 @@ class PPU():
         self.screen = pygame.display.set_mode(size)
         self.x_limit_position = size[0]
         self.y_limit_position = size[1]
+
+    def build_bg(self, sprite):
+        x_axis = 0
+        y_axis = 0
+
+        for vertical in range(0, 32):
+            for horizontal in range(0, 32):
+                bg = Sprite(42, 42, sprite, False)
+                bg.rect.x = x_axis
+                bg.rect.y = y_axis
+                x_axis = x_axis + 8
+                self.bg.add(bg)
+            x_axis = 0
+            y_axis = y_axis + 8
 
 
     def build_full_sprite(self, sprites, all_sprites_list, initial_position, array_flags):
@@ -49,25 +66,28 @@ class PPU():
 
         return [pacman_0, pacman_1, pacman_2, pacman_3]
 
-
     def build_sprite(self, sprite, initial_position, array_flags):
         return self.build_full_sprite(sprite, self.all_sprites_list, initial_position, array_flags)
-
 
     def update_sprite(self, sprite, speed, screen_size):
         [x, y] = speed
         sprite.rect.x = (sprite.rect.x + x) % screen_size[0]
         sprite.rect.y = (sprite.rect.y + y) % screen_size[1]
 
-
     def render(self):
         #Game Logic
+
+        if(self.nth_render == 0):
+            self.bg.update()
+            self.nth_render = self.nth_render + 1
+
         self.all_sprites_list.update()
         # print (self.all_sprites_list)
 
         #Drawing on Screen
         self.screen.fill((0, 0, 0))
         #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
+        self.bg.draw(self.screen)
         self.all_sprites_list.draw(self.screen)
 
 
@@ -76,53 +96,6 @@ class PPU():
 
         #Number of frames per secong e.g. 60
         # self.clock.tick(124)
-
-# if not pygame.font: print('Warning, fonts disabled')
-# if not pygame.mixer: print('Warning, sound disabled')
-
-# pixels = [
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-#     "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100", "00000100",
-# ]
-
-# pixels_2 = [
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-#     "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100", "00011100",
-# ]
-
-# pixels_3 = [
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-#     "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100", "00101100",
-# ]
-
-# pixels_4 = [
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-#     "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101", "00111101",
-# ]
 
 def teste(pixels, pixels_2, pixels_3, pixels_4, array_flags, pos):
     sprites = [pixels, pixels_2, pixels_3, pixels_4]
@@ -144,101 +117,3 @@ def teste(pixels, pixels_2, pixels_3, pixels_4, array_flags, pos):
 
 
         ppu.render()
-
-
-# size = width, height = 400, 500
-# speed = [2, 2]
-# black = 0, 0, 0
-#
-# screen = pygame.display.set_mode(size)
-#
-# all_sprites_list = pygame.sprite.Group()
-# pacman = (build_sprite(sprites, all_sprites_list, [200, 300]), [200, 400])
-#
-# pacman_2 = (build_sprite(sprites, all_sprites_list, [200, 100]), [200, 400])
-#
-#
-# # ball = pygame.image.load("logo-ic-unicamp.png")
-# # ballrect = ball.get_rect()
-# # ball2 = pygame.image.load("logo-ic-unicamp.png")
-# # ballrect2 = ball.get_rect()
-# # ball3 = pygame.image.load("logo-ic-unicamp.png")
-# # ballrect3 = ball.get_rect()
-#
-# # print (ballrect)
-# # print (type(ball))
-# # ballrect.top = ballrect.top + 100
-# # print (ballrect)
-#
-# # print (dir(ballrect))
-# clock = pygame.time.Clock()
-# limit_position = 400
-# i = 0
-# while i < 2000:
-#     # ballrect.top = ballrect.top - 1
-#     # print (ballrect.top)
-#     # ballrect.left = ballrect.left - 1
-#     # screen.fill(black)
-#     # screen.blit(ball, ballrect)
-#     # time.sleep(0.01)
-#     # i = i + 1
-#     #
-#     # ballrect2.left = ballrect.left
-#     # ballrect2.top = ballrect.top
-#     # ballrect3.left = ballrect.left
-#     # ballrect3.top = ballrect.top
-#     #
-#     # if (ballrect.top * -1 > ballrect.height):
-#     #     ballrect.top = 240 - ballrect.height
-#     #
-#     # if (ballrect.left * -1 > ballrect.width):
-#     #     ballrect.left = 320 - ballrect.width
-#     #
-#     # if (ballrect.top < 0):
-#     #     ballrect2.top = ballrect.top + 240
-#     #     # ballrect2.left = ballrect.left
-#     #     screen.blit(ball2, ballrect2)
-#     #     pygame.display.flip()
-#     #
-#     # if (ballrect.left < 0):
-#     #     ballrect2.left = ballrect.left + 320
-#     #     screen.blit(ball2, ballrect2)
-#     #     pygame.display.flip()
-#
-#
-#     for event in pygame.event.get():
-#         if event.type==pygame.QUIT:
-#             carryOn=False
-#
-#     if (pacman[1][0] >= limit_position):
-#         pacman[1][0] = 0
-#         pacman[0][0].rect.x = 0
-#         pacman[0][1].rect.x = 21
-#         pacman[0][2].rect.x = 0
-#         pacman[0][3].rect.x = 21
-#     else:
-#         pacman[1][0] = pacman[1][0] + 10
-#         pacman[0][0].rect.x = pacman[0][0].rect.x + 10
-#         pacman[0][1].rect.x = pacman[0][1].rect.x + 10
-#         pacman[0][2].rect.x = pacman[0][2].rect.x + 10
-#         pacman[0][3].rect.x = pacman[0][3].rect.x + 10
-#
-#     #Game Logic
-#     all_sprites_list.update()
-#
-#     #Drawing on Screen
-#     screen.fill((0, 0, 0))
-#
-#     #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
-#     all_sprites_list.draw(screen)
-#
-#     #Refresh Screen
-#     pygame.display.flip()
-#
-#     #Number of frames per secong e.g. 60
-#     clock.tick(24)
-#
-#
-#     # pygame.display.flip()
-#
-# print ("OI")
