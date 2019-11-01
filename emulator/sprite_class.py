@@ -94,8 +94,8 @@ class Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def build_image(self, pixels):
-        default_size = 3
-        x_offset = 0 if not self.flag else 21
+        default_size = 1
+        x_offset = 0 if not self.flag else 7
         y_offset = 0
         cur_pixel = 0
         if (self.flag):
@@ -107,7 +107,7 @@ class Sprite(pygame.sprite.Sprite):
                         pass
                     x_offset = x_offset - default_size
                     cur_pixel = cur_pixel + 1
-                x_offset = 21
+                x_offset = 7
                 y_offset = y_offset + default_size
         else:
             for y in range(0, 8):

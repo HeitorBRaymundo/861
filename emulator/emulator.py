@@ -132,7 +132,7 @@ maxSprite = i + 256
 # retirar o primeiro sprite que eh o bg
 spriteList = spriteList[1:]
 
-local_ppu = ppu.PPU([500, 500])
+# local_ppu = ppu.PPU([500, 500])
 
 # pulo de 32 pois eh o upload dos pallets
 spriteWithHexColor = []
@@ -168,7 +168,7 @@ while i < maxSprite:
     deslocInicial = deslocInicial + 1
 
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-local_ppu = ppu.PPU([500, 500])
+local_ppu = ppu.PPU([256, 240])
 
 
 for i in range(int(len(spriteWithHexColor)/ 4)):
@@ -769,9 +769,9 @@ while True:
         addr = get_zero_page_addr(operand)
         AndWithAcumulator0x25(systemCPU, addr)
         thread.cycle_counter = thread.cycle_counter + 3
-    elif opcode == '0x29':        
+    elif opcode == '0x29':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        operand = pgr_bytes[systemCPU.program_counter - 1]    
+        operand = pgr_bytes[systemCPU.program_counter - 1]
         AndWithAcumulator0x29(systemCPU, operand)
         thread.cycle_counter = thread.cycle_counter + 2
     elif opcode == '0x2d':
@@ -1183,7 +1183,7 @@ while True:
                 player2_key_index += 1
             else:
                 player2_key_index = 0
-        
+
         else:
             LoadInA0xAD(register='A', position=addr, system=systemCPU)
 

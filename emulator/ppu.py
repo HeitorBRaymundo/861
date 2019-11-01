@@ -32,16 +32,16 @@ class PPU():
         pacman_0.rect.y = initial_position[0][1]
 
         # Posicao 2 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_1.rect.x = initial_position[0][0] + (initial_position[1][0] - initial_position[0][0]) * 3
-        pacman_1.rect.y = initial_position[0][1] + (initial_position[1][1] - initial_position[0][1]) * 3
+        pacman_1.rect.x = initial_position[0][0] + (initial_position[1][0] - initial_position[0][0]) * 1
+        pacman_1.rect.y = initial_position[0][1] + (initial_position[1][1] - initial_position[0][1]) * 1
 
         # Posicao 3 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_2.rect.x = initial_position[0][0] + (initial_position[2][0] - initial_position[0][0]) * 3
-        pacman_2.rect.y = initial_position[0][1] + (initial_position[2][1] - initial_position[0][1]) * 3
+        pacman_2.rect.x = initial_position[0][0] + (initial_position[2][0] - initial_position[0][0]) * 1
+        pacman_2.rect.y = initial_position[0][1] + (initial_position[2][1] - initial_position[0][1]) * 1
 
         # Posicao 4 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_3.rect.x = initial_position[0][0] + (initial_position[3][0] - initial_position[0][0]) * 3
-        pacman_3.rect.y = initial_position[0][1] + (initial_position[3][1] - initial_position[0][1]) * 3
+        pacman_3.rect.x = initial_position[0][0] + (initial_position[3][0] - initial_position[0][0]) * 1
+        pacman_3.rect.y = initial_position[0][1] + (initial_position[3][1] - initial_position[0][1]) * 1
         self.all_sprites_list.add(pacman_0)
         self.all_sprites_list.add(pacman_1)
         self.all_sprites_list.add(pacman_2)
@@ -75,7 +75,7 @@ class PPU():
         pygame.display.flip()
 
         #Number of frames per secong e.g. 60
-        # self.clock.tick(24)
+        # self.clock.tick(124)
 
 # if not pygame.font: print('Warning, fonts disabled')
 # if not pygame.mixer: print('Warning, sound disabled')
