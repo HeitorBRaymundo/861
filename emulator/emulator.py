@@ -1192,30 +1192,30 @@ while True:
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-        if (addr == 16406):
-            systemCPU.A = get_key(all_keys, player1_key_index, 1)
-            if systemCPU.A != 0 and player1_key_index in range(4,8):
-                if hex(pgr_bytes[systemCPU.program_counter]) == '0xad':
-                    # print("PQP")
-                    systemCPU.A = 0
-                    systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
-            if player1_key_index != 7:
-                player1_key_index += 1
-            else:
-                player1_key_index = 0
+        # if (addr == 16406):
+        #     systemCPU.A = get_key(all_keys, player1_key_index, 1)
+        #     if systemCPU.A != 0 and player1_key_index in range(4,8):
+        #         if hex(pgr_bytes[systemCPU.program_counter]) == '0xad':
+        #             # print("PQP")
+        #             systemCPU.A = 0
+        #             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
+        #     if player1_key_index != 7:
+        #         player1_key_index += 1
+        #     else:
+        #         player1_key_index = 0
             # if systemCPU.A != 0:
                 # print(systemCPU.A, player1_key_index)
 
-        elif (addr == 16407):
-            systemCPU.A = get_key(all_keys, player2_key_index, 2)
-            if player2_key_index != 7:
-                player2_key_index += 1
-            else:
-                player2_key_index = 0
+        # elif (addr == 16407):
+        #     systemCPU.A = get_key(all_keys, player2_key_index, 2)
+        #     if player2_key_index != 7:
+        #         player2_key_index += 1
+        #     else:
+        #         player2_key_index = 0
 
-        else:
-            LoadInA0xAD(register='A', position=addr, system=systemCPU)
-
+        # else:
+        #     LoadInA0xAD(register='A', position=addr, system=systemCPU)
+        LoadInA0xAD(register='A', position=addr, system=systemCPU)
         cycle_counter = cycle_counter + 4
 
     elif opcode == '0xae':
