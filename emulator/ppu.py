@@ -90,6 +90,6 @@ class PPU():
         pygame.event.pump()
 
         #Number of frames per secong e.g. 60
-        self.clock.tick(24)
+        self.clock.tick(48)
 
         # self.clock.tick(124)
