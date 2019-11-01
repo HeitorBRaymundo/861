@@ -32,9 +32,12 @@ class StoreInA0x85(Store_Op):
 
 
 class StoreInA0x8D(Store_Op):
+    _counter = 0
     def __init__(self, register, address, system):
+        StoreInA0x8D._counter += 1
+        self.id = StoreInA0x8D._counter
         super().__init__(register, address, system)
-        super().execute()
+        
 
 
 class StoreInA0x91(Store_Op):

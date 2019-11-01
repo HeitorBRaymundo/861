@@ -1,3 +1,4 @@
+import time
 class System():
     A = 0
     X = 0
@@ -12,8 +13,11 @@ class System():
     stack_val_return = 0
     branch_hit = False
     stack_neg = False
-
+    _counter = 0
+    time = -1
     def __init__ (self, rom):
+        System._counter += 1
+        self.id = System._counter
         self.A = 0
         self.X = 0
         self.Y = 0
@@ -28,6 +32,7 @@ class System():
         self.branch_hit = False
         self.stack_neg = False
         self.ppu_set = 0
+        self.time = -1
 
     def getA(self):
         return self.A
@@ -99,10 +104,21 @@ class System():
         except:
             raise Exception('Invalid type of address!')
 
+        if converted_address == 8:
+            if self.loadMem(8) != value:
+                if self.time == -1:
+                    self.time = time.time()
+                else:
+                    last_time = self.time
+                    self.time = time.time()
+                    if self.time - last_time < 2:
+                        print('\t',self.time - last_time)
+                        return
+                        
+                    
         try:
             # save the value
             self.mem[converted_address] = value
-            
         except:
             raise Exception("Invalid address!")
 
@@ -119,6 +135,7 @@ class System():
         except:
             raise Exception('Invalid type of address!')
 
+        # converted_address = address
         try:
             # save the value
             if converted_address == 0x2002:
@@ -127,7 +144,7 @@ class System():
                 return self.mem[converted_address]
         except:
             raise Exception("Invalid address!")
-            return False
+        #     return False
 
 
 if __name__ == '__main__':

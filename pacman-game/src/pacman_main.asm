@@ -43,6 +43,7 @@ volta:
   AND #1
   BNE PacUp1
   LDA $4016 ; Baixo
+  LDX #37
   AND #1
   BNE PacDown1
   LDA $4016 ; Esquerda
@@ -50,7 +51,6 @@ volta:
   BNE PacLeft1
   LDA $4016 ; Direita
   AND #1
-  LDX #37
   BNE PacRight1
   JMP PacMan_movement
 
@@ -220,8 +220,6 @@ beep: ; emite um beep em C# (#$C9)
 End:
   LDA #$02
   STA $4014
-  ;LDA #$01
-  ;STA $4016
   RTI				; return to Forever
 
 ;;;;;;;;;;;;;;;;;;
@@ -355,7 +353,7 @@ Background:
   seed2: .ds 2
   seed3: .ds 2
   seed4: .ds 2
-  directionPacMan: .ds 1
+  directionPacMan: .ds 2
   count1: .ds 1
   count2: .ds 1
   count3: .ds 1
