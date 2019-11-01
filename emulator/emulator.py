@@ -126,9 +126,11 @@ maxSprite = i + 256
 
 
 # retirar o primeiro sprite que eh o bg
+# bg = [spriteList[0], spriteList[0], spriteList[0], spriteList[0]]
+bg = spriteList[0]
 spriteList = spriteList[1:]
 
-local_ppu = ppu.PPU([500, 500])
+# local_ppu = ppu.PPU([500, 500])
 
 # pulo de 32 pois eh o upload dos pallets
 spriteWithHexColor = []
@@ -164,10 +166,20 @@ while i < maxSprite:
     deslocInicial = deslocInicial + 1
 
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-local_ppu = ppu.PPU([500, 500])
+local_ppu = ppu.PPU([256, 240])
 
+bg_list = []
+for j in bg:
+    # + 16 para ir para o pallete das cores do sprite
+    # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+    # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+    bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
+
+print(bg_list)
+local_ppu.build_bg(bg_list)
 
 for i in range(int(len(spriteWithHexColor)/ 4)):
+    # print(spriteWithHexColor[4*i:4*(i + 1)])
     local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
 
 local_ppu.render()
@@ -600,7 +612,7 @@ while True:
             in_forever = False
             systemCPU.stack_push(systemCPU.program_counter,2)
             systemCPU.stack_push(0,1)
-            
+
         else:
             systemCPU.program_counter = systemCPU.program_counter + 3
             low = pgr_bytes[systemCPU.program_counter - 2]
@@ -675,7 +687,7 @@ while True:
         old_pc = systemCPU.program_counter
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BNE0xD0(systemCPU, setPCToAddress)
-        
+
         # if systemCPU.branch_hit:
         #     print("\t TOMEI O BRANCH HIT PARA: ", hex(setPCToAddress))
 
@@ -771,9 +783,9 @@ while True:
         addr = get_zero_page_addr(operand)
         AndWithAcumulator0x25(systemCPU, addr)
         cycle_counter = cycle_counter + 3
-    elif opcode == '0x29':        
+    elif opcode == '0x29':
         systemCPU.program_counter = systemCPU.program_counter + 2
-        operand = pgr_bytes[systemCPU.program_counter - 1]    
+        operand = pgr_bytes[systemCPU.program_counter - 1]
         AndWithAcumulator0x29(systemCPU, operand)
         # if operand == 1:
         #     print("\t",systemCPU.FLAGS)
@@ -1198,7 +1210,7 @@ while True:
                 player2_key_index += 1
             else:
                 player2_key_index = 0
-        
+
         else:
             LoadInA0xAD(register='A', position=addr, system=systemCPU)
 
