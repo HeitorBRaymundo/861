@@ -294,6 +294,7 @@ Palette:
     .db $30, $05, %00000011, $30
     .db $38, $06, %00000011, $38
     .db $38, $06, %01000011, $30
+    
 ; [Position Y, Sprite's index , Attributes, Position X]
 
 ;;;;;;;;;;;;;;;;;

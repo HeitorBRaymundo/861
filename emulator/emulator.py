@@ -112,7 +112,7 @@ while i < chr_size:
                 for k in range(8):
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
             spriteList.append(colorList)
-
+        
 positionConfigSprite = 0xe000
 
 
@@ -138,6 +138,7 @@ offsetzinho = 0
 deslocInicial = 0
 array_flag = []
 bin_flag = []
+
 while i < maxSprite:
     # print (hex(pgr_bytes[i]), " ", deslocInicial)
     if (hex(pgr_bytes[i]) != '0xff'):
@@ -165,6 +166,7 @@ while i < maxSprite:
     i = i + 1
     deslocInicial = deslocInicial + 1
 
+# time.sleep(10)
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
 local_ppu = ppu.PPU([256, 240])
 
@@ -175,7 +177,7 @@ for j in bg:
     # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
     bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
 
-print(bg_list)
+# print(bg_list)
 local_ppu.build_bg(bg_list)
 
 for i in range(int(len(spriteWithHexColor)/ 4)):
@@ -606,7 +608,7 @@ while True:
     elif opcode == '0x4c': # JMP abs
         if in_forever:
             # import pdb; pdb.set_trace()
-            print("TO NO FOREVER")
+            # print("TO NO FOREVER")
             pgr_bytes = nesROM.prg_rom
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
             in_forever = False
@@ -1033,8 +1035,8 @@ while True:
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-        if addr == 8:
-            print("STY no 8")
+        # if addr == 8:
+        #     print("STY no 8")
         StoreInX0x8C(register='Y', address=addr, system=systemCPU)
         cycle_counter = cycle_counter + 4
 
@@ -1070,8 +1072,8 @@ while True:
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-        if addr == 8:
-            print("STX NO PACMAN DIRECTION")
+        # if addr == 8:
+        #     print("STX NO PACMAN DIRECTION")
         StoreInX0x8E(register='X', address=addr, system=systemCPU)
         cycle_counter = cycle_counter + 4
 
@@ -1194,7 +1196,7 @@ while True:
             systemCPU.A = get_key(all_keys, player1_key_index, 1)
             if systemCPU.A != 0 and player1_key_index in range(4,8):
                 if hex(pgr_bytes[systemCPU.program_counter]) == '0xad':
-                    print("PQP")
+                    # print("PQP")
                     systemCPU.A = 0
                     systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
             if player1_key_index != 7:

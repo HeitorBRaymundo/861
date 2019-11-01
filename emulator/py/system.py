@@ -112,7 +112,7 @@ class System():
                     last_time = self.time
                     self.time = time.time()
                     if self.time - last_time < 2:
-                        print('\t',self.time - last_time)
+                        # print('\t',self.time - last_time)
                         return
                         
                     
