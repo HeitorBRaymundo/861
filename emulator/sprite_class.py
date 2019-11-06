@@ -122,26 +122,9 @@ class Sprite(pygame.sprite.Sprite):
 
 
 def build_sprite(sprites, all_sprites_list, pos):
-    pacman_0 = Sprite(48, 48, sprites[0])
-    pacman_1 = Sprite(48, 48, sprites[1])
-    pacman_2 = Sprite(48, 48, sprites[2])
-    pacman_3 = Sprite(48, 48, sprites[3])
+    sprite = Sprite(48, 48, sprites)
 
-    pacman_0.rect.x = pos[0].x
-    pacman_0.rect.y = pos[0].y
+    sprite.rect.x = pos.x
+    sprite.rect.y = pos.y
 
-    pacman_1.rect.x = pos[1].x
-    pacman_1.rect.y = pos[1].y
-
-    pacman_2.rect.x = pos[2].x
-    pacman_2.rect.y = pos[2].y
-
-    pacman_3.rect.x = pos[3].x
-    pacman_3.rect.y = pos[3].y
-
-    all_sprites_list.add(pacman_0)
-    all_sprites_list.add(pacman_1)
-    all_sprites_list.add(pacman_2)
-    all_sprites_list.add(pacman_3)
-
-    return [pacman_0, pacman_1, pacman_2, pacman_3]
+    all_sprites_list.add(sprite)

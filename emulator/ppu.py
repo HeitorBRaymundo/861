@@ -11,6 +11,7 @@ class PPU():
     black = 0, 0, 0
 
     nth_render = 0
+    flag_enable_render = False
 
     all_sprites_list = pygame.sprite.Group()
     bg = pygame.sprite.Group()
@@ -27,6 +28,8 @@ class PPU():
         x_axis = 0
         y_axis = 0
 
+        # Nao vai funcionar para o generico
+
         for vertical in range(0, 32):
             for horizontal in range(0, 32):
                 bg = Sprite(42, 42, sprite, False)
@@ -39,32 +42,14 @@ class PPU():
 
 
     def build_full_sprite(self, sprites, all_sprites_list, initial_position, array_flags):
-        pacman_0 = Sprite(42, 42, sprites[0], array_flags[0])
-        pacman_1 = Sprite(42, 42, sprites[1], array_flags[1])
-        pacman_2 = Sprite(42, 42, sprites[2], array_flags[2])
-        pacman_3 = Sprite(42, 42, sprites[3], array_flags[3])
+        sprite_to_build = Sprite(42, 42, sprites, array_flags)
 
         # Posicao 1
-        pacman_0.rect.x = initial_position[0][0]
-        pacman_0.rect.y = initial_position[0][1]
+        sprite_to_build.rect.x = initial_position[0]
+        sprite_to_build.rect.y = initial_position[1]
 
-        # Posicao 2 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_1.rect.x = initial_position[0][0] + (initial_position[1][0] - initial_position[0][0]) * 1
-        pacman_1.rect.y = initial_position[0][1] + (initial_position[1][1] - initial_position[0][1]) * 1
-
-        # Posicao 3 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_2.rect.x = initial_position[0][0] + (initial_position[2][0] - initial_position[0][0]) * 1
-        pacman_2.rect.y = initial_position[0][1] + (initial_position[2][1] - initial_position[0][1]) * 1
-
-        # Posicao 4 (deslocado 3 * a diferenca entre a posicao 1)
-        pacman_3.rect.x = initial_position[0][0] + (initial_position[3][0] - initial_position[0][0]) * 1
-        pacman_3.rect.y = initial_position[0][1] + (initial_position[3][1] - initial_position[0][1]) * 1
-        self.all_sprites_list.add(pacman_0)
-        self.all_sprites_list.add(pacman_1)
-        self.all_sprites_list.add(pacman_2)
-        self.all_sprites_list.add(pacman_3)
-
-        return [pacman_0, pacman_1, pacman_2, pacman_3]
+        self.all_sprites_list.add(sprite_to_build)
+        
 
     def build_sprite(self, sprite, initial_position, array_flags):
         return self.build_full_sprite(sprite, self.all_sprites_list, initial_position, array_flags)

@@ -180,11 +180,13 @@ for j in bg:
 # print(bg_list)
 local_ppu.build_bg(bg_list)
 
-for i in range(int(len(spriteWithHexColor)/ 4)):
+for i in range(int(len(spriteWithHexColor))):
     # print(spriteWithHexColor[4*i:4*(i + 1)])
-    local_ppu.build_sprite(spriteWithHexColor[4*i:4*(i + 1)], posSprite[4*i:4*(i + 1)], array_flag[4*i:4*(i + 1)])
+    local_ppu.build_sprite(spriteWithHexColor[i], posSprite[i], array_flag[i])
 
 local_ppu.render()
+
+# import pdb; pdb.set_trace()
 
 temp = pgr_bytes[0x2002] + 128
 exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
@@ -528,23 +530,14 @@ while True:
         # i = i + 2
     elif opcode == '0x40': # interrupt
         local_ppu.all_sprites_list = pygame.sprite.Group()
-        for i in range (0x200,0x2ff, 16):
+        for i in range (0x200,0x2ff, 4):
             if (systemCPU.loadMem(i) != -1):
                 pos = []
                 spritesToPrint = []
                 array_flags_to_print = []
-                pos.append([systemCPU.loadMem(i + 3), systemCPU.loadMem(i)])
-                pos.append([systemCPU.loadMem(i + 7), systemCPU.loadMem(i + 4)])
-                pos.append([systemCPU.loadMem(i + 11), systemCPU.loadMem(i + 8)])
-                pos.append([systemCPU.loadMem(i + 15), systemCPU.loadMem(i + 12)])
-                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)])
-                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 5) + 4 * (systemCPU.loadMem(i + 6) % 4)])
-                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 9) + 4 * (systemCPU.loadMem(i + 10) % 4)])
-                spritesToPrint.append(spriteWithHexColor[systemCPU.loadMem(i + 13) + 4 * (systemCPU.loadMem(i + 14) % 4)])
-                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 1)])
-                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 5)])
-                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 9)])
-                array_flags_to_print.append(array_flag[systemCPU.loadMem(i + 13)])
+                pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
+                spritesToPrint = spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)]
+                array_flags_to_print = array_flag[systemCPU.loadMem(i + 1)]
                 # print ("--------------------")
                 # print (systemCPU.loadMem(i + 1))
                 # print (systemCPU.loadMem(i + 5))
