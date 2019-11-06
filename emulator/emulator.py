@@ -531,27 +531,10 @@ while True:
     elif opcode == '0x40': # interrupt
         local_ppu.all_sprites_list = pygame.sprite.Group()
         for i in range (0x200,0x2ff, 4):
-            if (systemCPU.loadMem(i) != -1):
-                pos = []
-                spritesToPrint = []
-                array_flags_to_print = []
+            if (systemCPU.loadMem(i) != -1 and local_ppu.flag_enable_render):
                 pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
                 spritesToPrint = spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)]
                 array_flags_to_print = array_flag[systemCPU.loadMem(i + 1)]
-                # print ("--------------------")
-                # print (systemCPU.loadMem(i + 1))
-                # print (systemCPU.loadMem(i + 5))
-                # print (systemCPU.loadMem(i + 9))
-                # print (systemCPU.loadMem(i + 13))
-                # print ("spritesToPrint", spritesToPrint)
-                # print (spriteWithHexColor[systemCPU.loadMem(i + 1)])
-                # print (spriteWithHexColor[systemCPU.loadMem(i + 5)])
-                # print (spriteWithHexColor[systemCPU.loadMem(i + 9)])
-                # print (spriteWithHexColor[systemCPU.loadMem(i + 13)])
-                # print ("pos", pos)
-                # print ("array_flags_to_print", array_flags_to_print)
-                # print (array_flag)
-                # print ("--------------------")
                 local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
 
         local_ppu.render()

@@ -11,12 +11,65 @@ class PPU():
     black = 0, 0, 0
 
     nth_render = 0
-    flag_enable_render = False
+    flag_enable_render = True
 
     all_sprites_list = pygame.sprite.Group()
     bg = pygame.sprite.Group()
 
     clock = pygame.time.Clock()
+
+
+    #Flags da PPUCTRL ($2000)
+    # VPHB SINN
+    flag_enable_NMI = False #V
+    flag_PPU_master_slave = False #P
+    flag_sprite_height = False #H
+    flag_bg_tile = False #B
+    flag_tile_select = False #S
+    flag_increment_mode = False #I
+    flag_name_table = '00' #NN
+
+    #Flags da PPUMASK ($2001)
+    # BGRs bMmG
+    flag_emphasis_blue = False #B
+    flag_emphasis_green = False #G
+    flag_emphasis_red = False #R
+    flag_enable_sprite = False #s
+    flag_enable_bg = False #b
+    flag_enable_left_column = False #M
+    flag_enable_left_bg_column = False #m
+    flag_greyscale = False #G
+
+    #Flags da PPUSTATUS ($2002)
+    #VSO- ---- 	
+    flag_vblank = False #V
+    flag_sprite_hit = False
+    flag_sprite_overflow = False
+
+    #OAMADDR ($2003)
+    #aaaa aaaa
+    oam_read_write_address = '00000000'
+
+    #OAMDATA ($2004)
+    #dddd dddd
+    oam_data_read_write = '00000000'
+
+    #PPUSCROLL ($2005)
+    #xxxx xxxx 	
+    scroll_pos_x = '0000'
+    scroll_pos_y = '0000'
+
+    #PPUADDR ($2006)
+    #aaaa aaaa
+    ppu_read_write_address = '00000000'
+
+    #PPUDATA ($2007)
+    #dddd dddd
+    ppu_data_read_write = '00000000'
+
+    #OAMDMA ($4004)
+    #aaaa aaaa
+    oam_dma_high_address = '00000000'
 
     def __init__(self, size):
         # size = [width, height]
