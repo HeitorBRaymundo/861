@@ -13,6 +13,7 @@ class System():
     stack_val_return = 0
     branch_hit = False
     stack_neg = False
+    cycle_counter = 0
     _counter = 0
     time = -1
     def __init__ (self, rom):
@@ -33,6 +34,7 @@ class System():
         self.stack_neg = False
         self.ppu_set = 0
         self.time = -1
+        self.cycle_counter = 0
 
     def getA(self):
         return self.A
