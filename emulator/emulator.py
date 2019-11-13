@@ -60,6 +60,11 @@ i = 0
 spriteList = []
 posSprite = []
 in_forever = True
+
+
+local_ppu = ppu.PPU([256, 240])
+
+
 # percorre todos os CHR para separa os sprites
 # input: chr_pgr e chr_size
 # output: spriteList (cada entrada da lsita é uma lista com a cor já mapeada (mas ainda não é o valor da cor hexa exata)
@@ -71,19 +76,8 @@ while i < chr_size:
     lowList = []
     highList = []
 
-    j = 0
-    while j < 8:
-        try:
-            temporary = bin(chr_rom[i + j])[2:].zfill(8)
-        except:
-            flag = False
-            break
-        lowList.append(temporary)
-        if (temporary != '11111111'):
-            flag = True
-        # print (i + j, " ", temporary)
-        j = j + 1
-
+    flag, lowList = local_ppu.read_sprite(chr_rom[i:])    
+    
     # Andamos de 8 em 8 posicoes (tamanho do sprite)
     i = i + 8
 
@@ -168,7 +162,6 @@ while i < maxSprite:
 
 # time.sleep(10)
 # array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-local_ppu = ppu.PPU([256, 240])
 
 bg_list = []
 for j in bg:

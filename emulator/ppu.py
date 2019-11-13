@@ -46,6 +46,7 @@ class PPU():
     flag_sprite_hit = False
     flag_sprite_overflow = False
 
+
     #OAMADDR ($2003)
     #aaaa aaaa
     oam_read_write_address = '00000000'
@@ -93,7 +94,91 @@ class PPU():
             x_axis = 0
             y_axis = y_axis + 8
 
+    # newControl eh um inteiro entre 0 e 255, precisamos parsear no formato
+    #Flags da PPUCTRL ($2000)
+    # VPHB SINN
+    # flag_enable_NMI = False #V
+    # flag_PPU_master_slave = False #P
+    # flag_sprite_height = False #H
+    # flag_bg_tile = False #B
+    # flag_tile_select = False #S
+    # flag_increment_mode = False #I
+    # flag_name_table = '00' #NN
+    def update_ppu_control(self, newControl):
+        self.flag_name_table = bin((newMask >> 0) % 4)[2:]
+        self.flag_increment_mode = (newMask >> 2) % 2
+        self.flag_tile_select = (newMask >> 3) % 2
+        self.flag_bg_tile = (newMask >> 4) % 2
+        self.flag_sprite_height = (newMask >> 5) % 2
+        self.flag_PPU_master_slave = (newMask >> 6) % 2
+        self.flag_enable_NMI = (newMask >> 7) % 2
 
+    
+    def read_sprite(self, rom, chr_size):
+        i = 0
+        flag = False
+        sprite = []
+        while i < 8:
+            try:
+                temporary = bin(rom[i])[2:].zfill(8)
+            except:
+                flag = False
+                break
+            sprite.append(temporary)
+            if (temporary != '11111111'):
+                flag = True
+            # print (i + i, " ", temporary)
+            i = i + 1
+
+        return flag, sprite 
+
+    # newMask eh um inteiro entre 0 e 255, precisamos parsear no formato 
+    #Flags da PPUMASK ($2001)
+    # BGRs bMmG
+    # flag_emphasis_blue = False #B
+    # flag_emphasis_green = False #G
+    # flag_emphasis_red = False #R
+    # flag_enable_sprite = False #s
+    # flag_enable_bg = False #b
+    # flag_enable_left_column = False #M
+    # flag_enable_left_bg_column = False #m
+    # flag_greyscale = False #G
+    def update_ppu_mask(self, newMask):
+        self.flag_greyscale = (newMask >> 0) % 2
+        self.flag_enable_left_bg_column = (newMask >> 1) % 2
+        self.flag_enable_left_column = (newMask >> 2) % 2
+        self.flag_enable_bg = (newMask >> 3) % 2
+        self.flag_enable_sprite = (newMask >> 4) % 2
+        self.flag_emphasis_red = (newMask >> 5) % 2
+        self.flag_emphasis_green = (newMask >> 6) % 2
+        self.flag_emphasis_blue = (newMask >> 7) % 2
+
+    #OAMADDR ($2003)
+    #aaaa aaaa
+    def update_OAM_Address(self, newOamAddress):
+        self.oam_read_write_address = bin(newOamAddress)[2:]
+    #OAMDATA ($2004)
+    #dddd dddd
+    def update_OAM_Data(self, newOamData):
+        self.oam_data_read_write = bin(newOamAddress)[2:]
+    #PPUSCROLL ($2005)
+    #xxxx xxxx 	
+    # tem umas regras mais cabulosas para preencher essas
+    def update_scrool_pos(self, newScrollPos):
+        self.scroll_pos_x = '0000'
+        self.scroll_pos_y = '0000'
+
+    #PPUADDR ($2006)
+    #aaaa aaaa
+    def update_PPU_Address(self, newPpuAddress):
+        self.ppu_read_write_address = bin(newOamAddress)[2:]
+
+    #PPUDATA ($2007)
+    #dddd dddd
+    def update_PPU_Address(self, newPpuData):
+        self.ppu_data_read_write = bin(newPpuData)[2:]
+
+        
     def build_full_sprite(self, sprites, all_sprites_list, initial_position, array_flags):
         sprite_to_build = Sprite(42, 42, sprites, array_flags)
 
