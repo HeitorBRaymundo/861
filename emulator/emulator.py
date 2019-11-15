@@ -76,7 +76,7 @@ while i < chr_size:
     lowList = []
     highList = []
 
-    flag, lowList = local_ppu.read_sprite(chr_rom[i:])    
+    flag, lowList = local_ppu.read_sprite(chr_rom[i:], 8)
     
     # Andamos de 8 em 8 posicoes (tamanho do sprite)
     i = i + 8
