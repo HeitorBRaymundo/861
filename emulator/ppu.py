@@ -73,7 +73,14 @@ class PPU():
     #aaaa aaaa
     oam_dma_high_address = '00000000'
 
+
+    # VARIAVEIS ANTES USADAS NO EMULATOR.PY
     sprites = []
+    spriteWithHexColor = []
+    array_flag = []
+    bin_flag = []
+    posSprite = []
+    positionConfigSprite = 0xe000
 
     def __init__(self, size, nesROM):
         # size = [width, height]
@@ -82,6 +89,8 @@ class PPU():
         self.y_limit_position = size[1]
         self.chr_rom = nesROM.chr_rom
         self.chr_size = nesROM.chr_rom_size * 8 * 1024   
+        self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
+        self.pgr_bytes = nesROM.prg_rom
 
     def build_bg(self, sprite):
         x_axis = 0
@@ -269,8 +278,54 @@ class PPU():
                             colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
                     spriteList.append(colorList)
         self.sprites = spriteList
+        self.colorSprites()
 
     def colorSprites(self):
+        # retirar o primeiro sprite que eh o bg <-- ISSO NO CASO DO NOSSO PACMAN!
+        i  = 0
+        begin = self.positionConfigSprite - self.PC_OFFSET
+        spriteList = self.sprites[1:]
+
+        # local_ppu = ppu.PPU([500, 500])
+
+        # pulo de 32 pois eh o upload dos pallets
+        spriteColored = []
+        deslocInicial = 0
+        array_flag = []
+        bin_flag = []
+        posSprite = []
+
+        while i < 256:
+            # print (hex(pgr_bytes[i]), " ", deslocInicial)
+            if (hex(self.pgr_bytes[begin + i]) != '0xff'):
+                if (deslocInicial > 31 and deslocInicial % 4 == 1):
+                    newList = []
+                    for j in spriteList[self.pgr_bytes[begin + i]]:
+                        # + 16 para ir para o pallete das cores do sprite
+                        # (self.pgr_bytes[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+                        # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
+                        newList.append(bin(self.pgr_bytes[begin + 16 + 4 * (self.pgr_bytes[begin + i + 1] % 4) + j])[2:].zfill(8))
+
+                    # import pdb; pdb.set_trace()
+                    # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
+                    bin_flag.append(self.pgr_bytes[begin + i + 1])
+                    if (self.pgr_bytes[begin + i + 1] >= 64 and self.pgr_bytes[begin + i + 1] < 128):
+                        array_flag.append(True)
+                    else:
+                        array_flag.append(False)
+                    # Posicao que ira criar o sprite em questao
+                    posSprite.append([self.pgr_bytes[begin + i + 2], self.pgr_bytes[begin + i - 1]])
+                    spriteColored.append(newList)
+                    i = i + 3
+                    deslocInicial = deslocInicial + 3
+
+            i = i + 1
+            deslocInicial = deslocInicial + 1
+
+        self.array_flag = array_flag
+        self.bin_flag = bin_flag
+        self.spriteWithHexColor = spriteColored
+        self.posSprite = posSprite
 
 
     def tick(self):
