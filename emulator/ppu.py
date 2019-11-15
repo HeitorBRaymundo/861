@@ -294,7 +294,8 @@ class PPU():
         array_flag = []
         bin_flag = []
         posSprite = []
-
+        
+        # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
             # print (hex(pgr_bytes[i]), " ", deslocInicial)
             if (hex(self.pgr_bytes[begin + i]) != '0xff'):
