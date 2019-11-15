@@ -62,53 +62,11 @@ posSprite = []
 in_forever = True
 
 
-local_ppu = ppu.PPU([256, 240])
+local_ppu = ppu.PPU([256, 240], nesROM)
 
-
-# percorre todos os CHR para separa os sprites
-# input: chr_pgr e chr_size
-# output: spriteList (cada entrada da lsita é uma lista com a cor já mapeada (mas ainda não é o valor da cor hexa exata)
-# isso será tratado em seguida (podemos migrar para ca)
-while i < chr_size:
-
-    # A principio, supomos que nao eh um sprite, se encontrar um valor diferente de '0xff', eh um sprite
-    flag = False
-    lowList = []
-    highList = []
-
-    flag, lowList = local_ppu.read_sprite(chr_rom[i:], 8)
-    
-    # Andamos de 8 em 8 posicoes (tamanho do sprite)
-    i = i + 8
-
-    # Se encontrou um potencial sprite, verificar se o proximo byte eh o High
-    if (flag):
-        j = 0
-        flag = False
-        while j < 8:
-            try:
-                temporary = bin(chr_rom[i + j])[2:].zfill(8)
-            except:
-                flag = False
-                break
-            # print (temporary)
-            highList.append(temporary)
-            if (temporary != '11111111'):
-                flag = True
-            j = j + 1
-
-        # se encontrou o High do sprite, talvez nao precisemos disso, supoe que semrpe tem low e high
-        if (flag):
-            i = i + 8
-            colorList = []
-            # une o low e high bit para mapear qual sera a cor em cada posicao do sprite
-            for j in range(8):
-                for k in range(8):
-                    colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-            spriteList.append(colorList)
-        
 positionConfigSprite = 0xe000
 
+local_ppu.evaluate_sprite()
 
 # ESSA PARTE IRA QUANDO O CLOCK BATER 60. COMO O PROPRIO JOGO IRA ALTERAR O VALOR DO X E Y DO PACMAN, IRA FUNCIONAR AS EXPECTED
 
@@ -121,8 +79,8 @@ maxSprite = i + 256
 
 # retirar o primeiro sprite que eh o bg
 # bg = [spriteList[0], spriteList[0], spriteList[0], spriteList[0]]
-bg = spriteList[0]
-spriteList = spriteList[1:]
+bg = local_ppu.sprites[0]
+spriteList = local_ppu.sprites[1:]
 
 # local_ppu = ppu.PPU([500, 500])
 
