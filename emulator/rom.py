@@ -11,6 +11,7 @@ class Rom():
 
     def __init__(self, filename):
         self.file = open(filename, "rb")
+        self.SRAM = zeros(0x2000, dtype = uint8)
 
         self.header = self.file.read(16)
         print (self.header)
