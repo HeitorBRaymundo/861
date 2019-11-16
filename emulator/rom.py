@@ -19,6 +19,9 @@ class Rom():
             raise Exception("Invalid ROM for NES!")
 
         self.prg_rom_size = self.header[4]
+        self.chr_rom_size = self.header[5]
+        self.mirroring = bool((self.header[6] & 0b1) | (((self.header[6] >> 3) & 0b1) << 1))
+        self.mapper = (self.header[7] & 0xF0) | ((self.header[6] & 0xF0) >> 4)
 
         self.interrupt_handlers = {
             'NMI_HANDLER': 0xFFFA,
@@ -27,12 +30,9 @@ class Rom():
             'BRK_HANDLER': 0xFFFE,
         }
 
-        self.chr_rom_size = self.header[5]
         self.prg_rom = self.file.read(self.prg_rom_size * 1024 * 16)
-        self.mapper = (self.header[7] & 0xF0) | ((self.header[6] & 0xF0) >> 4)
-        self.mirroring = bool(self.header[6] & 0b1)
 
         try:
             self.chr_rom = self.file.read(self.chr_rom_size * 1024 * 8)
         except:
-            self.chr_rom = None
+            self.chr_rom = [0 for _ in range(8192)]
