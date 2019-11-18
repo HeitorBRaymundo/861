@@ -15,7 +15,7 @@ class System():
     stack_neg = False
     _counter = 0
     time = -1
-    def __init__ (self, rom):
+    def __init__ (self, rom, mapper):
         System._counter += 1
         self.id = System._counter
         self.A = 0
@@ -149,4 +149,4 @@ class System():
 
 if __name__ == '__main__':
     system = System()
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()

@@ -13,6 +13,9 @@ class Store_Op():
         except:
             raise Exception('Invalid register!')
 
+
+        # precisamos tratar diferente cada um do store/load na memoria, para verificar se o address eh entre
+        # 2000 e 2007 ou 4014, etc. para que a PPU possa funcionar corretamente :DD
         self.system.setMem(self.position, register_value)
 
         return True

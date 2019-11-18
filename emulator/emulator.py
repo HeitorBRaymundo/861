@@ -4,9 +4,9 @@ from py.operations import *
 from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
+from controllers import *
 import time
 import ppu
-from controllers import *
 import pygame
 # from teste_carts import igu
 
@@ -61,7 +61,7 @@ spriteList = []
 in_forever = True
 
 
-local_ppu = ppu.PPU([256, 240], nesROM)
+local_ppu = ppu.PPU(nesROM, 2)
 
 local_ppu.evaluate_sprite()
 
@@ -83,7 +83,7 @@ for j in bg:
     bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
 
 # print(bg_list)
-local_ppu.build_bg(bg_list)
+# local_ppu.build_bg(bg_list)
 
 for i in range(int(len(local_ppu.spriteWithHexColor))):
     # print(local_ppu.spriteWithHexColor[4*i:4*(i + 1)])

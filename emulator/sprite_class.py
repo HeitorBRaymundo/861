@@ -70,13 +70,14 @@ colors = {
 class Sprite(pygame.sprite.Sprite):
     #This class represents a car. It derives from the "Sprite" class in Pygame.
 
-    def __init__(self, width, height, drawing, flag):
+    def __init__(self, width, height, drawing, flag, color):
         # Call the parent class (Sprite) constructor
         super().__init__()
 
         # Pass in the color of the car, and its x and y position, width and height.
         # Set the background color and set it to be transparent
         self.image = pygame.Surface([width, height])
+        # Parametrizar pela color enviada pelo construtor
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
         self.flag = flag
