@@ -104,8 +104,8 @@ class PPU():
 
 
         self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
-        self.prg_bytes = nesROM.prg_rom
-        self.rom = nesROM
+        self.prg_bytes = nesROM.pgr_rom
+        self.nesROM = nesROM
         # entender o que é isso
         self.SPR_RAM = [0] * 0x0100
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
@@ -308,27 +308,27 @@ class PPU():
         # import pdb; pdb.set_trace()
         # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
-            print (self.prg_bytes[begin + i], self.prg_bytes[begin + i + 1], self.prg_bytes[begin + i + 2], self.prg_bytes[begin + i + 3])
+            print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
             # import pdb; pdb.set_trace()
             # print (hex(prg_bytes[i]), " ", deslocInicial)
-            if (hex(self.prg_bytes[begin + i]) != '0xff'):
+            if (hex(self.nesROM.pgr_rom[begin + i]) != '0xff'):
                 if (deslocInicial > 31 and deslocInicial % 4 == 1):
                     newList = []
-                    for j in spriteList[self.prg_bytes[begin + i]]:
+                    for j in spriteList[self.nesROM.pgr_rom[begin + i]]:
                         # + 16 para ir para o pallete das cores do sprite
-                        # (self.prg_bytes[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+                        # (self.nesROM.pgr_rom[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
                         # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
-                        newList.append(bin(self.prg_bytes[begin + 16 + 4 * (self.prg_bytes[begin + i + 1] % 4) + j])[2:].zfill(8))
+                        newList.append(bin(self.nesROM.pgr_rom[begin + 16 + 4 * (self.nesROM.pgr_rom[begin + i + 1] % 4) + j])[2:].zfill(8))
 
                     # import pdb; pdb.set_trace()
                     # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
-                    bin_flag.append(self.prg_bytes[begin + i + 1])
-                    if (self.prg_bytes[begin + i + 1] >= 64 and self.prg_bytes[begin + i + 1] < 128):
+                    bin_flag.append(self.nesROM.pgr_rom[begin + i + 1])
+                    if (self.nesROM.pgr_rom[begin + i + 1] >= 64 and self.nesROM.pgr_rom[begin + i + 1] < 128):
                         array_flag.append(True)
                     else:
                         array_flag.append(False)
                     # Posicao que ira criar o sprite em questao
-                    posSprite.append([self.prg_bytes[begin + i + 2], self.prg_bytes[begin + i - 1]])
+                    posSprite.append([self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i - 1]])
                     spriteColored.append(newList)
                     i = i + 3
                     deslocInicial = deslocInicial + 3
