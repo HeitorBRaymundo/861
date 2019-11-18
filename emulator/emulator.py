@@ -20,7 +20,7 @@ systemCPU = system.System(nesROM)
 pygame.init()
 pygame.display.set_mode((256, 224))
 
-pgr_bytes = nesROM.prg_rom
+# nesROM.pgr_rom = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
 chr_size = nesROM.chr_rom_size * 8 * 1024
 controler_read_state = 0
@@ -51,9 +51,9 @@ bg = local_ppu.sprites[0]
 bg_list = []
 for j in bg:
     # + 16 para ir para o pallete das cores do sprite
-    # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
+    # (nesROM.pgr_rom[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
     # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
-    bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
+    bg_list.append(bin(nesROM.pgr_rom[begin + j])[2:].zfill(8))
 
 # print(bg_list)
 # local_ppu.build_bg(bg_list)
@@ -66,10 +66,10 @@ local_ppu.render()
 
 # import pdb; pdb.set_trace()
 
-temp = pgr_bytes[0x2002] + 128
+temp = nesROM.pgr_rom[0x2002] + 128
 exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
-pgr_bytes = pgr_bytes[:0x2002] + temp + pgr_bytes[0x2003:]
-systemCPU.rom.prg_rom = pgr_bytes
+nesROM.pgr_rom = nesROM.pgr_rom[:0x2002] + temp + nesROM.pgr_rom[0x2003:]
+systemCPU.rom.prg_rom = nesROM.pgr_rom
 systemCPU.ppu_set = 1
 
 def execute(opcode, systemCPU, pgr_bytes):
@@ -1069,5 +1069,5 @@ def execute(opcode, systemCPU, pgr_bytes):
         pass
 
 while True:
-    opcode = hex(pgr_bytes[systemCPU.program_counter])
-    execute(opcode, systemCPU, pgr_bytes)
+    opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
+    execute(opcode, systemCPU, nesROM.pgr_rom)

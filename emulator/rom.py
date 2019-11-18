@@ -3,7 +3,7 @@ class Rom():
     header = None
     prg_rom_size = 0
     chr_rom_size = 0
-    prg_rom = None
+    pgr_rom = None
     chr_rom = None
     interrupt_handlers = {}
     mapper = -1
@@ -32,7 +32,7 @@ class Rom():
             'BRK_HANDLER': 0xFFFE,
         }
 
-        self.prg_rom = self.file.read(self.prg_rom_size * 1024 * 16)
+        self.pgr_rom = self.file.read(self.prg_rom_size * 1024 * 16)
 
 
         try:

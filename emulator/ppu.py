@@ -112,12 +112,6 @@ class PPU():
         self.scale = scale
 
 
-    def update_prg_bytes(self, newPgr):
-        self.prg_bytes = newPgr
-
-    def update_chr_bytes(self, newChr):
-        self.VRAM = newChr
-
     def build_bg(self, sprite):
         x_axis = 0
         y_axis = 0
