@@ -150,21 +150,17 @@ class PPU():
     
     def read_sprite(self, rom, chr_size):
         i = 0
-        flag = False
         sprite = []
         while i < 8:
             try:
                 temporary = bin(rom[i])[2:].zfill(8)
             except:
-                flag = False
                 break
             sprite.append(temporary)
-            if (temporary != '11111111'):
-                flag = True
             # print (i + i, " ", temporary)
             i = i + 1
 
-        return flag, sprite 
+        return sprite 
 
     # newMask eh um inteiro entre 0 e 255, precisamos parsear no formato 
     #Flags da PPUMASK ($2001)
@@ -259,39 +255,37 @@ class PPU():
     def evaluate_sprite(self):
         
         i = 0
+        bgList = []
         spriteList = []
-        while i < self.chr_size:
-            # import pdb; pdb.set_trace()
-
-            # A principio, supomos que nao eh um sprite, se encontrar um valor diferente de '0xff', eh um sprite
-            flagLow = False
-            flagHigh = False
+        while i < self.chr_size/2:
             lowList = []
             highList = []
             colorList = []
 
-            flagLow, lowList = self.read_sprite(self.VRAM[i:], 8)
-            flagHigh, highList = self.read_sprite(self.VRAM[i + 8:], 8)
+            lowList = self.read_sprite(self.VRAM[i:], 8)
+            highList = self.read_sprite(self.VRAM[i + 8:], 8)
             
-            # colorList = []
             for j in range(8):
-                # a = []
                 for k in range(8):
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-                    # a.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-                # colorList.append(a)
-            spriteList.append(colorList)
-                
-            # Andamos de 8 em 8 posicoes (tamanho do sprite)
+            bgList.append(colorList)
             i = i + 16
 
-        a = 0
-        for i in spriteList:
-            print (a)
-            a = a + 1
-            print (i)
-        import pdb; pdb.set_trace()
-        # import time; time.sleep(3)
+        while i < self.chr_size:
+            lowList = []
+            highList = []
+            colorList = []
+
+            lowList = self.read_sprite(self.VRAM[i:], 8)
+            highList = self.read_sprite(self.VRAM[i + 8:], 8)
+            
+            for j in range(8):
+                for k in range(8):
+                    colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
+            spriteList.append(colorList)
+            i = i + 16
+        
+        self.bgSprite = bgList
         self.sprites = spriteList
         self.colorSprites()
 
