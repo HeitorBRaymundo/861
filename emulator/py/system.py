@@ -16,7 +16,7 @@ class System():
     cycle_counter = 0
     _counter = 0
     time = -1
-    def __init__ (self, rom, mapper):
+    def __init__ (self, rom):
         System._counter += 1
         self.id = System._counter
         self.A = 0
