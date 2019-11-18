@@ -4,9 +4,9 @@ from py.operations import *
 from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
+from controllers import *
 import time
 import ppu
-from controllers import *
 import pygame
 
 try:
@@ -31,117 +31,22 @@ player2_key_index = 0
 
 i = 0
 spriteList = []
-posSprite = []
 in_forever = True
-# percorre todos os CHR para separa os sprites
-# input: chr_pgr e chr_size
-# output: spriteList (cada entrada da lsita é uma lista com a cor já mapeada (mas ainda não é o valor da cor hexa exata)
-# isso será tratado em seguida (podemos migrar para ca)
-while i < chr_size:
-
-    # A principio, supomos que nao eh um sprite, se encontrar um valor diferente de '0xff', eh um sprite
-    flag = False
-    lowList = []
-    highList = []
-
-    j = 0
-    while j < 8:
-        try:
-            temporary = bin(chr_rom[i + j])[2:].zfill(8)
-        except:
-            flag = False
-            break
-        lowList.append(temporary)
-        if (temporary != '11111111'):
-            flag = True
-        # print (i + j, " ", temporary)
-        j = j + 1
-
-    # Andamos de 8 em 8 posicoes (tamanho do sprite)
-    i = i + 8
-
-    # Se encontrou um potencial sprite, verificar se o proximo byte eh o High
-    if (flag):
-        j = 0
-        flag = False
-        while j < 8:
-            try:
-                temporary = bin(chr_rom[i + j])[2:].zfill(8)
-            except:
-                flag = False
-                break
-            # print (temporary)
-            highList.append(temporary)
-            if (temporary != '11111111'):
-                flag = True
-            j = j + 1
-
-        # se encontrou o High do sprite, talvez nao precisemos disso, supoe que semrpe tem low e high
-        if (flag):
-            i = i + 8
-            colorList = []
-            # une o low e high bit para mapear qual sera a cor em cada posicao do sprite
-            for j in range(8):
-                for k in range(8):
-                    colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-            spriteList.append(colorList)
-        
-positionConfigSprite = 0xe000
 
 
-# ESSA PARTE IRA QUANDO O CLOCK BATER 60. COMO O PROPRIO JOGO IRA ALTERAR O VALOR DO X E Y DO PACMAN, IRA FUNCIONAR AS EXPECTED
+local_ppu = ppu.PPU(nesROM, 2)
+
+local_ppu.evaluate_sprite()
 
 # Inicializa i e begin com a posicao inicial das informacoes do sprite (onde ele esta, qual a cor, se reflete, etc.)
-i = positionConfigSprite - systemCPU.PC_OFFSET
-begin = positionConfigSprite - systemCPU.PC_OFFSET
-# existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)
+begin = local_ppu.positionConfigSprite - local_ppu.PC_OFFSET
+
 maxSprite = i + 256
 
 
-# retirar o primeiro sprite que eh o bg
-# bg = [spriteList[0], spriteList[0], spriteList[0], spriteList[0]]
-bg = spriteList[0]
-spriteList = spriteList[1:]
+# retirar o primeiro sprite que eh o bg <-- ISSO NO NOSSO PACMAN
 
-# local_ppu = ppu.PPU([500, 500])
-
-# pulo de 32 pois eh o upload dos pallets
-spriteWithHexColor = []
-offsetzinho = 0
-deslocInicial = 0
-array_flag = []
-bin_flag = []
-
-while i < maxSprite:
-    # print (hex(pgr_bytes[i]), " ", deslocInicial)
-    if (hex(pgr_bytes[i]) != '0xff'):
-        if (deslocInicial > 31 and deslocInicial % 4 == 1):
-            newList = []
-            for j in spriteList[pgr_bytes[i]]:
-                # + 16 para ir para o pallete das cores do sprite
-                # (pgr_bytes[i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
-                # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
-                newList.append(bin(pgr_bytes[begin + 16 + 4 * (pgr_bytes[i + 1] % 4) + j])[2:].zfill(8))
-
-            # import pdb; pdb.set_trace()
-            # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
-            bin_flag.append(pgr_bytes[i + 1])
-            if (pgr_bytes[i + 1] >= 64 and pgr_bytes[i + 1] < 128):
-                array_flag.append(True)
-            else:
-                array_flag.append(False)
-            # Posicao que ira criar o sprite em questao
-            posSprite.append([pgr_bytes[i + 2], pgr_bytes[i - 1]])
-            spriteWithHexColor.append(newList)
-            i = i + 3
-            deslocInicial = deslocInicial + 3
-
-    i = i + 1
-    deslocInicial = deslocInicial + 1
-
-# time.sleep(10)
-# array_flag = [array_flag[1], array_flag[0], array_flag[3], array_flag[2]]
-local_ppu = ppu.PPU([256, 240])
+bg = local_ppu.sprites[0]
 
 bg_list = []
 for j in bg:
@@ -151,11 +56,11 @@ for j in bg:
     bg_list.append(bin(pgr_bytes[begin + j])[2:].zfill(8))
 
 # print(bg_list)
-local_ppu.build_bg(bg_list)
+# local_ppu.build_bg(bg_list)
 
-for i in range(int(len(spriteWithHexColor))):
-    # print(spriteWithHexColor[4*i:4*(i + 1)])
-    local_ppu.build_sprite(spriteWithHexColor[i], posSprite[i], array_flag[i])
+for i in range(int(len(local_ppu.spriteWithHexColor))):
+    # print(local_ppu.spriteWithHexColor[4*i:4*(i + 1)])
+    local_ppu.build_sprite(local_ppu.spriteWithHexColor[i], local_ppu.posSprite[i], local_ppu.array_flag[i])
 
 local_ppu.render()
 
@@ -468,12 +373,13 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
+        local_ppu.evaluate_sprite()
         local_ppu.all_sprites_list = pygame.sprite.Group()
         for i in range (0x200,0x2ff, 4):
             if (systemCPU.loadMem(i) != -1 and local_ppu.flag_enable_render):
                 pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
-                spritesToPrint = spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)]
-                array_flags_to_print = array_flag[systemCPU.loadMem(i + 1)]
+                spritesToPrint = local_ppu.spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)]
+                array_flags_to_print = local_ppu.array_flag[systemCPU.loadMem(i + 1)]
                 local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
         local_ppu.render()
         systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
