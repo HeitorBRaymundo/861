@@ -3,7 +3,7 @@ class System():
     A = 0
     X = 0
     Y = 0
-    mem = [0] * 2048
+    mem = [0] * 2049
     FLAGS = {"C": 0, "Z": 0, "I": 0, "D": 0, "B": 0, "O": 0, "N": 0}
     stack = []
     rom = None
@@ -22,7 +22,7 @@ class System():
         self.A = 0
         self.X = 0
         self.Y = 0
-        self.mem = [-1] * 2048
+        self.mem = [-1] * 2049
         self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = [0] * 512
         self.rom = rom
@@ -42,19 +42,19 @@ class System():
         return self.A
 
     def setA(self, newA):
-        self.A = newA
+        self.A = newA % 256
 
     def getX(self):
         return self.X
 
     def setX(self, newX):
-        self.X = newX
+        self.X = newX % 256
 
     def getY(self):
         return self.Y
 
     def setY(self, newY):
-        self.Y = newY
+        self.Y = newY % 256
 
     def getFLAG(self, flag = 0):
         if (flag):
@@ -99,56 +99,41 @@ class System():
         return hex(self.stack_pointer) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
 
     def setMem(self, address, value):
-        try:
-            # map the addres between 0 to 0x0800
-            if type(address) == str:
-                converted_address = int(address, 16) & int('0x7ff', 16)
-            else:
-                converted_address = int(address) & int('0x7ff', 16)
-        except:
-            raise Exception('Invalid type of address!')
-
-        if converted_address == 8:
-            if self.loadMem(8) != value:
-                if self.time == -1:
-                    self.time = time.time()
-                else:
-                    last_time = self.time
-                    self.time = time.time()
-                    if self.time - last_time < 2:
-                        # print('\t',self.time - last_time)
-                        return
-                        
-                    
-        try:
-            # save the value
-            self.mem[converted_address] = value
-        except:
-            raise Exception("Invalid address!")
-
-    def loadMem(self, address):
-        try:
-            if not address == 0x2002:
+        # print(hex(self.program_counter + 0x8000))
+        print(hex(address),value)
+        if address < 0x2000:
+            try:
                 # map the addres between 0 to 0x0800
                 if type(address) == str:
                     converted_address = int(address, 16) & int('0x7ff', 16)
                 else:
                     converted_address = int(address) & int('0x7ff', 16)
-            else:
-                converted_address = address
-        except:
-            raise Exception('Invalid type of address!')
+            except:
+                raise Exception('Invalid type of address!')
+            try:
+                # save the value
+                self.mem[converted_address] = value
+            except:
+                import pdb;pdb.set_trace()
+                raise Exception("Invalid address!")
 
-        # converted_address = address
-        try:
-            # save the value
-            if converted_address == 0x2002:
-                return self.rom.pgr_rom[converted_address]
-            else:
-                return self.mem[converted_address]
-        except:
-            raise Exception("Invalid address!")
-        #     return False
+    def loadMem(self, address):
+        print(hex(address))
+        if address < 0x2000:            
+            try:
+                # map the addres between 0 to 0x0800
+                if type(address) == str:
+                    converted_address = int(address, 16) & int('0x7ff', 16)
+                else:
+                    converted_address = int(address) & int('0x7ff', 16)
+            except:
+                raise Exception('Invalid type of address!')
+
+            return self.mem[converted_address]
+        elif address >= 0x8000:
+            return self.rom.pgr_rom[address - self.PC_OFFSET]
+        elif address == 0x2002:
+            return self.rom.pgr_rom[0x2002]
 
 
 if __name__ == '__main__':

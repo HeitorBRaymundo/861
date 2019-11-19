@@ -118,7 +118,7 @@ class Load_Op():
             value_to_load = self.value
         else:
             try:
-                value_to_load = self.system.loadMem(self.position)
+                value_to_load = (self.system).loadMem(self.position)
             except:
                 raise Exception('Invalid number from memory!')
 
@@ -130,8 +130,9 @@ class Load_Op():
 
         # if self.register == 'A':
             # set negative flag
+        
         self.system.FLAGS["N"] = int_to_bit(value_to_load)[0]
-
+    
         # put the value into the register
         try:
             value_to_load = str(value_to_load)

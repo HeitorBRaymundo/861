@@ -308,7 +308,7 @@ class PPU():
         # import pdb; pdb.set_trace()
         # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
-            print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
+            # print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
             # import pdb; pdb.set_trace()
             # print (hex(prg_bytes[i]), " ", deslocInicial)
             if (hex(self.nesROM.pgr_rom[begin + i]) != '0xff'):

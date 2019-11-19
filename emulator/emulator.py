@@ -31,7 +31,7 @@ player2_key_index = 0
 
 i = 0
 spriteList = []
-in_forever = True
+in_forever = False
 
 
 local_ppu = ppu.PPU(nesROM, 2)
@@ -80,6 +80,11 @@ def execute(opcode, systemCPU, pgr_bytes):
     addr = None
     stack = None
     all_keys = latch_controllers()
+
+    # if systemCPU.program_counter == (0x82f9 - 0x8000):
+        # import pdb;pdb.set_trace()
+
+    # print(systemCPU.mem)
 
     if opcode == '0x0':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -373,6 +378,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
+        # import pdb;pdb.set_trace()
+
         local_ppu.evaluate_sprite()
         local_ppu.all_sprites_list = pygame.sprite.Group()
         for i in range (0x200,0x2ff, 4):
@@ -420,6 +427,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         if page_diff(old_pc, systemCPU.program_counter):
             systemCPU.cycle_counter += 2
     elif opcode == '0x4c': # JMP abs
+        # import pdb;pdb.set_trace()
         global in_forever
         if in_forever:
             pgr_bytes = nesROM.prg_rom
@@ -881,6 +889,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         StoreInA0x99(register='A', address=addr, system=systemCPU)
         systemCPU.cycle_counter += 5
     elif opcode == '0x9d':
+        if systemCPU.program_counter == 0x106:
+            import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
@@ -941,7 +951,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
-        addr = get_absolute_addr(operand_low, operand_high)
+        addr = get_absolute_addr(operand_low, operand_high)            
         if (addr == 16406):
             systemCPU.A = get_key(all_keys, player1_key_index, 1)
             if player1_key_index != 7:
@@ -1024,6 +1034,11 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
+
+        # if addr == 0x8004:
+        #     import pdb;pdb.set_trace()
+
+
         LoadInA0xBD(register='A', position=addr, system=systemCPU)
         systemCPU.cycle_counter += 4
         if page_diff(addr, addr - systemCPU.getX()):
@@ -1069,5 +1084,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         pass
 
 while True:
+    # print(hex(systemCPU.program_counter + 0x8000))
+    # time.sleep(0.1)
     opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
     execute(opcode, systemCPU, nesROM.pgr_rom)
