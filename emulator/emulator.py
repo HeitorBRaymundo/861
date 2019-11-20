@@ -1097,24 +1097,16 @@ while True:
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
                                       systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
                                       systemCPU.PC_OFFSET
-
+            local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
-            for i in range (0x200,0x2ff, 4):
-                if (systemCPU.loadMem(i) != -1 and local_ppu.flag_enable_render):
-                    print(hex(i))
-                    pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
-                    print("*******************************************")
-                    print(systemCPU.mem)
-                    print("*******************************************")
-                    print("------------------------------")
-                    print((systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)) % 64)
-                    print(len(local_ppu.spriteWithHexColor))
-                    print("------------------------------")
-                    # import pdb;pdb.set_trace()
-                    spritesToPrint = local_ppu.spriteWithHexColor[(systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4))%64]
-                    array_flags_to_print = local_ppu.array_flag[systemCPU.loadMem(i + 1)]
+            for i in range (64):
+                if (local_ppu.flag_enable_render):
+                    pos = local_ppu.posSprite[i]
+                    spritesToPrint = local_ppu.spriteWithHexColor[i]
+                    array_flags_to_print = local_ppu.array_flag[i]
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
+            # import pdb;pdb.set_trace()
             local_ppu.render()
 
         run_count = 0
