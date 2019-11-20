@@ -108,7 +108,7 @@ class PPU():
         # entender o que é isso
         self.SPR_RAM = [0] * 0x0100
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
-        self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
+        self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
         # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
         self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
         print ("Sprite:")
@@ -314,20 +314,25 @@ class PPU():
         # local_ppu = ppu.PPU([500, 500])
 
         # pulo de 32 pois eh o upload dos pallets
+        # temp = []
         spriteColored = []
         deslocInicial = 0
         array_flag = []
         bin_flag = []
         posSprite = []
 
-        # print (self.SPR_RAM)
-        # import pdb; pdb.set_trace();
+        print ("AAAAAAAAAAAAAAA")
+        print (self.SPR_RAM)
+        import pdb; pdb.set_trace();
         # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
             # print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
             # print (hex(prg_bytes[i]), " ", deslocInicial)
             newList = []
-            for j in spriteList[i//4]:
+            print ("i: ",i)
+            for j in spriteList[self.SPR_RAM[i + 1]]:
+                # print ("j: ",j)
+                # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)
                 # (self.nesROM.pgr_rom[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
                 # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
                 # print ((4 * (self.SPR_RAM[i + 2] % 4)) + j)
@@ -346,6 +351,13 @@ class PPU():
 
             i = i + 4
             deslocInicial = deslocInicial + 4
+        i = 0
+        # spriteColored = []
+        # print ("AAAA", len(temp))
+        print (self.SPR_RAM)
+        # while i < 256:
+        #     spriteColored.append(temp[(self.SPR_RAM[i + 1] % 64) ])
+        #     i = i + 4
 
         self.array_flag = array_flag
         self.bin_flag = bin_flag
