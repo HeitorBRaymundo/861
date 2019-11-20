@@ -378,18 +378,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
-        # import pdb;pdb.set_trace()
-
-        local_ppu.evaluate_sprite()
-        local_ppu.all_sprites_list = pygame.sprite.Group()
-        for i in range (0x200,0x2ff, 4):
-            if (systemCPU.loadMem(i) != -1 and local_ppu.flag_enable_render):
-                pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
-                spritesToPrint = local_ppu.spriteWithHexColor[systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)]
-                array_flags_to_print = local_ppu.array_flag[systemCPU.loadMem(i + 1)]
-                local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
-        local_ppu.render()
-        systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
+        systemCPU.on_nmi = False
         systemCPU.cycle_counter += 6
     elif opcode == '0x58':
         systemCPU.program_counter = systemCPU.program_counter + 1
@@ -431,7 +420,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         global in_forever
         if in_forever:
             pgr_bytes = nesROM.prg_rom
-            systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - 0x8000
+            
             in_forever = False
             systemCPU.stack_push(systemCPU.program_counter,2)
             systemCPU.stack_push(0,1)
@@ -1083,8 +1072,41 @@ def execute(opcode, systemCPU, pgr_bytes):
         print ("Erro")
         pass
 
+run_count = 0
+
 while True:
-    # print(hex(systemCPU.program_counter + 0x8000))
-    # time.sleep(0.1)
+
     opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
     execute(opcode, systemCPU, nesROM.pgr_rom)
+
+    run_count += 1
+
+    if run_count == 37:
+        if systemCPU.active_nmi and not (systemCPU.on_nmi):
+            systemCPU.on_nmi = True
+            systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
+                                      systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
+                                      systemCPU.PC_OFFSET
+
+            local_ppu.evaluate_sprite()
+            local_ppu.all_sprites_list = pygame.sprite.Group()
+            for i in range (0x200,0x2ff, 4):
+                if (systemCPU.loadMem(i) != -1 and local_ppu.flag_enable_render):
+                    print(hex(i))
+                    pos = [systemCPU.loadMem(i + 3), systemCPU.loadMem(i)]
+                    print("*******************************************")
+                    print(systemCPU.mem)
+                    print("*******************************************")
+                    print("------------------------------")
+                    print((systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4)) % 64)
+                    print(len(local_ppu.spriteWithHexColor))
+                    print("------------------------------")
+                    # import pdb;pdb.set_trace()
+                    spritesToPrint = local_ppu.spriteWithHexColor[(systemCPU.loadMem(i + 1)  + 4 * (systemCPU.loadMem(i + 2) % 4))%64]
+                    array_flags_to_print = local_ppu.array_flag[systemCPU.loadMem(i + 1)]
+                    local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
+            local_ppu.render()
+
+        run_count = 0
+        systemCPU.cycle_counter = 0
+

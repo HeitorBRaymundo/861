@@ -16,6 +16,8 @@ class System():
     cycle_counter = 0
     _counter = 0
     time = -1
+    on_nmi = False
+    active_nmi = False
     def __init__ (self, rom):
         System._counter += 1
         self.id = System._counter
@@ -37,6 +39,8 @@ class System():
         self.ppu_set = 0
         self.time = -1
         self.cycle_counter = 0
+        self.on_nmi = False
+        self.active_nmi = False
 
     def getA(self):
         return self.A
@@ -100,7 +104,8 @@ class System():
 
     def setMem(self, address, value):
         # print(hex(self.program_counter + 0x8000))
-        print(hex(address),value)
+        # print(hex(address),value)
+
         if address < 0x2000:
             try:
                 # map the addres between 0 to 0x0800
@@ -116,9 +121,17 @@ class System():
             except:
                 import pdb;pdb.set_trace()
                 raise Exception("Invalid address!")
+        elif address == 0x2000:
+            # print("AAAAAAAAAAAAAAA")
+            # print((value & 0b10000000) > 0)
+            # print("AAAAAAAAAAAAAAA")
+            self.active_nmi = (value & 0b10000000) > 0
 
+
+        
+                
     def loadMem(self, address):
-        print(hex(address))
+        # print(hex(address))
         if address < 0x2000:            
             try:
                 # map the addres between 0 to 0x0800
