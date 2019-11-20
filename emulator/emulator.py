@@ -34,7 +34,7 @@ spriteList = []
 in_forever = False
 
 
-local_ppu = ppu.PPU(nesROM, 2)
+local_ppu = ppu.PPU(nesROM, 1)
 
 local_ppu.evaluate_sprite()
 
@@ -1100,12 +1100,15 @@ while True:
             local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
+            # import pdb;pdb.set_trace()
             for i in range (64):
                 if (local_ppu.flag_enable_render):
                     pos = local_ppu.posSprite[i]
                     spritesToPrint = local_ppu.spriteWithHexColor[i]
                     array_flags_to_print = local_ppu.array_flag[i]
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
+        
+            local_ppu.corno_func()
             # import pdb;pdb.set_trace()
             local_ppu.render()
 

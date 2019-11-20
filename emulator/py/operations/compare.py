@@ -38,7 +38,6 @@ class CMP_Op():
                 self.system.setFLAG("N", 0)
 
         elif (self.group == 'EOR'):
-            # import pdb; pdb.set_trace()
             res = self.first_value ^ self.second_value
             self.system.setA(res)
             if (not res):

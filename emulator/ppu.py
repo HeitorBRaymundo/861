@@ -95,12 +95,11 @@ class PPU():
         self.VRAM[:0x2000] = nesROM.chr_rom
         # self.chr_rom = nesROM.chr_rom
         self.chr_size = nesROM.chr_rom_size * 8 * 1024   
-        self.size = [self.default_width * scale, self.default_height * scale]
-        self.screen = pygame.display.set_mode(self.size)
-
+        self.scale = scale
+        self.screen = pygame.display.set_mode((self.default_width * self.scale, self.default_height * self.scale))
 
         self.pic = pygame.surface.Surface((self.default_width, self.default_height))
-        self.screen.blit(pygame.transform.scale(self.pic, (scale * self.default_width, scale * self.default_height)), (0, 0))
+        self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
 
 
         self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
@@ -109,8 +108,15 @@ class PPU():
         # entender o que é isso
         self.SPR_RAM = [0] * 0x0100
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
-        self.scale = scale
-
+        self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
+        # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
+        self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
+        print ("Sprite:")
+        for i in self.sprite_palette:
+            print(i)
+        print ("BG:")
+        for i in self.bg_palette:
+            print(i)
 
     def build_bg(self, sprite):
         x_axis = 0
@@ -127,6 +133,12 @@ class PPU():
                 self.bg.add(bg)
             x_axis = 0
             y_axis = y_axis + 8
+
+    def corno_func(self):
+        self.pic = pygame.surface.Surface((self.default_width, self.default_height))
+        self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
+        pygame.display.update()
+        
 
     # newControl eh um inteiro entre 0 e 255, precisamos parsear no formato
     #Flags da PPUCTRL ($2000)
@@ -273,7 +285,6 @@ class PPU():
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
             bgList.append(colorList)
             i = i + 16
-
         while i < self.chr_size:
             lowList = []
             highList = []
@@ -296,7 +307,6 @@ class PPU():
         # retirar o primeiro sprite que eh o bg <-- ISSO NO CASO DO NOSSO PACMAN!
         i  = 0
         # begin = self.rom.mapper self.positionConfigSprite - self.PC_OFFSET
-        # import pdb; pdb.set_trace()
         begin = (self.positionConfigSprite - self.PC_OFFSET)%0x4000
         spriteList = self.sprites
         print (spriteList)
@@ -309,19 +319,21 @@ class PPU():
         array_flag = []
         bin_flag = []
         posSprite = []
-        # import pdb; pdb.set_trace()
+
+        # print (self.SPR_RAM)
+        # import pdb; pdb.set_trace();
         # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
             # print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
-            # import pdb; pdb.set_trace()
             # print (hex(prg_bytes[i]), " ", deslocInicial)
             newList = []
             for j in spriteList[i//4]:
                 # (self.nesROM.pgr_rom[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
                 # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
-                newList.append(bin(self.nesROM.pgr_rom[begin + 16 + 4 * (self.SPR_RAM[i + 2] % 4) + j])[2:].zfill(8))
+                # print ((4 * (self.SPR_RAM[i + 2] % 4)) + j)
+                # print (len(self.sprite_palette))
+                newList.append(bin(self.sprite_palette[(4 * (self.SPR_RAM[i + 2] % 4)) + j])[2:].zfill(8))
 
-            # import pdb; pdb.set_trace()
             # Verificacao se precisa inverter verticalmente (falta fazer horizontalmente)
             bin_flag.append(self.nesROM.pgr_rom[begin + i + 1])
             if (self.SPR_RAM[i + 2] >= 64 and self.SPR_RAM[i + 2] < 128):
@@ -339,7 +351,6 @@ class PPU():
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
         self.posSprite = posSprite
-        # import pdb; pdb.set_trace()
 
 
     def tick(self):
