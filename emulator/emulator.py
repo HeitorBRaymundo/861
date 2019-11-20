@@ -822,6 +822,17 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
+
+        # if (addr == 0x2000 and systemCPU.A == 128):
+        #     print ("EEEEEEEEEOOOOO")
+        #     local_ppu.update_rom(systemCPU.mem[0x200:0x300])
+        #     local_ppu.evaluate_sprite()
+        #     for i in range(int(len(local_ppu.spriteWithHexColor))):
+        #         # print(local_ppu.spriteWithHexColor[4*i:4*(i + 1)])
+        #         local_ppu.build_sprite(local_ppu.spriteWithHexColor[i], local_ppu.posSprite[i], local_ppu.array_flag[i])
+        #     import pdb;pdb.set_trace();
+        #     local_ppu.render()
+
         if (addr == 16406 or addr == 16407):
             if (controler_read_state == 0 and systemCPU.A == 1):
                 controler_read_state = 1
@@ -1026,7 +1037,6 @@ def execute(opcode, systemCPU, pgr_bytes):
 
         # if addr == 0x8004:
         #     import pdb;pdb.set_trace()
-
 
         LoadInA0xBD(register='A', position=addr, system=systemCPU)
         systemCPU.cycle_counter += 4
