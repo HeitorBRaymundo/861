@@ -31,7 +31,10 @@ class System():
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
         self.program_counter = ((self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8) +  \
                                 (self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET])) -          \
-                                 0x8000
+                                 self.PC_OFFSET
+        print("-----------------------------------------------------------")
+        print("INITIAL PC: ", hex(self.program_counter + 0x8000))
+        print("-----------------------------------------------------------")
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
         self.branch_hit = False
@@ -104,7 +107,7 @@ class System():
 
     def setMem(self, address, value):
         # print(hex(self.program_counter + 0x8000))
-        # print(hex(address),value)
+        print(hex(address),value)
 
         if address < 0x2000:
             try:

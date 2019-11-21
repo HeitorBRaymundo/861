@@ -114,12 +114,12 @@ class PPU():
         # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
         self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
         self.bg_palette = [45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45]
-        print ("Sprite:")
-        for i in self.sprite_palette:
-            print(i)
-        print ("BG:")
-        for i in self.bg_palette:
-            print(i)
+        # print ("Sprite:")
+        # for i in self.sprite_palette:
+        #     print(i)
+        # print ("BG:")
+        # for i in self.bg_palette:
+        #     print(i)
 
     def build_bg(self, sprite):
         x_axis = 0
@@ -333,8 +333,8 @@ class PPU():
         begin = (self.positionConfigSprite - self.PC_OFFSET)%0x4000
         background = self.bgSprite
         spriteList = self.sprites
-        print (spriteList)
-        print ("begin", begin)
+        # print (spriteList)
+        # print ("begin", begin)
         # local_ppu = ppu.PPU([500, 500])
         
         attribute_bg = self.VRAM[self.nametable_address + 0x3C0:self.nametable_address + 0x400]
@@ -374,7 +374,7 @@ class PPU():
             # print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
             # print (hex(prg_bytes[i]), " ", deslocInicial)
             newList = []
-            print ("i: ",i)
+            # print ("i: ",i)
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)
@@ -399,7 +399,7 @@ class PPU():
         i = 0
         # spriteColored = []
         # print ("AAAA", len(temp))
-        print (self.SPR_RAM)
+        # print (self.SPR_RAM)
         # while i < 256:
         #     spriteColored.append(temp[(self.SPR_RAM[i + 1] % 64) ])
         #     i = i + 4
