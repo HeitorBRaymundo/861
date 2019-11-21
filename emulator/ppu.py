@@ -295,7 +295,7 @@ class PPU():
         bgList = []
         spriteList = []
         # import pdb; pdb.set_trace()
-        while i < self.chr_size/2:
+        while i < self.chr_size/(2*self.nesROM.chr_rom_size):
             lowList = []
             highList = []
             colorList = []
@@ -308,7 +308,7 @@ class PPU():
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
             bgList.append(colorList)
             i = i + 16
-        while i < self.chr_size:
+        while i < self.chr_size/(self.nesROM.chr_rom_size):
             lowList = []
             highList = []
             colorList = []
@@ -322,6 +322,8 @@ class PPU():
             spriteList.append(colorList)
             i = i + 16
         
+        # import pdb; pdb.set_trace()
+
         self.bgSprite = bgList
         self.sprites = spriteList
         self.colorSprites()
@@ -339,24 +341,29 @@ class PPU():
         
         attribute_bg = self.VRAM[self.nametable_address + 0x3C0:self.nametable_address + 0x400]
         bgFinal = []
-        print (attribute_bg)
+        # print (attribute_bg)
         for j in range (0,len(background)):
             newList = []
-            for j in background[j]:
-                # MOCADISSIMO ARRUMAR 
-                binario =  bin(int(j / 4))[2:].zfill(8)
-                decimal = int(j/4)
-                if ((int(decimal) % 4) == 0):
+            for k in background[j]:
+                # MOCADISSIMO ARRUMAR
+                print (j)
+                # import pdb; pdb.set_trace()
+                # if (j == 256):
+                #     import pdb; pdb.set_trace()
+                decimal = attribute_bg[int(j / 4)]
+                binario =  bin(attribute_bg[int(j / 4)])[2:].zfill(8)
+                if ((j % 4) == 0):
                     palette_index = int(binario[7]) * 2 + int(binario[6])
-                if ((int(decimal) % 4) == 1):
+                if ((j % 4) == 1):
                     palette_index = int(binario[5]) * 2 + int(binario[4])
-                if ((int(decimal) % 4) == 2):
+                if ((j % 4) == 2):
                     palette_index = int(binario[3]) * 2 + int(binario[2])
-                if ((int(decimal) % 4) == 3):
+                if ((j % 4) == 3):
                     palette_index = int(binario[1]) * 2 + int(binario[0])
                 # import pdb; pdb.set_trace()
                 # print(palette_index)
-                newList.append(bin(self.bg_palette[(4 * (attribute_bg[palette_index])) + j])[2:].zfill(8))
+                # print (palette_index, k)
+                newList.append(bin(self.bg_palette[(4 * (palette_index)) + k])[2:].zfill(8))
             bgFinal.append(newList) 
         # pulo de 32 pois eh o upload dos pallets
         # temp = []
