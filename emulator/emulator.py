@@ -1097,9 +1097,10 @@ while True:
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
                                       systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
                                       systemCPU.PC_OFFSET
-            local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
+            local_ppu.update_bg()
+            local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
             # import pdb;pdb.set_trace()
             for i in range (64):
                 if (local_ppu.flag_enable_render):

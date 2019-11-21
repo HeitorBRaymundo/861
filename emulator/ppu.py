@@ -79,6 +79,7 @@ class PPU():
     # VARIAVEIS ANTES USADAS NO EMULATOR.PY
     sprites = []
     spriteWithHexColor = []
+    bgColored = []
     array_flag = []
     bin_flag = []
     posSprite = []
@@ -87,7 +88,7 @@ class PPU():
     default_width = 256
     default_height = 224
 
-    VRAM = [0] * 0x2000
+    VRAM = [0] * 0x5000
 
     def __init__(self, nesROM, scale):
         # size = [width, height]
@@ -109,8 +110,10 @@ class PPU():
         self.SPR_RAM = [0] * 0x0100
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
         self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
+        self.nametable_address = 0x2000
         # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
         self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
+        self.bg_palette = [45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45]
         print ("Sprite:")
         for i in self.sprite_palette:
             print(i)
@@ -138,7 +141,26 @@ class PPU():
         self.pic = pygame.surface.Surface((self.default_width, self.default_height))
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
         pygame.display.update()
+
+    def update_bg(self):
+
+        # pattern_table = self.background_pattern_table
+        # nametable = self.VRAM[self.nametable_address:attribute_table_address]
+        # attribute_table = self.VRAM[attribute_table_address:attribute_table_address + 0x40]
+        # color_handler = self.color_handler
+        # pic = self.pic
+
+        # self.bgList
+        begin = self.name_table
+        end = begin + 0x3c0
+
+        for i in range(begin, end, 1):
+            row = int(i/32)
+            column = i % 32
+            print (row, column)
+            self.build_sprite(self.bgColored[0], (column * 8, row * 8), False)
         
+        # import pdb; pdb.set_trace()
 
     # newControl eh um inteiro entre 0 e 255, precisamos parsear no formato
     #Flags da PPUCTRL ($2000)
@@ -272,6 +294,7 @@ class PPU():
         i = 0
         bgList = []
         spriteList = []
+        # import pdb; pdb.set_trace()
         while i < self.chr_size/2:
             lowList = []
             highList = []
@@ -308,11 +331,33 @@ class PPU():
         i  = 0
         # begin = self.rom.mapper self.positionConfigSprite - self.PC_OFFSET
         begin = (self.positionConfigSprite - self.PC_OFFSET)%0x4000
+        background = self.bgSprite
         spriteList = self.sprites
         print (spriteList)
         print ("begin", begin)
         # local_ppu = ppu.PPU([500, 500])
-
+        
+        attribute_bg = self.VRAM[self.nametable_address + 0x3C0:self.nametable_address + 0x400]
+        bgFinal = []
+        print (attribute_bg)
+        for j in range (0,len(background)):
+            newList = []
+            for j in background[j]:
+                # MOCADISSIMO ARRUMAR 
+                binario =  bin(int(j / 4))[2:].zfill(8)
+                decimal = int(j/4)
+                if ((int(decimal) % 4) == 0):
+                    palette_index = int(binario[7]) * 2 + int(binario[6])
+                if ((int(decimal) % 4) == 1):
+                    palette_index = int(binario[5]) * 2 + int(binario[4])
+                if ((int(decimal) % 4) == 2):
+                    palette_index = int(binario[3]) * 2 + int(binario[2])
+                if ((int(decimal) % 4) == 3):
+                    palette_index = int(binario[1]) * 2 + int(binario[0])
+                # import pdb; pdb.set_trace()
+                # print(palette_index)
+                newList.append(bin(self.bg_palette[(4 * (attribute_bg[palette_index])) + j])[2:].zfill(8))
+            bgFinal.append(newList) 
         # pulo de 32 pois eh o upload dos pallets
         # temp = []
         spriteColored = []
@@ -321,9 +366,9 @@ class PPU():
         bin_flag = []
         posSprite = []
 
-        print ("AAAAAAAAAAAAAAA")
-        print (self.SPR_RAM)
-        import pdb; pdb.set_trace();
+        # print ("AAAAAAAAAAAAAAA")
+        # print (self.SPR_RAM)
+        # import pdb; pdb.set_trace();
         # existe uma limitacao de 64 sprites (cada sprite tem 4 bytes de configuracao, totalizando 256 posicoes de memoria)     
         while i < 256:
             # print (self.nesROM.pgr_rom[begin + i], self.nesROM.pgr_rom[begin + i + 1], self.nesROM.pgr_rom[begin + i + 2], self.nesROM.pgr_rom[begin + i + 3])
@@ -362,6 +407,9 @@ class PPU():
         self.array_flag = array_flag
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
+        self.bgColored = bgFinal
+        print (self.bgColored)
+        # import pdb;pdb.set_trace()
         self.posSprite = posSprite
 
 
