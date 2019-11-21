@@ -4,7 +4,7 @@ from py.operations import *
 from rom import Rom
 from memory_helper import *
 from threading import Timer,Thread,Event
-from controllers import *
+# from controllers import *
 import time
 import ppu
 import pygame
@@ -25,8 +25,6 @@ chr_rom = nesROM.chr_rom
 chr_size = nesROM.chr_rom_size * 8 * 1024
 controler_read_state = 0
 all_keys = []
-player1_key_index = 0
-player2_key_index = 0
 
 
 i = 0
@@ -78,7 +76,7 @@ def execute(opcode, systemCPU, pgr_bytes):
     """
     addr = None
     stack = None
-    all_keys = latch_controllers()
+    systemCPU.all_keys = latch_controllers()
 
     # if systemCPU.program_counter == (0x82f9 - 0x8000):
         # import pdb;pdb.set_trace()
@@ -492,6 +490,7 @@ def execute(opcode, systemCPU, pgr_bytes):
     elif opcode == '0xd0':
         systemCPU.program_counter = systemCPU.program_counter + 2
         old_pc = systemCPU.program_counter
+        # print(hex(old_pc+0x8000))
         setPCToAddress = get_relative_addr(systemCPU.program_counter, pgr_bytes[systemCPU.program_counter - 1])
         BNE0xD0(systemCPU, setPCToAddress)
         systemCPU.cycle_counter += 2
@@ -945,27 +944,26 @@ def execute(opcode, systemCPU, pgr_bytes):
         LoadFromY0xAC(register='Y', position=addr, system=systemCPU)
         systemCPU.cycle_counter += 4
     elif opcode == '0xad': # LDA abs
-        global player1_key_index
-        global player2_key_index
+        # global player1_key_index
+        # global player2_key_index
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)            
 
-        if (addr == 16406):
-            systemCPU.A = get_key(all_keys, player1_key_index, 1)
-            if player1_key_index != 7:
-                player1_key_index += 1
-            else:
-                player1_key_index = 0
-        elif (addr == 16407):
-            systemCPU.A = get_key(all_keys, player2_key_index, 2)
-            if player2_key_index != 7:
-                player2_key_index += 1
-            else:
-                player2_key_index = 0
-        else:
-            LoadInA0xAD(register='A', position=addr, system=systemCPU)
+        # if addr == 16406:
+        #     systemCPU.A = get_key(all_keys, player1_key_index, 1)
+        #     if player1_key_index != 7:
+        #         player1_key_index += 1
+        #     else:
+        #         player1_key_index = 0
+        # elif (addr == 16407):
+        #     systemCPU.A = get_key(all_keys, player2_key_index, 2)
+        #     if player2_key_index != 7:
+        #         player2_key_index += 1
+        #     else:
+        #         player2_key_index = 0
+        LoadInA0xAD(register='A', position=addr, system=systemCPU)
         
         if addr == 0x2002:
             systemCPU.setFLAG('N',1)
@@ -1092,16 +1090,19 @@ run_count = 0
 while True:
 
     opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
+    # print(hex(systemCPU.program_counter+0x8000), opcode)
     execute(opcode, systemCPU, nesROM.pgr_rom)
 
     run_count += 1
 
     if run_count == 37:
         if systemCPU.active_nmi and not (systemCPU.on_nmi):
+            
             systemCPU.on_nmi = True
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
                                       systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
                                       systemCPU.PC_OFFSET
+            # print("PAU NO CU DO YUJI")
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
             local_ppu.update_bg()

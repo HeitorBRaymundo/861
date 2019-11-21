@@ -157,7 +157,7 @@ class PPU():
         for i in range(begin, end, 1):
             row = int(i/32)
             column = i % 32
-            print (row, column)
+            # print (row, column)
             self.build_sprite(self.bgColored[0], (column * 8, row * 8), False)
         
         # import pdb; pdb.set_trace()
@@ -346,7 +346,7 @@ class PPU():
             newList = []
             for k in background[j]:
                 # MOCADISSIMO ARRUMAR
-                print (j)
+                # print (j)
                 # import pdb; pdb.set_trace()
                 # if (j == 256):
                 #     import pdb; pdb.set_trace()
@@ -415,7 +415,7 @@ class PPU():
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
         self.bgColored = bgFinal
-        print (self.bgColored)
+        # print (self.bgColored)
         # import pdb;pdb.set_trace()
         self.posSprite = posSprite
 
