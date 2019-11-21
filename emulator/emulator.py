@@ -887,8 +887,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         StoreInA0x99(register='A', address=addr, system=systemCPU)
         systemCPU.cycle_counter += 5
     elif opcode == '0x9d':
-        if systemCPU.program_counter == 0x106:
-            import pdb; pdb.set_trace()
+        # if systemCPU.program_counter == 0x106:
+        #     import pdb; pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 3
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
@@ -1105,7 +1105,12 @@ while True:
             # print("PAU NO CU DO YUJI")
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
+            local_ppu.corno_func()
+            # local_ppu.update_corno_dois()
+            local_ppu.update_corno_dois(systemCPU.batatinha[0x2000:0x23c0])
             local_ppu.update_bg()
+            # import pdb; pdb.set_trace()
+            print ("EEEEEEEEEE")
             local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
             # import pdb;pdb.set_trace()
             for i in range (64):
@@ -1114,10 +1119,8 @@ while True:
                     spritesToPrint = local_ppu.spriteWithHexColor[i]
                     array_flags_to_print = local_ppu.array_flag[i]
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
-        
-            local_ppu.corno_func()
-            # import pdb;pdb.set_trace()
             local_ppu.render()
+            import pdb;pdb.set_trace()
 
         run_count = 0
         systemCPU.cycle_counter = 0

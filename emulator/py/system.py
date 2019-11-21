@@ -49,6 +49,10 @@ class System():
         self.player1_key_index = 0
         self.player2_key_index = 0
         self.all_keys = []
+        self.batatinha = [0] * 0x10000
+        self.address2006 = 0
+        self.address2006Hi = 0
+        self.address2006Lo = 0
 
 
     def getA(self):
@@ -136,6 +140,35 @@ class System():
             # print((value & 0b10000000) > 0)
             # print("AAAAAAAAAAAAAAA")
             self.active_nmi = (value & 0b10000000) > 0
+        else:
+            if(address == 0x2006):
+                if (self.address2006Hi == 0):
+                    self.address2006Hi = value
+                    self.address2006 = (self.address2006Hi & 0xff) << 8
+                    # print ("Comocaremos novo store or not", hex(self.address2006))
+                else:
+                    self.address2006 = ((self.address2006Hi & 0xff) << 8) + (value & 0xff)
+                    # print ("Novo store oriundo de High:", hex(self.address2006Hi), " e Low: ", hex(value), " virando: ", hex(self.address2006))
+                    self.address2006Hi = 0
+            elif (address == 0x2007):
+                if (self.address2006 >= 0x2000 and self.address2006 < 0x3000):
+                    self.batatinha[self.address2006 + 0x800] = value
+                    self.batatinha[self.address2006] = value
+                elif self.address2006 < 0x3F00: 
+                    self.address2006 = self.address2006 % 0x3000
+                    self.batatinha[self.address2006] = value
+                    self.batatinha[self.address2006 + 0x800] = value
+                elif self.address2006 >= 0x3F20 and self.address2006 < 0x4000:
+                    self.batatinha[self.address2006 % 0x3F20] = value
+                else:
+                    self.batatinha[(self.address2006)%0x3fff] = value
+                
+                print (hex(self.address2006), value)
+                # print (hex(self.address2006), " 2007: ",value)
+                self.address2006 = self.address2006 + 1
+                # print ("prox: ", hex(self.address2006))
+            # else:
+            #     print (hex(address), value)
 
 
         

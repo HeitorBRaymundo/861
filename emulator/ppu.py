@@ -155,6 +155,9 @@ class PPU():
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
         pygame.display.update()
 
+    def update_corno_dois(self, newVRAM):
+        self.VRAM[0x2000:0x23c0] = newVRAM
+
     def update_bg(self):
 
         # pattern_table = self.background_pattern_table
@@ -165,13 +168,17 @@ class PPU():
 
         # self.bgList
         begin = self.name_table
+        import pdb; pdb.set_trace()
+        print (begin)
         end = begin + 0x3c0
-
+        # import pdb; pdb.set_trace()
         for i in range(begin, end, 1):
             row = int(i/32)
             column = i % 32
             # print (row, column)
-            self.build_sprite(self.bgColored[0], (column * 8, row * 8), False)
+            # if (i-begin == 256):
+            #     import pdb;pdb.set_trace()
+            self.build_sprite(self.bgColored[self.VRAM[0x2000+i]], (column * 8, row * 8), False)
         
         # import pdb; pdb.set_trace()
 
@@ -337,8 +344,8 @@ class PPU():
         
         # import pdb; pdb.set_trace()
 
-        self.bgSprite = bgList
-        self.sprites = spriteList
+        self.bgSprite = spriteList
+        self.sprites = bgList
         self.colorSprites()
 
     def colorSprites(self):
@@ -430,6 +437,8 @@ class PPU():
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
         self.bgColored = bgFinal
+        # self.spriteWithHexColor = bgFinal
+        # self.bgColored = spriteColored
         # print (self.bgColored)
         # import pdb;pdb.set_trace()
         self.posSprite = posSprite
