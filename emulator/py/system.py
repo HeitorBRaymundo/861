@@ -1,4 +1,6 @@
 import time
+from .controllers import *
+
 class System():
     A = 0
     X = 0
@@ -24,7 +26,7 @@ class System():
         self.A = 0
         self.X = 0
         self.Y = 0
-        self.mem = [-1] * 2049
+        self.mem = [0] * 2049
         self.FLAGS = {"N": 0, "V": 0, "B": 1, "D": 0, "I": 1, "Z": 0, "C": 0}
         self.stack = [0] * 512
         self.rom = rom
@@ -44,6 +46,10 @@ class System():
         self.cycle_counter = 0
         self.on_nmi = False
         self.active_nmi = False
+        self.player1_key_index = 0
+        self.player2_key_index = 0
+        self.all_keys = []
+
 
     def getA(self):
         return self.A
@@ -125,6 +131,7 @@ class System():
                 # import pdb;pdb.set_trace()
                 raise Exception("Invalid address!")
         elif address == 0x2000:
+            # print(value)
             # print("AAAAAAAAAAAAAAA")
             # print((value & 0b10000000) > 0)
             # print("AAAAAAAAAAAAAAA")
@@ -150,6 +157,21 @@ class System():
             return self.rom.pgr_rom[address - self.PC_OFFSET]
         elif address == 0x2002:
             return self.rom.pgr_rom[0x2002]
+        elif address == 16406:
+            temp = get_key(self.all_keys, self.player1_key_index, 1)
+            if self.player1_key_index != 7:
+                self.player1_key_index += 1
+            else:
+                self.player1_key_index = 0
+
+            return temp
+        elif address == 16407:
+            temp = get_key(self.all_keys, self.player2_key_index, 2)
+            if self.player2_key_index != 7:
+                self.player2_key_index += 1
+            else:
+                self.player2_key_index = 0
+            return temp
 
 
 if __name__ == '__main__':

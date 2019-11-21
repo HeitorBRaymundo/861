@@ -130,8 +130,10 @@ class Load_Op():
 
         # if self.register == 'A':
             # set negative flag
-        
-        self.system.FLAGS["N"] = int_to_bit(value_to_load)[0]
+        try:
+            self.system.FLAGS["N"] = int_to_bit(value_to_load)[0]
+        except:
+            import pdb; pdb.set_trace()
     
         # put the value into the register
         try:
