@@ -23,8 +23,6 @@ class Rom():
         self.mirroring = bool((self.header[6] & 0b1) | (((self.header[6] >> 3) & 0b1) << 1))
         self.mapper = (self.header[7] & 0xF0) | ((self.header[6] & 0xF0) >> 4)
 
-        # print (self.mapper)
-
         self.interrupt_handlers = {
             'NMI_HANDLER': 0xFFFA,
             'RESET_HANDLER': 0xFFFC,

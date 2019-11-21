@@ -64,13 +64,12 @@ for i in range(int(len(local_ppu.spriteWithHexColor))):
 
 local_ppu.render()
 
-# import pdb; pdb.set_trace()
-
-temp = nesROM.pgr_rom[0x2002] + 128
+temp = (nesROM.pgr_rom[0x2002]%128) + 128
 exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
 nesROM.pgr_rom = nesROM.pgr_rom[:0x2002] + temp + nesROM.pgr_rom[0x2003:]
 systemCPU.rom.prg_rom = nesROM.pgr_rom
 systemCPU.ppu_set = 1
+
 
 def execute(opcode, systemCPU, pgr_bytes):
     
@@ -952,6 +951,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)            
+
         if (addr == 16406):
             systemCPU.A = get_key(all_keys, player1_key_index, 1)
             if player1_key_index != 7:
@@ -966,6 +966,10 @@ def execute(opcode, systemCPU, pgr_bytes):
                 player2_key_index = 0
         else:
             LoadInA0xAD(register='A', position=addr, system=systemCPU)
+        
+        if addr == 0x2002:
+            systemCPU.setFLAG('N',1)
+
         systemCPU.cycle_counter += 4
     elif opcode == '0xae':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -1079,6 +1083,7 @@ def execute(opcode, systemCPU, pgr_bytes):
     elif opcode == '0x':
         systemCPU.program_counter = systemCPU.program_counter + 1
     else:
+        print(opcode)
         print ("Erro")
         pass
 
