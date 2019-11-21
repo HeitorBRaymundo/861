@@ -109,11 +109,24 @@ class PPU():
         # entender o que é isso
         self.SPR_RAM = [0] * 0x0100
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
-        self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
+
+
+        # Color_palete
+        # self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
+        
+        
+        self.sprite_palette = [1, 34, 55, 58, 1, 48, 20, 9, 1, 15, 49, 22, 1, 48, 21, 48]
         self.nametable_address = 0x2000
         # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
-        self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
-        self.bg_palette = [45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45]
+        # self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
+        
+        
+        # Color_palete
+        # self.bg_palette = [45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45]
+        
+        
+        self.bg_palette = [1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50]
+        
         # print ("Sprite:")
         # for i in self.sprite_palette:
         #     print(i)
@@ -157,7 +170,7 @@ class PPU():
         for i in range(begin, end, 1):
             row = int(i/32)
             column = i % 32
-            print (row, column)
+            # print (row, column)
             self.build_sprite(self.bgColored[0], (column * 8, row * 8), False)
         
         # import pdb; pdb.set_trace()
@@ -346,7 +359,7 @@ class PPU():
             newList = []
             for k in background[j]:
                 # MOCADISSIMO ARRUMAR
-                print (j)
+                # print (j)
                 # import pdb; pdb.set_trace()
                 # if (j == 256):
                 #     import pdb; pdb.set_trace()
@@ -382,6 +395,8 @@ class PPU():
             # print (hex(prg_bytes[i]), " ", deslocInicial)
             newList = []
             # print ("i: ",i)
+            # print (spriteList)
+            # print (len(spriteList))
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)
@@ -415,7 +430,7 @@ class PPU():
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
         self.bgColored = bgFinal
-        print (self.bgColored)
+        # print (self.bgColored)
         # import pdb;pdb.set_trace()
         self.posSprite = posSprite
 

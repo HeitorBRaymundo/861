@@ -32,9 +32,9 @@ class System():
         self.program_counter = ((self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8) +  \
                                 (self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET])) -          \
                                  self.PC_OFFSET
-        print("-----------------------------------------------------------")
-        print("INITIAL PC: ", hex(self.program_counter + 0x8000))
-        print("-----------------------------------------------------------")
+        # print("-----------------------------------------------------------")
+        # print("INITIAL PC: ", hex(self.program_counter + 0x8000))
+        # print("-----------------------------------------------------------")
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
         self.branch_hit = False
@@ -107,7 +107,7 @@ class System():
 
     def setMem(self, address, value):
         # print(hex(self.program_counter + 0x8000))
-        print(hex(address),value)
+        # print(hex(address),value)
 
         if address < 0x2000:
             try:
@@ -122,7 +122,7 @@ class System():
                 # save the value
                 self.mem[converted_address] = value
             except:
-                import pdb;pdb.set_trace()
+                # import pdb;pdb.set_trace()
                 raise Exception("Invalid address!")
         elif address == 0x2000:
             # print("AAAAAAAAAAAAAAA")

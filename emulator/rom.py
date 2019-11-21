@@ -37,7 +37,12 @@ class Rom():
             self.chr_rom = self.file.read(self.chr_rom_size * 1024 * 8)
         except:
             self.chr_rom = [0 for _ in range(8192)]
-        
+        # import pdb; pdb.set_trace()
+        # print (len(self.chr_rom))
+        # print (self.chr_rom[0x0000:0x2000])
+        # print (self.chr_rom[0x2000:0x4000])
+        # print (self.chr_rom[0x4000:0x6000])
+        # print (self.chr_rom[0x6000:0x8000])
         # for i in range(0,len(self.chr_rom), 4):
         #     print (i, self.chr_rom[i], i + 1, self.chr_rom[i + 1], i + 2, self.chr_rom[i + 2], i + 3, self.chr_rom[i + 3])
         # print (self.chr_rom_size)
