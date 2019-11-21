@@ -31,11 +31,17 @@ class System():
         self.stack = [0] * 512
         self.rom = rom
         self.PC_OFFSET = 0x8000 if (self.rom.prg_rom_size==2) else 0xC000
-        self.program_counter = ((self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8) +  \
-                                (self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET])) -          \
-                                 self.PC_OFFSET
+        if 'pacman' in rom.filename:
+            self.program_counter = ((self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8) +  \
+                                    (self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET])) -          \
+                                     0x8000
+        else:
+            self.program_counter = ((self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] + 1 - self.PC_OFFSET] << 8) +  \
+                                    (self.rom.pgr_rom[self.rom.interrupt_handlers['RESET_HANDLER'] - self.PC_OFFSET])) -          \
+                                     self.PC_OFFSET                                     
+
         # print("-----------------------------------------------------------")
-        # print("INITIAL PC: ", hex(self.program_counter + 0x8000))
+        print("INITIAL PC: ", hex(self.program_counter))
         # print("-----------------------------------------------------------")
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0

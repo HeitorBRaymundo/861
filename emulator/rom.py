@@ -1,4 +1,5 @@
 class Rom():
+    filename = ''
     file = None
     header = None
     prg_rom_size = 0
@@ -10,6 +11,8 @@ class Rom():
     mirroring = False
 
     def __init__(self, filename):
+        self.filename = filename
+        
         self.file = open(filename, "rb")
         
         self.header = self.file.read(16)
@@ -38,6 +41,3 @@ class Rom():
         except:
             self.chr_rom = [0 for _ in range(8192)]
         
-        # for i in range(0,len(self.chr_rom), 4):
-        #     print (i, self.chr_rom[i], i + 1, self.chr_rom[i + 1], i + 2, self.chr_rom[i + 2], i + 3, self.chr_rom[i + 3])
-        # print (self.chr_rom_size)
