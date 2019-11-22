@@ -411,6 +411,7 @@ class PPU():
             # print ("i: ",i)
             # print (spriteList)
             # print (len(spriteList))
+            # print (len(self.SPR_RAM))
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)

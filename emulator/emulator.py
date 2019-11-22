@@ -214,15 +214,6 @@ def execute(opcode, systemCPU, pgr_bytes):
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         systemCPU.cycle_counter += 7
     elif opcode == '0x88':
-
-        # if systemCPU.Y == 0 and systemCPU.contadorLixo == 3:
-        #     import pdb;pdb.set_trace()
-        #     print("YAHSADSADASF")        
-
-        if systemCPU.Y == 0:
-            systemCPU.contadorLixo += 1
-            print("oi")
-            
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
         systemCPU.cycle_counter += 2
@@ -233,8 +224,6 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        # if systemCPU.Y == 255:
-        #     print("aaaaaaaaa")
         IncreaseReg0xC8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xca':
@@ -273,8 +262,6 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        # if systemCPU.X == 255:
-        #     print("yuji coco")
         IncreaseReg0xE8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xe9':
@@ -950,24 +937,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)            
-
-        # if addr == 16406:
-        #     systemCPU.A = get_key(all_keys, player1_key_index, 1)
-        #     if player1_key_index != 7:
-        #         player1_key_index += 1
-        #     else:
-        #         player1_key_index = 0
-        # elif (addr == 16407):
-        #     systemCPU.A = get_key(all_keys, player2_key_index, 2)
-        #     if player2_key_index != 7:
-        #         player2_key_index += 1
-        #     else:
-        #         player2_key_index = 0
         LoadInA0xAD(register='A', position=addr, system=systemCPU)
-        
-        if addr == 0x2002:
-            systemCPU.setFLAG('N',1)
-
         systemCPU.cycle_counter += 4
     elif opcode == '0xae':
         systemCPU.program_counter = systemCPU.program_counter + 3
@@ -1036,10 +1006,6 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         offset = systemCPU.X
         addr = get_absolute_addr(operand_low, operand_high, offset)
-
-        # if addr == 0x8004:
-        #     import pdb;pdb.set_trace()
-
         LoadInA0xBD(register='A', position=addr, system=systemCPU)
         systemCPU.cycle_counter += 4
         if page_diff(addr, addr - systemCPU.getX()):
@@ -1087,6 +1053,26 @@ def execute(opcode, systemCPU, pgr_bytes):
 
 run_count = 0
 
+
+
+def update_ppu_flags(systemCPU, systemPPU):
+    # flags do 0x2001
+    systemPPU.emphasis_blue = systemCPU.emphasis_blue
+    systemPPU.emphasis_green = systemCPU.emphasis_green
+    systemPPU.emphasis_red = systemCPU.emphasis_red
+    systemPPU.enable_sprite = systemCPU.enable_sprite
+    systemPPU.enable_bg = systemCPU.enable_bg
+    systemPPU.enable_left_column = systemCPU.enable_left_column
+    systemPPU.enable_left_bg_column = systemCPU.enable_left_bg_column
+    systemPPU.greyscale = systemCPU.greyscale
+    # flags do 0x2002
+    systemPPU.enable_NMI = systemCPU.active_nmi
+    systemPPU.vblank = systemCPU.vblank
+    systemPPU.sprite_hit = systemCPU.sprite_0
+    systemPPU.sprite_overflow = systemCPU.spr_over    
+
+
+
 while True:
 
     opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
@@ -1094,9 +1080,6 @@ while True:
     operand_low = nesROM.pgr_rom[systemCPU.program_counter + 1]
     operand_high = nesROM.pgr_rom[systemCPU.program_counter + 2]
     addr = get_absolute_addr(operand_low, operand_high)
-
-    # if addr == 0x2007 and systemCPU.address2006 == 0x20ba:
-    #     import pdb;pdb.set_trace()
 
     if (addr == 0x2000):
         if (opcode in ['0x8d', '0x9d', '0x99']):
@@ -1107,7 +1090,9 @@ while True:
             value = systemCPU.Y
         local_ppu.update_ppu_control(value)
     execute(opcode, systemCPU, nesROM.pgr_rom)
-        
+    
+    update_ppu_flags(systemCPU, local_ppu)
+
     run_count += 1
 
     if run_count == 30:
