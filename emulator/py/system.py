@@ -41,7 +41,7 @@ class System():
                                      self.PC_OFFSET                                     
 
         # print("-----------------------------------------------------------")
-        print("INITIAL PC: ", hex(self.program_counter))
+        # print("INITIAL PC: ", hex(self.program_counter))
         # print("-----------------------------------------------------------")
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
@@ -61,6 +61,7 @@ class System():
         self.address2006Lo = 0
         self.flag2006 = False
         self.flag_increment_mode = 0
+        self.contadorLixo = 0
 
 
     def getA(self):
@@ -194,8 +195,9 @@ class System():
                 # print (hex(self.address2006), " 2007: ",value)
                 self.address2006 = self.address2006 + self.flag_increment_mode
                 # print ("prox: ", hex(self.address2006))
-            # else:
-            #     print (hex(address), value)
+            else:
+                pass
+                # print (hex(address), value)
 
 
         

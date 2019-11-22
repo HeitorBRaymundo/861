@@ -15,22 +15,23 @@ class ADC_Op():
         second_vector = int_to_bit(self.value_second)
         result = self.system.getA() + self.value_second + self.system.getFLAG("C")
         result_vector = int_to_bit(result)
-        if ((a_vector[0] and second_vector[0] and not result_vector[0]) or (not a_vector[0] and not second_vector[0] and result_vector[0])):
+        if ~(self.system.A ^ self.value_second) & (self.system.A ^ result) & 0x80:
             self.system.setFLAG("V", 1)
         else:
             self.system.setFLAG("V", 0)
 
         self.system.setFLAG("N", result_vector[0])
-        if (all(value == 0 for value in result_vector)):
+
+        if result % 256 == 0:
             self.system.setFLAG("Z", 1)
         else:
             self.system.setFLAG("Z", 0)
 
         self.system.setA(result)
 
-        if (self.system.getA() % 256 != self.system.getA()):
+        if (self.system.getA() > 255):
             self.system.setFLAG("C", 1)
-            self.system.setA(self.system.getA() % 256)
+            self.system.setA(self.system.getA() - 256)
         else:
             self.system.setFLAG("C", 0)
 
@@ -49,13 +50,14 @@ class SBC_Op():
         result = self.system.getA() + (256 - self.value_second) + (self.system.getFLAG("C") - 1)
         result_vector = int_to_bit(result)
 
-        if ((a_vector[0] and not second_vector[0] and not result_vector[0]) or (not a_vector[0] and second_vector[0] and result_vector[0])):
+        if ~(self.system.A ^ self.value_second) & (self.system.A ^ result) & 0x80:
             self.system.setFLAG("V", 1)
         else:
             self.system.setFLAG("V", 0)
 
         self.system.setFLAG("N", result_vector[0])
-        if (all(value == 0 for value in result_vector)):
+        
+        if result % 256 == 0:
             self.system.setFLAG("Z", 1)
         else:
             self.system.setFLAG("Z", 0)
@@ -63,9 +65,9 @@ class SBC_Op():
 
         self.system.setA(self.system.getA() + (256 - self.value_second) + (self.system.getFLAG("C") - 1))
 
-        if (self.system.getA() % 256 != self.system.getA()):
+        if (self.system.getA() > 255):
             self.system.setFLAG("C", 1)
-            self.system.setA(self.system.getA() % 256)
+            self.system.setA(self.system.getA() - 256)
         else:
             self.system.setFLAG("C", 0)
 

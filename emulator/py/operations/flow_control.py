@@ -94,6 +94,7 @@ class BNE0xD0():
     def __init__(self, system, mem_position):
         # Branch on Result not Zero
         # branch on Z = 0
+        # 0xe501
         if (system.getFLAG("Z") == 0):
             system.program_counter = mem_position
             system.branch_hit = True

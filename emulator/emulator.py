@@ -296,6 +296,13 @@ def execute(opcode, systemCPU, pgr_bytes):
         # print("))))))))))))))))))))))))")
         # if systemCPU.Y == 1:
         #     import pdb;pdb.set_trace()
+        #     print("YAHSADSADASF")        
+
+        if systemCPU.Y == 0:
+            systemCPU.contadorLixo += 1
+            print("oi")
+            
+        systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xc6':
@@ -305,6 +312,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        if systemCPU.Y == 255:
+            print("aaaaaaaaa")
         IncreaseReg0xC8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xca':
@@ -343,6 +352,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        if systemCPU.X == 255:
+            print("yuji coco")
         IncreaseReg0xE8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xe9':
@@ -458,6 +469,9 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
+        # RTI0x40(systemCPU)
+        # import pdb;pdb.set_trace()
+        # PLP0x28(systemCPU)
         systemCPU.on_nmi = False
         systemCPU.cycle_counter += 6
     elif opcode == '0x58':
@@ -1159,6 +1173,10 @@ while True:
     operand_low = nesROM.pgr_rom[systemCPU.program_counter + 1]
     operand_high = nesROM.pgr_rom[systemCPU.program_counter + 2]
     addr = get_absolute_addr(operand_low, operand_high)
+
+    # if addr == 0x2007 and systemCPU.address2006 == 0x20ba:
+    #     import pdb;pdb.set_trace()
+
     if (addr == 0x2000):
         if (opcode in ['0x8d', '0x9d', '0x99']):
             value = systemCPU.A
@@ -1171,24 +1189,20 @@ while True:
         
     run_count += 1
 
-    if run_count == 37:
+    if run_count == 30:
         if systemCPU.active_nmi and not (systemCPU.on_nmi):
             
             systemCPU.on_nmi = True
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
                                       systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
                                       systemCPU.PC_OFFSET
-            # print("PAU NO CU DO YUJI")
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
             local_ppu.corno_func()
-            # local_ppu.update_corno_dois()
             local_ppu.update_corno_dois(systemCPU.batatinha[0x2000:0x23c0])
             local_ppu.update_bg()
-            # import pdb; pdb.set_trace()
-            print ("EEEEEEEEEE")
             local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
-            # import pdb;pdb.set_trace()
+            
             for i in range (64):
                 if (local_ppu.flag_enable_render):
                     pos = local_ppu.posSprite[i]

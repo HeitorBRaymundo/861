@@ -12,10 +12,8 @@ class ASL_Op():
         #  C <- [76543210] <- 0
 
         if (self.position == -1):
-            if (self.system.getA() >= 128):
-                self.system.setFLAG("C", 1)
-            else:
-                self.system.setFLAG("C", 0)
+            
+            self.system.setFLAG("C", (self.system.getA() >> 7))
 
             shifted = (self.system.getA() << 1) % 256
 
@@ -24,12 +22,15 @@ class ASL_Op():
             else:
                 self.system.setFLAG("N", 0)
 
+            if shifted == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
             self.system.setA(shifted)
         else:
-            if (self.system.loadMem(self.position) >= 128):
-                self.system.setFLAG("C", 1)
-            else:
-                self.system.setFLAG("C", 0)
+
+            self.system.setFLAG("C", (self.system.getA() >> 7))
 
             shifted = (self.system.loadMem(self.position) << 1) % 256
 
@@ -37,6 +38,11 @@ class ASL_Op():
                 self.system.setFLAG("N", 1)
             else:
                 self.system.setFLAG("N", 0)
+
+            if shifted == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
 
             self.system.setMem(self.position, shifted)
 
@@ -74,19 +80,40 @@ class ROL_Op():
 
     def execute(self):
         #  C <- [76543210] <- C
+
         isInCarry = self.system.getFLAG("C")
         if (self.position == -1):
-            if (self.system.getA() > 128):
-                self.system.setFLAG("C", 1)
+            self.system.setFLAG("C", (self.system.getA() >> 7))
+
+            shifted = ((self.system.getA() << 1)  + isInCarry) % 256
+
+            if (shifted >= 128):
+                self.system.setFLAG("N", 1)
             else:
-                self.system.setFLAG("C", 0)
-            self.system.setA(((self.system.getA() << 1)  + isInCarry) % 255)
+                self.system.setFLAG("N", 0)
+
+            if shifted == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
+            self.system.setA(((self.system.getA() << 1)  + isInCarry) % 256)
         else:
-            if (self.system.loadMem(self.position) > 128):
-                self.system.setFLAG("C", 1)
+            self.system.setFLAG("C", (self.system.loadMem(self.position) >> 7))
+
+            shifted = ((self.system.loadMem(self.position) << 1)  + isInCarry) % 256
+
+            if (shifted >= 128):
+                self.system.setFLAG("N", 1)
             else:
-                self.system.setFLAG("C", 0)
-            self.system.setMem(self.position, ((self.system.loadMem(self.position) << 1)  + isInCarry) % 255)
+                self.system.setFLAG("N", 0)
+
+            if shifted == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
+            self.system.setMem(self.position, ((self.system.loadMem(self.position) << 1)  + isInCarry) % 256)
 
 class ROL_zero_page_0x26(ROL_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
@@ -126,9 +153,30 @@ class LSR_Op():
         if (self.position == -1):
             self.system.setFLAG("C", self.system.getA() % 2)
             self.system.setA(self.system.getA()  >> 1)
+
+            if (self.system.getA() >= 128):
+                self.system.setFLAG("N", 1)
+            else:
+                self.system.setFLAG("N", 0)
+
+            if self.system.getA() == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
         else:
             self.system.setFLAG("C", self.system.loadMem(self.position) % 2)
             self.system.setMem(self.position, self.system.loadMem(self.position)  >> 1)
+
+            if (self.system.loadMem(self.position) >= 128):
+                self.system.setFLAG("N", 1)
+            else:
+                self.system.setFLAG("N", 0)
+
+            if self.system.loadMem(self.position) == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
 
 class LSR_zero_page_0x46(LSR_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
@@ -167,13 +215,35 @@ class ROR_Op():
         #   C -> [76543210] -> C
         if (self.position == -1):
             isInCarry = self.system.getFLAG("C") * 128
+
             self.system.setFLAG("C", self.system.getA() % 2)
             self.system.setA((self.system.getA()  >> 1) + isInCarry)
+
+            if (self.system.getA() >= 128):
+                self.system.setFLAG("N", 1)
+            else:
+                self.system.setFLAG("N", 0)
+
+            if self.system.getA() == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+
         else:
             isInCarry = self.system.getFLAG("C") * 128
             self.system.setFLAG("C", self.system.loadMem(self.position) % 2)
             self.system.setMem(self.position, self.system.loadMem(self.position)  >> 1 + isInCarry)
 
+            if (self.system.loadMem(self.position) >= 128):
+                self.system.setFLAG("N", 1)
+            else:
+                self.system.setFLAG("N", 0)
+
+            if self.system.loadMem(self.position) == 0:
+                self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
+            
 class ROR_zero_page_0x66(ROR_Op):
     def __init__(self, SystemCPU: System, zpg_pos: int):
         super().__init__(SystemCPU, SystemCPU.loadMem(zpg_pos))
