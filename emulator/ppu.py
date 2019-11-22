@@ -87,6 +87,7 @@ class PPU():
     
     default_width = 256
     default_height = 224
+    SPR_RAM = [0] * 0x100
 
     VRAM = [0] * 0x5000
 
@@ -102,12 +103,12 @@ class PPU():
         self.pic = pygame.surface.Surface((self.default_width, self.default_height))
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
 
-
+        self.SPR_RAM = nesROM.pgr_rom[0x2000:0x2100]
+        print (nesROM.chr_rom[0x2000:0x2100])
         self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
         self.prg_bytes = nesROM.pgr_rom
         self.nesROM = nesROM
         # entender o que é isso
-        self.SPR_RAM = [0] * 0x0100
         self.increase = 0
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
 
@@ -136,8 +137,8 @@ class PPU():
         #     print(i)
         self.flag_name_table =  0x2000
         self.flag_increment_mode = 1
-        self.flag_sprite_tile_select = 0
-        self.flag_bg_tile = 1
+        self.flag_sprite_tile_select = 1
+        self.flag_bg_tile = 0
         self.flag_sprite_height = (8,8)
         self.flag_PPU_master_slave = 0
         self.flag_enable_NMI = 0
@@ -349,10 +350,10 @@ class PPU():
             i = i + 16
         finalList.append(tempList)
         
-        # import pdb; pdb.set_trace()
 
-        self.bgSprite = finalList[self.flag_sprite_tile_select]
-        self.sprites = finalList[self.flag_bg_tile]
+        self.bgSprite = finalList[self.flag_bg_tile]
+        self.sprites = finalList[self.flag_sprite_tile_select]
+
         self.colorSprites()
 
     def colorSprites(self):
@@ -411,6 +412,7 @@ class PPU():
             # print ("i: ",i)
             # print (spriteList)
             # print (len(spriteList))
+            print (len(self.SPR_RAM))
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)
@@ -449,7 +451,8 @@ class PPU():
         # print (self.bgColored)
         # import pdb;pdb.set_trace()
         self.posSprite = posSprite
-
+        # import pdb;pdb.set_trace()
+        # print ("861")
 
     def tick(self):
         self.cicle_number += 1

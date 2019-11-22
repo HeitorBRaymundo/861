@@ -33,7 +33,6 @@ in_forever = False
 
 
 local_ppu = ppu.PPU(nesROM, 1)
-
 local_ppu.evaluate_sprite()
 
 # Inicializa i e begin com a posicao inicial das informacoes do sprite (onde ele esta, qual a cor, se reflete, etc.)
@@ -61,6 +60,7 @@ for i in range(int(len(local_ppu.spriteWithHexColor))):
     local_ppu.build_sprite(local_ppu.spriteWithHexColor[i], local_ppu.posSprite[i], local_ppu.array_flag[i])
 
 local_ppu.render()
+# import pdb;pdb.set_trace()
 
 temp = (nesROM.pgr_rom[0x2002]%128) + 128
 exec("temp = b"+'"\\'+hex(temp)[1:]+'"')
