@@ -1102,7 +1102,13 @@ while True:
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
             
             local_ppu.render()
-            # import pdb;pdb.set_trace()
+            
+            # if systemCPU.all_keys[pygame.K_ESCAPE]:
+            #     pygame.quit()
+            #     break
 
         run_count = 0
         systemCPU.cycle_counter = 0
+
+pygame.quit()
+        

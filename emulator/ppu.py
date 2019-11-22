@@ -341,16 +341,24 @@ class PPU():
         self.screen.fill((0, 0, 0))
 
         #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
-        if (self.enable_bg):
+        if self.enable_bg:
             self.bg.draw(self.screen)
-        if (self.enable_sprite):
+        elif 'pacman' in self.nesROM.filename:
+            self.bg.draw(self.screen)
+
+        if self.enable_sprite:
+            self.all_sprites_list.draw(self.screen)
+        elif 'pacman' in self.nesROM.filename:
             self.all_sprites_list.draw(self.screen)
 
         #Refresh Screen
         if (self.enable_bg or self.enable_sprite):
             pygame.display.update()
             pygame.event.pump()
-
+        elif 'pacman' in self.nesROM.filename:
+            pygame.display.update()
+            pygame.event.pump()
+            
         #Number of frames per secong e.g. 60
         self.clock.tick(48)
 
