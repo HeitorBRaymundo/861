@@ -59,7 +59,7 @@ for i in range(int(len(local_ppu.spriteWithHexColor))):
     # print(local_ppu.spriteWithHexColor[4*i:4*(i + 1)])
     local_ppu.build_sprite(local_ppu.spriteWithHexColor[i], local_ppu.posSprite[i], local_ppu.array_flag[i])
 
-local_ppu.render()
+# local_ppu.render()
 # import pdb;pdb.set_trace()
 
 temp = (nesROM.pgr_rom[0x2002]%128) + 128
@@ -1055,21 +1055,6 @@ run_count = 0
 
 
 
-def update_ppu_flags(systemCPU, systemPPU):
-    # flags do 0x2001
-    systemPPU.emphasis_blue = systemCPU.emphasis_blue
-    systemPPU.emphasis_green = systemCPU.emphasis_green
-    systemPPU.emphasis_red = systemCPU.emphasis_red
-    systemPPU.enable_sprite = systemCPU.enable_sprite
-    systemPPU.enable_bg = systemCPU.enable_bg
-    systemPPU.enable_left_column = systemCPU.enable_left_column
-    systemPPU.enable_left_bg_column = systemCPU.enable_left_bg_column
-    systemPPU.greyscale = systemCPU.greyscale
-    # flags do 0x2002
-    systemPPU.enable_NMI = systemCPU.active_nmi
-    systemPPU.vblank = systemCPU.vblank
-    systemPPU.sprite_hit = systemCPU.sprite_0
-    systemPPU.sprite_overflow = systemCPU.spr_over    
 
 
 
@@ -1091,7 +1076,7 @@ while True:
         local_ppu.update_ppu_control(value)
     execute(opcode, systemCPU, nesROM.pgr_rom)
     
-    update_ppu_flags(systemCPU, local_ppu)
+    local_ppu.update_ppu_flags(systemCPU)
 
     run_count += 1
 

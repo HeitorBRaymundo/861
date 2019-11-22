@@ -71,8 +71,8 @@ class System():
         self.emphasis_blue = 0
         self.emphasis_green = 0
         self.emphasis_red = 0
-        self.enable_sprite = 0
-        self.enable_bg = 0
+        self.enable_sprite = 1
+        self.enable_bg = 1
         self.enable_left_column = 0
         self.enable_left_bg_column = 0
         self.greyscale = 0
@@ -163,6 +163,7 @@ class System():
             self.flag_PPU_master_slave = (value >> 6) % 2
             self.active_nmi = (value & 0b10000000) > 0
         elif address == 0x2001:
+            # print ("0b",bin(value)[2:].zfill(8))
             self.greyscale = 1 if (value % 2) else 0
             self.enable_left_bg_column = 1 if ((value >> 1) % 2) else 0
             self.enable_left_column = 1 if ((value >> 2) % 2) else 0
@@ -234,8 +235,8 @@ class System():
             self.vblank = 1
 
             return value
-        elif address <= 0x4000:
-            print("hey")
+        # elif address <= 0x4000:
+        #     print("hey")
         elif address == 16406:
             temp = get_key(self.all_keys, self.player1_key_index, 1)
             if self.player1_key_index != 7:

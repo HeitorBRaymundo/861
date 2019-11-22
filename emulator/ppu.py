@@ -89,6 +89,20 @@ class PPU():
     default_height = 224
     SPR_RAM = [0] * 0x100
 
+    emphasis_blue = 0
+    emphasis_green = 0
+    emphasis_red = 0
+    enable_sprite = 0
+    enable_bg = 0
+    enable_left_column = 0
+    enable_left_bg_column = 0
+    greyscale = 0
+    # flags do 0x2002
+    enable_NMI = 0
+    vblank = 0
+    sprite_hit = 0
+    sprite_overflow = 0    
+
     VRAM = [0] * 0x5000
 
     def __init__(self, nesROM, scale):
@@ -110,6 +124,18 @@ class PPU():
         # entender o que é isso
         self.increase = 0
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
+        self.emphasis_blue = 0
+        self.emphasis_green = 0
+        self.emphasis_red = 0
+        self.enable_sprite = 1
+        self.enable_bg = 1
+        self.enable_left_column = 0
+        self.enable_left_bg_column = 0
+        self.greyscale = 0
+        self.enable_NMI = 0
+        self.vblank = 0
+        self.sprite_hit = 0
+        self.sprite_overflow = 0
 
 
         # Color_palete
@@ -223,12 +249,6 @@ class PPU():
         return sprite 
 
     def update_mem_SPR_RAM(self, newMem):
-        print ("********")
-        for i in self.SPR_RAM:
-            print (i)
-        print (self.SPR_RAM)
-        print ("--------")
-        print (newMem)
         self.SPR_RAM = newMem
 
     # newMask eh um inteiro entre 0 e 255, precisamos parsear no formato 
@@ -251,6 +271,23 @@ class PPU():
         self.flag_emphasis_red = (newMask >> 5) % 2
         self.flag_emphasis_green = (newMask >> 6) % 2
         self.flag_emphasis_blue = (newMask >> 7) % 2
+
+    def update_ppu_flags(self, cpu):
+        # flags do 0x2001
+        # print ("MAOE")
+        self.emphasis_blue = cpu.emphasis_blue
+        self.emphasis_green = cpu.emphasis_green
+        self.emphasis_red = cpu.emphasis_red
+        self.enable_sprite = cpu.enable_sprite
+        self.enable_bg = cpu.enable_bg
+        self.enable_left_column = cpu.enable_left_column
+        self.enable_left_bg_column = cpu.enable_left_bg_column
+        self.greyscale = cpu.greyscale
+        # flags do 0x2002
+        self.enable_NMI = cpu.active_nmi
+        self.vblank = cpu.vblank
+        self.sprite_hit = cpu.sprite_0
+        self.sprite_overflow = cpu.spr_over    
 
     #OAMADDR ($2003)
     #aaaa aaaa
@@ -304,15 +341,14 @@ class PPU():
         self.screen.fill((0, 0, 0))
 
         #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
-        if (self.flag_enable_bg):
+        if (self.enable_bg):
             self.bg.draw(self.screen)
-        if (self.flag_enable_sprite):
+        if (self.enable_sprite):
             self.all_sprites_list.draw(self.screen)
 
         #Refresh Screen
-        if (self.flag_enable_bg or self.flag_enable_sprite):
+        if (self.enable_bg or self.enable_sprite):
             pygame.display.update()
-
             pygame.event.pump()
 
         #Number of frames per secong e.g. 60
@@ -426,7 +462,6 @@ class PPU():
             # print (spriteList)
             # print (len(spriteList))
             # print (len(self.SPR_RAM))
-            print ("EValuate: ", self.SPR_RAM[i + 1])
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 *em (self.SPR_RAM[i + 2] % 4)) + j)
