@@ -233,8 +233,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        if systemCPU.Y == 255:
-            print("aaaaaaaaa")
+        # if systemCPU.Y == 255:
+        #     print("aaaaaaaaa")
         IncreaseReg0xC8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xca':
@@ -273,8 +273,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
-        if systemCPU.X == 255:
-            print("yuji coco")
+        # if systemCPU.X == 255:
+        #     print("yuji coco")
         IncreaseReg0xE8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xe9':
