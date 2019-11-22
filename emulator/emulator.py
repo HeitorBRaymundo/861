@@ -1115,8 +1115,9 @@ while True:
                     spritesToPrint = local_ppu.spriteWithHexColor[i]
                     array_flags_to_print = local_ppu.array_flag[i]
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
-            local_ppu.render()
             
+            local_ppu.render()
+            # import pdb;pdb.set_trace()
+
         run_count = 0
         systemCPU.cycle_counter = 0
-

@@ -61,7 +61,7 @@ class System():
         self.address2006Lo = 0
         self.flag_increment_mode = 0
         self.contadorLixo = 0
-        self.mem[0x200:0x300] = rom.pgr_rom[0x2000:0x2100]
+        self.mem[0x200:0x300] = rom.pgr_rom[0x2020:0x2120]
         self.address2003 = -1
         self.vblank = 1
         self.sprite_0 = 0

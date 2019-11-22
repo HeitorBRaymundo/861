@@ -103,7 +103,7 @@ class PPU():
         self.pic = pygame.surface.Surface((self.default_width, self.default_height))
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
 
-        self.SPR_RAM = nesROM.pgr_rom[0x2000:0x2100]
+        self.SPR_RAM = nesROM.pgr_rom[0x2020:0x2120]
         self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
         self.prg_bytes = nesROM.pgr_rom
         self.nesROM = nesROM
@@ -115,8 +115,13 @@ class PPU():
         # Color_palete
         # self.sprite_palette = [0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48,0,22,45,48]
         
+        if ('pacman' in self.nesROM.filename):
+            self.bg_palette = self.nesROM.pgr_rom[0x2000:0x2010]
+            self.sprite_palette = self.nesROM.pgr_rom[0x2010:0x2020]
+        else:
+            self.sprite_palette = [1, 34, 55, 58, 1, 48, 20, 9, 1, 15, 49, 22, 1, 48, 21, 48]
+            self.bg_palette = [1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50]
         
-        self.sprite_palette = [1, 34, 55, 58, 1, 48, 20, 9, 1, 15, 49, 22, 1, 48, 21, 48]
         self.nametable_address = 0x2000
         # self.sprite_palette = self.nesROM.chr_rom[0x3F10-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F20-(self.nesROM.chr_rom_size * 1024 * 8)]
         # self.bg_palette = self.nesROM.chr_rom[0x3F00-(self.nesROM.chr_rom_size * 1024 * 8) : 0x3F10-(self.nesROM.chr_rom_size * 1024 * 8)]
@@ -126,7 +131,6 @@ class PPU():
         # self.bg_palette = [45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45]
         
         
-        self.bg_palette = [1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50,1, 50, 50, 50]
         
         # print ("Sprite:")
         # for i in self.sprite_palette:
@@ -219,6 +223,12 @@ class PPU():
         return sprite 
 
     def update_mem_SPR_RAM(self, newMem):
+        print ("********")
+        for i in self.SPR_RAM:
+            print (i)
+        print (self.SPR_RAM)
+        print ("--------")
+        print (newMem)
         self.SPR_RAM = newMem
 
     # newMask eh um inteiro entre 0 e 255, precisamos parsear no formato 
@@ -290,16 +300,20 @@ class PPU():
         #Game Logic
 
         #Drawing on Screen
+
         self.screen.fill((0, 0, 0))
 
         #Now let's draw all the sprites in one go. (For now we only have 1 sprite!)
-        self.bg.draw(self.screen)
-        self.all_sprites_list.draw(self.screen)
+        if (self.flag_enable_bg):
+            self.bg.draw(self.screen)
+        if (self.flag_enable_sprite):
+            self.all_sprites_list.draw(self.screen)
 
         #Refresh Screen
-        pygame.display.update()
+        if (self.flag_enable_bg or self.flag_enable_sprite):
+            pygame.display.update()
 
-        pygame.event.pump()
+            pygame.event.pump()
 
         #Number of frames per secong e.g. 60
         self.clock.tick(48)
@@ -412,9 +426,10 @@ class PPU():
             # print (spriteList)
             # print (len(spriteList))
             # print (len(self.SPR_RAM))
+            print ("EValuate: ", self.SPR_RAM[i + 1])
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
-                # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)
+                # print ("SPR_RAM[i + 2]: ", (4 *em (self.SPR_RAM[i + 2] % 4)) + j)
                 # (self.nesROM.pgr_rom[begin + i + 1] % 4) eh para ver qual dos blocos de cor ira pegar
                 # j eh para identificar qual a cor de cada posicao (0 eh a primeira, 1 eh a segunda, etc.)
                 # print ((4 * (self.SPR_RAM[i + 2] % 4)) + j)
@@ -440,7 +455,6 @@ class PPU():
         # while i < 256:
         #     spriteColored.append(temp[(self.SPR_RAM[i + 1] % 64) ])
         #     i = i + 4
-
         self.array_flag = array_flag
         self.bin_flag = bin_flag
         self.spriteWithHexColor = spriteColored
