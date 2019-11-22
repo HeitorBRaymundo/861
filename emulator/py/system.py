@@ -59,6 +59,7 @@ class System():
         self.address2006 = 0
         self.address2006Hi = 0
         self.address2006Lo = 0
+        self.flag2006 = False
         self.flag_increment_mode = 0
 
 
@@ -158,29 +159,38 @@ class System():
             # local_ppu.update_ppu_control(value)
             # import pdb; pdb.set_trace()
         else:
+            # print (address & 0x7)
+            address = 0x2000 + (address & 0x7)
+            # print (address)
             if(address == 0x2006):
-                if (self.address2006Hi == 0):
+                if (self.flag2006 == False):
                     self.address2006Hi = value
                     self.address2006 = (self.address2006Hi & 0xff) << 8
+                    self.flag2006 = True
                     # print ("Comocaremos novo store or not", hex(self.address2006))
                 else:
+                    self.flag2006 = False
                     self.address2006 = ((self.address2006Hi & 0xff) << 8) + (value & 0xff)
                     # print ("Novo store oriundo de High:", hex(self.address2006Hi), " e Low: ", hex(value), " virando: ", hex(self.address2006))
                     self.address2006Hi = 0
+                # print (address)
+                print ("-------------------")
+                print ("Novo Address at 2006: ", hex(self.address2006))
+                print ("--------------------")
             elif (address == 0x2007):
                 if (self.address2006 >= 0x2000 and self.address2006 < 0x3000):
-                    self.batatinha[self.address2006 + 0x800] = value
+                    self.batatinha[self.address2006 + (0x400 << self.rom.mirroring)] = value
                     self.batatinha[self.address2006] = value
                 elif self.address2006 < 0x3F00: 
                     self.address2006 = self.address2006 % 0x3000
                     self.batatinha[self.address2006] = value
-                    # self.batatinha[self.address2006 + 0x800] = value
+                    self.batatinha[self.address2006 + (0x400 << self.rom.mirroring)] = value
                 elif self.address2006 >= 0x3F20 and self.address2006 < 0x4000:
-                    self.batatinha[self.address2006 % 0x3F20] = value
+                    self.batatinha[self.address2006 % 0x3F20] = value 
                 else:
                     self.batatinha[(self.address2006)%0x4000] = value
                 
-                print (hex(self.address2006), value)
+                # print (hex(self.address2006), value)
                 # print (hex(self.address2006), " 2007: ",value)
                 self.address2006 = self.address2006 + self.flag_increment_mode
                 # print ("prox: ", hex(self.address2006))
@@ -203,6 +213,21 @@ class System():
                 raise Exception('Invalid type of address!')
 
             return self.mem[converted_address]
+        # verificar se eh util ou nao
+        elif address == 0x2007:
+            value = 0
+            address = self.address2006
+            if address < 0x3F00:
+                value = self.Buffer
+                self.Buffer = self.batatinha[address]
+            elif address < 0x3F20:
+                self.Buffer = self.batatinha[address]
+                value = self.batatinha[address]
+            elif address < 0x4000:
+                address = address % 0x3F20
+                self.Buffer = self.batatinha[address]
+                value = self.batatinha[address]
+            return value
         elif address >= 0x8000:
             return self.rom.pgr_rom[address - self.PC_OFFSET]
         elif address == 0x2002:

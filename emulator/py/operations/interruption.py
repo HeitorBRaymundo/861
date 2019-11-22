@@ -52,10 +52,12 @@ class RTI0x40():
         hi = system.stack_pop()
         hi = hi << 8
 
-        if system.stack_neg:
-            system.program_counter = - (((hi | lo) ^ 0xfff) + 1)
-        else:
-            system.program_counter = hi | lo
+        # if system.stack_neg:
+        #     system.program_counter = - (((hi | lo) ^ 0xfff) + 1)
+        # else:
+        print ("B4: ", system.program_counter)
+        system.program_counter = hi | lo
+        print ("After: ", system.program_counter)
 
 # OK
 # tested

@@ -196,7 +196,7 @@ class PPU():
     # flag_name_table = '00' #NN
     def update_ppu_control(self, newControl):
         self.flag_name_table =  0x2000 + (0x400 * newControl % 4)
-        self.flag_increment_mode = 1 if ((newControl >> 2) % 2) else 1
+        self.flag_increment_mode = 1 if ((newControl >> 2) % 2) else 32
         self.flag_sprite_tile_select = (newControl >> 3) % 2
         self.flag_bg_tile = (newControl >> 4) % 2
         self.flag_sprite_height = (8,16) if((newControl >> 5) % 2) else (8,8)
