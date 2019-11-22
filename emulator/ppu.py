@@ -168,8 +168,8 @@ class PPU():
 
         # self.bgList
         begin = self.name_table
-        import pdb; pdb.set_trace()
-        print (begin)
+        # import pdb; pdb.set_trace()
+        # print (begin)
         end = begin + 0x3c0
         # import pdb; pdb.set_trace()
         for i in range(begin, end, 1):

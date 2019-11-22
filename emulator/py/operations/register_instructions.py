@@ -60,9 +60,13 @@ class Decrease_Op():
             
             if (self.system.getY() - 1) < 0:
                 self.system.setFLAG("N", 1)
-
+            else:
+                self.system.setFLAG("N", 0)
+            
             if (self.system.getY() - 1) == 0:
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
 
             self.system.setY(self.system.getY() - 1)
 
@@ -70,9 +74,13 @@ class Decrease_Op():
 
             if (self.system.getX() - 1) == 0:
                 self.system.setFLAG("Z", 1)
+            else:
+                self.system.setFLAG("Z", 0)
 
             if (self.system.getX() - 1) < 0:
                 self.system.setFLAG("N", 1)
+            else:
+                self.system.setFLAG("N", 0)
 
             self.system.setX(self.system.getX() - 1)
 

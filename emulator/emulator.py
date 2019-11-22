@@ -78,7 +78,9 @@ def execute(opcode, systemCPU, pgr_bytes):
     stack = None
     systemCPU.all_keys = latch_controllers()
 
-    # if systemCPU.program_counter == (0x82f9 - 0x8000):
+    # print(hex(systemCPU.program_counter), opcode)
+
+    # if systemCPU.program_counter == (12511):
         # import pdb;pdb.set_trace()
 
     # print(systemCPU.mem)
@@ -212,7 +214,13 @@ def execute(opcode, systemCPU, pgr_bytes):
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         systemCPU.cycle_counter += 7
     elif opcode == '0x88':
+        # import pdb;pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 1
+        print("))))))))))))))))))))))))")
+        print(systemCPU.Y)
+        print("))))))))))))))))))))))))")
+        # if systemCPU.Y == 1:
+        #     import pdb;pdb.set_trace()
         DecreaseReg0x88(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xc6':
@@ -820,25 +828,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         operand_low = pgr_bytes[systemCPU.program_counter - 2]
         operand_high = pgr_bytes[systemCPU.program_counter - 1]
         addr = get_absolute_addr(operand_low, operand_high)
-
-        # if (addr == 0x2000 and systemCPU.A == 128):
-        #     print ("EEEEEEEEEOOOOO")
-        #     local_ppu.update_rom(systemCPU.mem[0x200:0x300])
-        #     local_ppu.evaluate_sprite()
-        #     for i in range(int(len(local_ppu.spriteWithHexColor))):
-        #         # print(local_ppu.spriteWithHexColor[4*i:4*(i + 1)])
-        #         local_ppu.build_sprite(local_ppu.spriteWithHexColor[i], local_ppu.posSprite[i], local_ppu.array_flag[i])
-        #     import pdb;pdb.set_trace();
-        #     local_ppu.render()
-
-        if (addr == 16406 or addr == 16407):
-            if (controler_read_state == 0 and systemCPU.A == 1):
-                controler_read_state = 1
-            elif (controler_read_state == 1 and systemCPU.A == 0):
-                controler_read_state = 0
-                all_keys = latch_controllers()
-            elif (controler_read_state == 1 and systemCPU.A != 0):
-                controler_read_state = 0
+        
         obj = StoreInA0x8D(register='A', address=addr, system=systemCPU)
         obj.execute()
         del obj
