@@ -1091,8 +1091,19 @@ while True:
 
     opcode = hex(nesROM.pgr_rom[systemCPU.program_counter])
     # print(hex(systemCPU.program_counter+0x8000), opcode)
+    operand_low = nesROM.pgr_rom[systemCPU.program_counter + 1]
+    operand_high = nesROM.pgr_rom[systemCPU.program_counter + 2]
+    addr = get_absolute_addr(operand_low, operand_high)
+    if (addr == 0x2000):
+        if (opcode in ['0x8d', '0x9d', '0x99']):
+            value = systemCPU.A
+        elif opcode == '0x8e':
+            value = systemCPU.X
+        elif opcode == '0x8c':
+            value = systemCPU.Y
+        local_ppu.update_ppu_control(value)
     execute(opcode, systemCPU, nesROM.pgr_rom)
-
+        
     run_count += 1
 
     if run_count == 37:

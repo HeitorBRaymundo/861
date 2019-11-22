@@ -59,6 +59,7 @@ class System():
         self.address2006 = 0
         self.address2006Hi = 0
         self.address2006Lo = 0
+        self.flag_increment_mode = 0
 
 
     def getA(self):
@@ -145,7 +146,17 @@ class System():
             # print("AAAAAAAAAAAAAAA")
             # print((value & 0b10000000) > 0)
             # print("AAAAAAAAAAAAAAA")
+        # import pdb;pdb.set_trace()
+            self.flag_name_table =  0x2000 + (0x400 * value % 4)
+            self.flag_increment_mode = 32 if ((value >> 2) % 2) else 1
+            self.flag_tile_select = (value >> 3) % 2
+            self.flag_bg_tile = (value >> 4) % 2
+            self.flag_sprite_height = (8,16) if((value >> 5) % 2) else (8,8)
+            self.flag_PPU_master_slave = (value >> 6) % 2
+            # import pdb;pdb.set_trace()
             self.active_nmi = (value & 0b10000000) > 0
+            # local_ppu.update_ppu_control(value)
+            # import pdb; pdb.set_trace()
         else:
             if(address == 0x2006):
                 if (self.address2006Hi == 0):
@@ -163,15 +174,15 @@ class System():
                 elif self.address2006 < 0x3F00: 
                     self.address2006 = self.address2006 % 0x3000
                     self.batatinha[self.address2006] = value
-                    self.batatinha[self.address2006 + 0x800] = value
+                    # self.batatinha[self.address2006 + 0x800] = value
                 elif self.address2006 >= 0x3F20 and self.address2006 < 0x4000:
                     self.batatinha[self.address2006 % 0x3F20] = value
                 else:
-                    self.batatinha[(self.address2006)%0x3fff] = value
+                    self.batatinha[(self.address2006)%0x4000] = value
                 
                 print (hex(self.address2006), value)
                 # print (hex(self.address2006), " 2007: ",value)
-                self.address2006 = self.address2006 + 1
+                self.address2006 = self.address2006 + self.flag_increment_mode
                 # print ("prox: ", hex(self.address2006))
             # else:
             #     print (hex(address), value)

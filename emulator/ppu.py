@@ -108,6 +108,7 @@ class PPU():
         self.nesROM = nesROM
         # entender o que é isso
         self.SPR_RAM = [0] * 0x0100
+        self.increase = 0
         # self.SPR_RAM = np.zeros(0x0100, dtype=np.uint8)
 
 
@@ -133,6 +134,13 @@ class PPU():
         # print ("BG:")
         # for i in self.bg_palette:
         #     print(i)
+        self.flag_name_table =  0x2000
+        self.flag_increment_mode = 1
+        self.flag_sprite_tile_select = 0
+        self.flag_bg_tile = 1
+        self.flag_sprite_height = (8,8)
+        self.flag_PPU_master_slave = 0
+        self.flag_enable_NMI = 0
 
     def build_bg(self, sprite):
         x_axis = 0
@@ -168,19 +176,12 @@ class PPU():
 
         # self.bgList
         begin = self.name_table
-        import pdb; pdb.set_trace()
         print (begin)
         end = begin + 0x3c0
-        # import pdb; pdb.set_trace()
         for i in range(begin, end, 1):
             row = int(i/32)
             column = i % 32
-            # print (row, column)
-            # if (i-begin == 256):
-            #     import pdb;pdb.set_trace()
             self.build_sprite(self.bgColored[self.VRAM[0x2000+i]], (column * 8, row * 8), False)
-        
-        # import pdb; pdb.set_trace()
 
     # newControl eh um inteiro entre 0 e 255, precisamos parsear no formato
     #Flags da PPUCTRL ($2000)
@@ -193,13 +194,13 @@ class PPU():
     # flag_increment_mode = False #I
     # flag_name_table = '00' #NN
     def update_ppu_control(self, newControl):
-        self.flag_name_table = bin((newMask >> 0) % 4)[2:]
-        self.flag_increment_mode = (newMask >> 2) % 2
-        self.flag_tile_select = (newMask >> 3) % 2
-        self.flag_bg_tile = (newMask >> 4) % 2
-        self.flag_sprite_height = (newMask >> 5) % 2
-        self.flag_PPU_master_slave = (newMask >> 6) % 2
-        self.flag_enable_NMI = (newMask >> 7) % 2
+        self.flag_name_table =  0x2000 + (0x400 * newControl % 4)
+        self.flag_increment_mode = 1 if ((newControl >> 2) % 2) else 1
+        self.flag_sprite_tile_select = (newControl >> 3) % 2
+        self.flag_bg_tile = (newControl >> 4) % 2
+        self.flag_sprite_height = (8,16) if((newControl >> 5) % 2) else (8,8)
+        self.flag_PPU_master_slave = (newControl >> 6) % 2
+        self.flag_enable_NMI = (newControl >> 7) % 2
 
     
     def read_sprite(self, rom, chr_size):
@@ -314,6 +315,8 @@ class PPU():
         i = 0
         bgList = []
         spriteList = []
+        finalList = []
+        tempList = []
         # import pdb; pdb.set_trace()
         while i < self.chr_size/(2*self.nesROM.chr_rom_size):
             lowList = []
@@ -326,8 +329,10 @@ class PPU():
             for j in range(8):
                 for k in range(8):
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-            bgList.append(colorList)
+            tempList.append(colorList)
             i = i + 16
+        finalList.append(tempList)
+        tempList = []
         while i < self.chr_size/(self.nesROM.chr_rom_size):
             lowList = []
             highList = []
@@ -339,13 +344,14 @@ class PPU():
             for j in range(8):
                 for k in range(8):
                     colorList.append(int(lowList[j][k]) + 2 * int(highList[j][k]))
-            spriteList.append(colorList)
+            tempList.append(colorList)
             i = i + 16
+        finalList.append(tempList)
         
         # import pdb; pdb.set_trace()
 
-        self.bgSprite = spriteList
-        self.sprites = bgList
+        self.bgSprite = finalList[self.flag_sprite_tile_select]
+        self.sprites = finalList[self.flag_bg_tile]
         self.colorSprites()
 
     def colorSprites(self):
