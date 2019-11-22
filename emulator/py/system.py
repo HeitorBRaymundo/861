@@ -41,7 +41,7 @@ class System():
                                      self.PC_OFFSET                                     
 
         # print("-----------------------------------------------------------")
-        print("INITIAL PC: ", hex(self.program_counter))
+        # print("INITIAL PC: ", hex(self.program_counter))
         # print("-----------------------------------------------------------")
         self.stack_pointer = 0x01fd
         self.stack_val_return = 0
@@ -60,6 +60,7 @@ class System():
         self.address2006Hi = 0
         self.address2006Lo = 0
         self.flag_increment_mode = 0
+        self.contadorLixo = 0
 
 
     def getA(self):
@@ -169,6 +170,7 @@ class System():
                     self.address2006Hi = 0
             elif (address == 0x2007):
                 if (self.address2006 >= 0x2000 and self.address2006 < 0x3000):
+                    # print(hex(self.address2006), value)
                     self.batatinha[self.address2006 + 0x800] = value
                     self.batatinha[self.address2006] = value
                 elif self.address2006 < 0x3F00: 
@@ -180,12 +182,13 @@ class System():
                 else:
                     self.batatinha[(self.address2006)%0x4000] = value
                 
-                print (hex(self.address2006), value)
+                # print (hex(self.address2006), value)
                 # print (hex(self.address2006), " 2007: ",value)
                 self.address2006 = self.address2006 + self.flag_increment_mode
                 # print ("prox: ", hex(self.address2006))
-            # else:
-            #     print (hex(address), value)
+            else:
+                pass
+                # print (hex(address), value)
 
 
         

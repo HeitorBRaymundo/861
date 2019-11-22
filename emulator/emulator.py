@@ -214,6 +214,15 @@ def execute(opcode, systemCPU, pgr_bytes):
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         systemCPU.cycle_counter += 7
     elif opcode == '0x88':
+
+        # if systemCPU.Y == 0 and systemCPU.contadorLixo == 3:
+        #     import pdb;pdb.set_trace()
+        #     print("YAHSADSADASF")        
+
+        if systemCPU.Y == 0:
+            systemCPU.contadorLixo += 1
+            print("oi")
+            
         systemCPU.program_counter = systemCPU.program_counter + 1
         DecreaseReg0x88(systemCPU)
         systemCPU.cycle_counter += 2
@@ -224,6 +233,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xc8':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        if systemCPU.Y == 255:
+            print("aaaaaaaaa")
         IncreaseReg0xC8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xca':
@@ -262,6 +273,8 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 5
     elif opcode == '0xe8':
         systemCPU.program_counter = systemCPU.program_counter + 1
+        if systemCPU.X == 255:
+            print("yuji coco")
         IncreaseReg0xE8(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xe9':
@@ -377,6 +390,9 @@ def execute(opcode, systemCPU, pgr_bytes):
         systemCPU.cycle_counter += 4
         # i = i + 2
     elif opcode == '0x40': # interrupt
+        # RTI0x40(systemCPU)
+        # import pdb;pdb.set_trace()
+        # PLP0x28(systemCPU)
         systemCPU.on_nmi = False
         systemCPU.cycle_counter += 6
     elif opcode == '0x58':
@@ -1078,6 +1094,10 @@ while True:
     operand_low = nesROM.pgr_rom[systemCPU.program_counter + 1]
     operand_high = nesROM.pgr_rom[systemCPU.program_counter + 2]
     addr = get_absolute_addr(operand_low, operand_high)
+
+    # if addr == 0x2007 and systemCPU.address2006 == 0x20ba:
+    #     import pdb;pdb.set_trace()
+
     if (addr == 0x2000):
         if (opcode in ['0x8d', '0x9d', '0x99']):
             value = systemCPU.A
@@ -1090,7 +1110,7 @@ while True:
         
     run_count += 1
 
-    if run_count == 37:
+    if run_count == 30:
         if systemCPU.active_nmi and not (systemCPU.on_nmi):
             
             systemCPU.on_nmi = True
