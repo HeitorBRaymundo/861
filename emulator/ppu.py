@@ -176,7 +176,8 @@ class PPU():
 
         # self.bgList
         begin = self.name_table
-        print (begin)
+        # import pdb; pdb.set_trace()
+        # print (begin)
         end = begin + 0x3c0
         for i in range(begin, end, 1):
             row = int(i/32)
