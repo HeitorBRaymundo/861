@@ -104,7 +104,7 @@ class PPU():
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
 
         self.SPR_RAM = nesROM.pgr_rom[0x2000:0x2100]
-        print (nesROM.chr_rom[0x2000:0x2100])
+        # print (nesROM.chr_rom[0x2000:0x2100])
         self.PC_OFFSET = 0x8000 if (nesROM.prg_rom_size==2) else 0xC000
         self.prg_bytes = nesROM.pgr_rom
         self.nesROM = nesROM
@@ -412,7 +412,7 @@ class PPU():
             # print ("i: ",i)
             # print (spriteList)
             # print (len(spriteList))
-            print (len(self.SPR_RAM))
+            # print (len(self.SPR_RAM))
             for j in spriteList[self.SPR_RAM[i + 1]]:
                 # print ("j: ",j)
                 # print ("SPR_RAM[i + 2]: ", (4 * (self.SPR_RAM[i + 2] % 4)) + j)

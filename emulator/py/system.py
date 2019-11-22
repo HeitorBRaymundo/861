@@ -57,11 +57,25 @@ class System():
         self.all_keys = []
         self.batatinha = [0] * 0x10000
         self.address2006 = 0
-        self.address2006Hi = 0
+        self.address2006Hi = -1
         self.address2006Lo = 0
         self.flag_increment_mode = 0
         self.contadorLixo = 0
         self.mem[0x200:0x300] = rom.pgr_rom[0x2000:0x2100]
+        self.address2003 = -1
+        self.vblank = 1
+        self.sprite_0 = 0
+        self.spr_over = 0
+        
+        # ppu flags register 2001
+        self.emphasis_blue = 0
+        self.emphasis_green = 0
+        self.emphasis_red = 0
+        self.enable_sprite = 0
+        self.enable_bg = 0
+        self.enable_left_column = 0
+        self.enable_left_bg_column = 0
+        self.greyscale = 0
 
 
     def getA(self):
@@ -125,9 +139,6 @@ class System():
         return hex(self.stack_pointer) # com refactor não precisa desse 2 multiplicando (tamanho da pilha fica em bytes)
 
     def setMem(self, address, value):
-        # print(hex(self.program_counter + 0x8000))
-        # print(hex(address),value)
-
         if address < 0x2000:
             try:
                 # map the addres between 0 to 0x0800
@@ -144,31 +155,37 @@ class System():
                 # import pdb;pdb.set_trace()
                 raise Exception("Invalid address!")
         elif address == 0x2000:
-            # print(value)
-            # print("AAAAAAAAAAAAAAA")
-            # print((value & 0b10000000) > 0)
-            # print("AAAAAAAAAAAAAAA")
-        # import pdb;pdb.set_trace()
             self.flag_name_table =  0x2000 + (0x400 * value % 4)
             self.flag_increment_mode = 32 if ((value >> 2) % 2) else 1
             self.flag_tile_select = (value >> 3) % 2
             self.flag_bg_tile = (value >> 4) % 2
             self.flag_sprite_height = (8,16) if((value >> 5) % 2) else (8,8)
             self.flag_PPU_master_slave = (value >> 6) % 2
-            # import pdb;pdb.set_trace()
             self.active_nmi = (value & 0b10000000) > 0
-            # local_ppu.update_ppu_control(value)
-            # import pdb; pdb.set_trace()
+        elif address == 0x2001:
+            self.greyscale = 1 if (value % 2) else 0
+            self.enable_left_bg_column = 1 if ((value >> 1) % 2) else 0
+            self.enable_left_column = 1 if ((value >> 2) % 2) else 0
+            self.enable_bg = 1 if ((value >> 3) % 2) else 0
+            self.enable_sprite = 1 if ((value >> 4) % 2) else 0
+            self.emphasis_red = 1 if ((value >> 5) % 2) else 0
+            self.emphasis_green = 1 if ((value >> 6) % 2) else 0
+            self.emphasis_blue = 1 if ((value >> 7) % 2) else 0
+        elif address == 0x2003:
+            self.address2003 = value
+        elif address == 0x2004:
+            self.batatinha[self.address2003] = value
+            self.address2003 = (self.address2003 + 1) & 0xFF
         else:
             if(address == 0x2006):
-                if (self.address2006Hi == 0):
+                if (self.address2006Hi == -1):
                     self.address2006Hi = value
                     self.address2006 = (self.address2006Hi & 0xff) << 8
                     # print ("Comocaremos novo store or not", hex(self.address2006))
                 else:
                     self.address2006 = ((self.address2006Hi & 0xff) << 8) + (value & 0xff)
                     # print ("Novo store oriundo de High:", hex(self.address2006Hi), " e Low: ", hex(value), " virando: ", hex(self.address2006))
-                    self.address2006Hi = 0
+                    self.address2006Hi = -1
             elif (address == 0x2007):
                 if (self.address2006 >= 0x2000 and self.address2006 < 0x3000):
                     # print(hex(self.address2006), value)
@@ -192,8 +209,6 @@ class System():
                 # print (hex(address), value)
 
 
-        
-                
     def loadMem(self, address):
         # print(hex(address))
         if address < 0x2000:            
@@ -207,10 +222,20 @@ class System():
                 raise Exception('Invalid type of address!')
 
             return self.mem[converted_address]
-        elif address >= 0x8000:
-            return self.rom.pgr_rom[address - self.PC_OFFSET]
         elif address == 0x2002:
-            return self.rom.pgr_rom[0x2002]
+            
+            value = 0
+            value |= self.vblank
+            value <<= 1
+            value |= self.sprite_0
+            value <<= 1
+            value |= self.spr_over
+            value <<= 5
+            self.vblank = 1
+
+            return value
+        elif address <= 0x4000:
+            print("hey")
         elif address == 16406:
             temp = get_key(self.all_keys, self.player1_key_index, 1)
             if self.player1_key_index != 7:
@@ -227,6 +252,8 @@ class System():
                 self.player2_key_index = 0
             return temp
 
-
+        elif address >= 0x8000:
+            return self.rom.pgr_rom[address - self.PC_OFFSET]
+        
 if __name__ == '__main__':
     system = System()
