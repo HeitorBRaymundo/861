@@ -18,7 +18,7 @@ nesROM = Rom(file)
 systemCPU = system.System(nesROM)
 
 pygame.init()
-pygame.display.set_mode((256, 224))
+pygame.display.set_mode((256, 224), pygame.FULLSCREEN)
 
 # nesROM.pgr_rom = nesROM.prg_rom
 chr_rom = nesROM.chr_rom
@@ -1103,12 +1103,11 @@ while True:
             
             local_ppu.render()
             
-            # if systemCPU.all_keys[pygame.K_ESCAPE]:
-            #     pygame.quit()
-            #     break
+            if systemCPU.all_keys[pygame.K_ESCAPE]:
+                pygame.quit()
+                break
 
         run_count = 0
         systemCPU.cycle_counter = 0
 
 pygame.quit()
-        

@@ -112,7 +112,7 @@ class PPU():
         # self.chr_rom = nesROM.chr_rom
         self.chr_size = nesROM.chr_rom_size * 8 * 1024   
         self.scale = scale
-        self.screen = pygame.display.set_mode((self.default_width * self.scale, self.default_height * self.scale))
+        self.screen = pygame.display.set_mode((self.default_width * self.scale, self.default_height * self.scale),pygame.FULLSCREEN)
 
         self.pic = pygame.surface.Surface((self.default_width, self.default_height))
         self.screen.blit(pygame.transform.scale(self.pic, (self.default_width * self.scale, self.default_height * self.scale)), (0, 0))
@@ -358,7 +358,7 @@ class PPU():
         elif 'pacman' in self.nesROM.filename:
             pygame.display.update()
             pygame.event.pump()
-            
+
         #Number of frames per secong e.g. 60
         self.clock.tick(48)
 
