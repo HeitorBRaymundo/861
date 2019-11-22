@@ -26,8 +26,9 @@ class BIT_zpg0x24():
         else:
             system.setFLAG("Z", 0)
 
-# OK
-# tsted
+        if (value_in_mem % 256!= value_in_mem):
+            self.system.setFLAG("C", 1)
+        
 class BIT_abs0x2C():
     def __init__(self, system, address):
 
@@ -42,3 +43,6 @@ class BIT_abs0x2C():
             system.setFLAG("Z", 1)
         else:
             system.setFLAG("Z", 0)
+
+        if (value_in_mem % 256!= value_in_mem):
+            self.system.setFLAG("C", 1)

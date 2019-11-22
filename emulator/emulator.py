@@ -214,13 +214,7 @@ def execute(opcode, systemCPU, pgr_bytes):
         ROR_abs_X_0x7E(systemCPU, pgr_bytes[systemCPU.program_counter - 2], pgr_bytes[systemCPU.program_counter - 1])
         systemCPU.cycle_counter += 7
     elif opcode == '0x88':
-        # import pdb;pdb.set_trace()
         systemCPU.program_counter = systemCPU.program_counter + 1
-        print("))))))))))))))))))))))))")
-        print(systemCPU.Y)
-        print("))))))))))))))))))))))))")
-        # if systemCPU.Y == 1:
-        #     import pdb;pdb.set_trace()
         DecreaseReg0x88(systemCPU)
         systemCPU.cycle_counter += 2
     elif opcode == '0xc6':
@@ -1103,17 +1097,13 @@ while True:
             systemCPU.program_counter = ((systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] + 1 - systemCPU.PC_OFFSET] << 8) + \
                                       systemCPU.rom.prg_rom[systemCPU.rom.interrupt_handlers['NMI_HANDLER'] - systemCPU.PC_OFFSET]) - \
                                       systemCPU.PC_OFFSET
-            # print("PAU NO CU DO YUJI")
             local_ppu.evaluate_sprite()
             local_ppu.all_sprites_list = pygame.sprite.Group()
             local_ppu.corno_func()
-            # local_ppu.update_corno_dois()
             local_ppu.update_corno_dois(systemCPU.batatinha[0x2000:0x23c0])
             local_ppu.update_bg()
-            # import pdb; pdb.set_trace()
-            print ("EEEEEEEEEE")
             local_ppu.update_mem_SPR_RAM(systemCPU.mem[0x200:0x300])
-            # import pdb;pdb.set_trace()
+            
             for i in range (64):
                 if (local_ppu.flag_enable_render):
                     pos = local_ppu.posSprite[i]
@@ -1121,8 +1111,7 @@ while True:
                     array_flags_to_print = local_ppu.array_flag[i]
                     local_ppu.build_sprite(spritesToPrint, pos, array_flags_to_print)
             local_ppu.render()
-            import pdb;pdb.set_trace()
-
+            
         run_count = 0
         systemCPU.cycle_counter = 0
 

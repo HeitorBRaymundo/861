@@ -21,6 +21,7 @@ class ADC_Op():
             self.system.setFLAG("V", 0)
 
         self.system.setFLAG("N", result_vector[0])
+
         if (all(value == 0 for value in result_vector)):
             self.system.setFLAG("Z", 1)
         else:
@@ -55,6 +56,7 @@ class SBC_Op():
             self.system.setFLAG("V", 0)
 
         self.system.setFLAG("N", result_vector[0])
+        
         if (all(value == 0 for value in result_vector)):
             self.system.setFLAG("Z", 1)
         else:
